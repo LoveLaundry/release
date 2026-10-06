@@ -1,0 +1,33 @@
+[submodule "love-ai"]
+	path = love-ai
+	url = https://github.com/LoveLaundry/love-ai.git
+[submodule "user-service"]
+	path = user-service
+	url = https://github.com/LoveLaundry/user-service.git
+[submodule "bill_service"]
+	path = bill_service
+	url = https://github.com/LoveLaundry/bill-service.git
+[submodule "quotations-ui"]
+	path = quotations-ui
+	url = https://github.com/LoveLaundry/quotations-ui.git
+[submodule "laundry-management"]
+	path = laundry-management
+	url = https://github.com/LoveLaundry/laundry-management.git
+[submodule "lovelaundry-bot"]
+	path = lovelaundry-bot
+	url = https://github.com/LoveLaundry/love-bot.git
+[submodule "worker-service"]
+	path = worker-service
+	url = https://github.com/LoveLaundry/worker-service.git
+[submodule "public.lovelaundry.lk"]
+	path = public.lovelaundry.lk
+	url = https://github.com/LoveLaundry/public.lovelaundry.lk.git
+[submodule "guest-billing"]
+	path = guest-billing
+	url = https://github.com/LoveLaundry/guest-billing-tool.git
+[submodule "quotation-service"]
+	path = quotation-service
+	url = https://github.com/LoveLaundry/quotation-service.git
+[submodule "LoveMobi"]
+	path = LoveMobi
+	url = https://github.com/LoveLaundry/skaner.git
