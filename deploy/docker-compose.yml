@@ -5,6 +5,9 @@ services:
     build:
       context: ../quotation-service
     env_file: ./backend.env
+    environment:
+      MONGODB_COLLECTION: quotations
+      CHAT_API_KEY: ${CHAT_API_KEY:-}
     restart: unless-stopped
     mem_limit: 256m
     healthcheck:
@@ -33,6 +36,8 @@ services:
     build:
       context: ../user-service
     env_file: ./backend.env
+    environment:
+      MONGODB_COLLECTION: users
     restart: unless-stopped
     mem_limit: 256m
     healthcheck:
@@ -75,6 +80,8 @@ services:
     build:
       context: ../love-ai
     env_file: ./backend.env
+    environment:
+      LOVE_AI_API_KEYS: ${LOVE_AI_API_KEYS:-}
     restart: unless-stopped
     mem_limit: 256m
     healthcheck:
@@ -95,17 +102,23 @@ services:
         VITE_WORKERS_API_URL: /api/workers
         VITE_MGMT_API_URL: /api/mgmt
         VITE_AI_API_URL: /
-        VITE_AI_API_KEY: ${VITE_AI_API_KEY:-change-me}
+        # Vite build arguments are public; never inject server-side API keys here.
         VITE_APP_TITLE: LoveLaundry Management System
     ports:
       - "80:80"
     depends_on:
-      - quotation-backend
-      - bills-backend
-      - user-backend
-      - workers-backend
-      - mgmt-backend
-      - ai-backend
+      quotation-backend:
+        condition: service_healthy
+      bills-backend:
+        condition: service_healthy
+      user-backend:
+        condition: service_healthy
+      workers-backend:
+        condition: service_healthy
+      mgmt-backend:
+        condition: service_healthy
+      ai-backend:
+        condition: service_healthy
     restart: unless-stopped
     mem_limit: 256m
     networks: [app]
