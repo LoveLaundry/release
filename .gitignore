@@ -26,3 +26,9 @@ venv/
 .idea/
 .DS_Store
 Thumbs.db
+
+# standalone app repos awaiting their own GitHub remotes
+shop-app/
+hotel-app/
+linen-room-app/
+media-output/
