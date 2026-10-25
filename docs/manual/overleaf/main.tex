@@ -699,7 +699,7 @@ Tenant isolation is the single most important property of the platform, and it i
 \subsection*{How a violation surfaces}
 The platform deliberately does not distinguish “this record belongs to someone else” from “this record does not exist”. Both produce the same 404 or 422. The reason is that a different response would confirm the existence of another tenant's data, which is itself a leak: an attacker could enumerate identifiers and learn how many gate passes a competitor processes.
 
-At the query level the filter is not applied as a post-processing step. A request for  compiles to a lookup on . If the identifier exists in another tenant, the query returns nothing, the handler raises not-found, and no document is ever loaded into memory.\texttt{/gate-passes/\{id\}}\texttt{\{ \_id: id, laundry\_id: <claim> \}}
+At the query level the filter is not applied as a post-processing step. A request for  compiles to a lookup on . If the identifier exists in another tenant, the query returns nothing, the handler raises not-found, and no document is ever loaded into memory.\texttt{/gatepasses/\{id\}}\texttt{\{ \_id: id, laundry\_id: <claim> \}}
 
 \subsection*{Where tenancy is checked, end to end}
 3 · Security ModelLoveLaundry — System Manual
@@ -2950,9 +2950,9 @@ POST & /users & Create a user & ADMIN \\ \hline
 PATCH & /users/\{id\} & Update display name or status & ADMIN \\ \hline
 GET & /laundries & List laundries & PLATFORM\_ADMIN \\ \hline
 POST & /laundries & Create a laundry (tenant) & PLATFORM\_ADMIN \\ \hline
-GET & /memberships & List memberships for the tenant & ADMIN \\ \hline
-POST & /memberships & Grant a role to a user & ADMIN \\ \hline
-DELETE & /memberships/\{id\} & Remove a user's access & ADMIN \\ \hline
+GET & /laundries/\{laundry\_id\}/members & List memberships for the tenant & ADMIN \\ \hline
+POST & /laundries/\{laundry\_id\}/members & Grant a role to a user & ADMIN \\ \hline
+DELETE & /laundries/\{laundry\_id\}/members/\{id\} & Remove a user's access & ADMIN \\ \hline
 \end{tabularx}
 \end{center}
 \begin{center}\small
@@ -2977,11 +2977,11 @@ AppendicesLoveLaundry — System Manual
 \hline
 \rowcolor{lightgrey}
 \textbf{Method} & \textbf{Path} & \textbf{Purpose} \\ \hline
-GET & /gate-passes & List passes for the tenant, filtered by status and date \\ \hline
-POST & /gate-passes & Create a pass with item lines \\ \hline
-GET & /gate-passes/\{id\} & Pass detail with lines and delivery history \\ \hline
-PATCH & /gate-passes/\{id\} & Amend a pass (manager or above) \\ \hline
-POST & /gate-passes/\{id\}/cancel & Cancel with a reason; the number is retained \\ \hline
+GET & /gatepasses & List passes for the tenant, filtered by status and date \\ \hline
+POST & /gatepasses & Create a pass with item lines \\ \hline
+GET & /gatepasses/\{id\} & Pass detail with lines and delivery history \\ \hline
+PATCH & /gatepasses/\{id\} & Amend a pass (manager or above) \\ \hline
+POST & /gatepasses/\{id\}/cancel & Cancel with a reason; the number is retained \\ \hline
 GET & /deliveries & List deliveries \\ \hline
 POST & /deliveries & Record a delivery against pass lines \\ \hline
 GET & /deliveries/\{id\} & Delivery detail and receiver \\ \hline
@@ -2990,7 +2990,7 @@ GET & /bills & List bills with status and balance \\ \hline
 POST & /bills & Raise a bill from unbilled deliveries \\ \hline
 GET & /bills/\{id\} & Bill detail with lines and payments \\ \hline
 POST & /bills/\{id\}/payments & Post a payment against the bill \\ \hline
-POST & /payments/\{id\}/reverse & Reverse a posted payment \\ \hline
+POST & /payments/\{payment\_id\}/reverse & Reverse a posted payment \\ \hline
 \end{tabularx}
 \end{center}
 \begin{center}\small
@@ -3000,11 +3000,11 @@ POST & /payments/\{id\}/reverse & Reverse a posted payment \\ \hline
 \textbf{Method} & \textbf{Path} & \textbf{Purpose} \\ \hline
 GET & /shop-bills & List counter sales for a business date \\ \hline
 POST & /shop-bills & Create a shop bill \\ \hline
-POST & /shop-bills/\{id\}/pay & Complete payment and issue the receipt \\ \hline
+POST & /shop-bills/\{id\}/record-payment & Complete payment and issue the receipt \\ \hline
 POST & /shop-bills/\{id\}/void & Void before payment, with a reason \\ \hline
 POST & /shop-bills/\{id\}/refund & Refund a paid bill; requires approval \\ \hline
-GET & /reports/monthly-matrix & Client-by-day quantities and values \\ \hline
-GET & /reports/unbilled & Deliveries not yet on a bill \\ \hline
+GET & /monthly/\{kind\}/\{client\}/\{yy\}/\{mm\} & Client-by-day quantities and values \\ \hline
+GET & /bills/unbilled-gatepasses & Deliveries not yet on a bill \\ \hline
 POST & /day-close & Close the business date \\ \hline
 GET & /day-close/\{date\} & Close record for a date \\ \hline
 GET & /dashboard & Operational tiles for the tenant \\ \hline
@@ -3020,12 +3020,12 @@ AppendicesLoveLaundry — System Manual
 \rowcolor{lightgrey}
 \textbf{Method} & \textbf{Path} & \textbf{Purpose} \\ \hline
 GET & /linens & List tags by status, client or item type \\ \hline
-POST & /linens/scan & Submit a scan event for a tag \\ \hline
+POST & /linens/\{doc\_id\}/scan & Submit a scan event for a tag \\ \hline
 POST & /linens/\{tag\}/action & Apply a lifecycle action to a tag \\ \hline
 GET & /linens/\{tag\}/history & Full event history for a tag \\ \hline
 POST & /linens/\{tag\}/retire & Retire an item (supervisor only) \\ \hline
-GET & /linens/inventory & Counts by status, type and client \\ \hline
-GET & /linens/discrepancies & Open and closed discrepancies \\ \hline
+GET & /linens & Counts by status, type and client \\ \hline
+GET & /linens/stats/summary & Open and closed discrepancies \\ \hline
 \end{tabularx}
 \end{center}
 \begin{center}\small
@@ -3034,7 +3034,7 @@ GET & /linens/discrepancies & Open and closed discrepancies \\ \hline
 \rowcolor{lightgrey}
 \textbf{Method} & \textbf{Path} & \textbf{Purpose} \\ \hline
 GET & /client-portal/summary & Passes in progress, items returned, outstanding balance \\ \hline
-GET & /client-portal/gate-passes & Passes scoped to the client\_name in client\_scope \\ \hline
+GET & /client-portal/gatepasses & Passes scoped to the client\_name in client\_scope \\ \hline
 GET & /client-portal/deliveries & Deliveries scoped to the client\_name \\ \hline
 GET & /client-portal/bills & Invoices for this property \\ \hline
 GET & /client-portal/bills/\{id\} & Invoice detail, scoped by both keys \\ \hline
