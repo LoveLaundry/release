@@ -3182,4 +3182,91 @@ Page references are to the printed page numbers in the footer.
 AppendicesLoveLaundry — System Manual
 
 \begin{notebox}NoteBold page numbers in a printed index conventionally denote the principal treatment; this index gives a single page per term to keep the reference unambiguous.\end{notebox}
+\textsc{\small\color{crimson}Appendix E · Registration}\par\medskip
+\chapter{Registration and Enrolment}
+\begin{quote}\itshape Who creates an account, what it is bound to, and how the two sides stay apart.\end{quote}
+\subsection*{E.1 The three identities}
+Every account belongs to one laundry, the business that does the washing. Staff accounts belong to the laundry itself and carry a membership. Client accounts belong to a laundry and to a customer name: the hotel or the shop. That pair is the isolation boundary, which is why a client session never receives a staff claim.
+
+A hotel account is created with  HOTEL and a role of HOTEL\_ADMIN or HOTEL\_MANAGER. A shop account uses SHOP with SHOP\_ADMIN or SHOP\_STAFF. The same login may exist at several laundries, and each is a separate account row, so switching laundries changes what a session may read rather than widening it.\texttt{client\_type}
+
+The first account of any hotel or shop is created by a laundry administrator. After that the customer’s own administrator can add colleagues on the same side, and only on the same side.
+
+Appendix E · RegistrationLoveLaundry — System Manual
+
+\subsection*{E.2 Who may create whom}
+\begin{center}\small
+\begin{tabularx}{\linewidth}{|X|X|X|X|X|X|}
+\hline
+\rowcolor{lightgrey}
+\textbf{Action} & \textbf{Laundry admin} & \textbf{Hotel admin} & \textbf{Hotel staff} & \textbf{Shop admin} & \textbf{Shop staff} \\ \hline
+Create a hotel or shop & yes & no & no & no & no \\ \hline
+Create another administrator & yes & no & no & no & no \\ \hline
+Add own staff & yes & yes & no & yes & no \\ \hline
+Read own records & n/a & yes & yes & yes & yes \\ \hline
+Raise a shop order & n/a & no & no & yes & yes \\ \hline
+Confirm receipt & staff API & no & no & no & no \\ \hline
+\end{tabularx}
+\end{center}
+Two rules keep the table true. The laundry and customer name of a new staff account are taken from the caller’s token, never from the request, so an administrator cannot enrol staff into somebody else’s hotel. And staff creation accepts only the non-administrator role of the same side, so the endpoint cannot mint a peer administrator.
+
+Creating an administrator therefore always requires the laundry, which is also the party able to suspend the account afterwards.
+
+Appendix E · RegistrationLoveLaundry — System Manual
+
+\subsection*{E.3 Registering a hotel}
+The laundry administrator posts the hotel’s first account. That customer name becomes the hotel’s identity on every gate pass, delivery and bill, so one spelling must be used everywhere: records are matched on it exactly.
+
+with the client type, the role, the customer name, a login and a password. The laundry comes from the caller’s token, not the body.\textbf{Request.}\texttt{POST /clients}
+
+The account without its password. A duplicate login inside the same laundry returns 409; a role that does not belong to the chosen client type returns 400.\textbf{Response.}
+
+The administrator then signs in at  with the client type set. If the same login exists at more than one laundry the reply is 409 listing them, and the call is repeated with an explicit laundry.\texttt{POST /client/auth/login}
+
+Appendix E · RegistrationLoveLaundry — System Manual
+
+\subsection*{E.4 Registering a shop and its staff}
+The shop flow is identical with one substitution:  is SHOP, the first account is SHOP\_ADMIN, and colleagues are SHOP\_STAFF. Endpoints, isolation and the 409 rules are unchanged.\texttt{client\_type}
+
+Once the shop administrator is signed in, adding a colleague is  with a login, a name and a password. The role defaults to SHOP\_STAFF and any other value is refused.  lists everyone under that shop and nobody from another.\texttt{POST /client/staff}\texttt{GET /client/staff}
+
+Appendix E · RegistrationLoveLaundry — System Manual
+
+\subsection*{E.5 Sessions across several laundries}
+A login registered at two laundries signs in once and then chooses. Without an explicit laundry the login is ambiguous, and the server refuses to guess: it returns 409 with the list. Once the choice is made, the token carries exactly that laundry.
+
+\begin{center}\small
+\begin{tabularx}{\linewidth}{|X|X|}
+\hline
+\rowcolor{lightgrey}
+\textbf{Call} & \textbf{Purpose} \\ \hline
+\texttt{POST /client/auth/login} & Sign in; 409 lists the laundries when ambiguous \\ \hline
+\texttt{GET /client/auth/laundries} & Every laundry this login may enter, on its own side \\ \hline
+\texttt{POST /client/auth/switch} & Re-issue the token for another of those laundries \\ \hline
+\texttt{POST /client/auth/refresh} & New expiry, claims re-read from the database \\ \hline
+\texttt{PATCH /clients/\{id\}/status} & Laundry admin suspends or archives an account \\ \hline
+\end{tabularx}
+\end{center}
+Switching does not extend a session’s reach. The old token keeps its original scope and the new one carries a different single scope. A suspension takes effect at the next refresh or sign-in, so revocation is bounded by the token lifetime rather than immediate.
+
+Appendix E · RegistrationLoveLaundry — System Manual
+
+\subsection*{E.6 Failures worth recognising}
+\begin{center}\small
+\begin{tabularx}{\linewidth}{|X|X|X|}
+\hline
+\rowcolor{lightgrey}
+\textbf{Status} & \textbf{Meaning} & \textbf{What to do} \\ \hline
+409 & That login already exists in this laundry & Choose another login, or suspend the old account \\ \hline
+409 & Sign-in is ambiguous across laundries & Repeat the call with an explicit laundry \\ \hline
+403 & Token belongs to the other side, or lacks the role & Use the correct app and the correct role \\ \hline
+400 & Role does not belong to the chosen client type & Hotel roles with HOTEL, shop roles with SHOP \\ \hline
+404 & The record exists but not for this account & Check the laundry and the customer name \\ \hline
+\end{tabularx}
+\end{center}
+\subsection*{E.7 Enrolment checklist}
+Confirm the laundry exists. Fix the customer name spelling before the first account, because later records match it exactly. Create the administrator, sign in as that administrator, add staff, then suspend any placeholder account. Finally sign in as a staff member and confirm the screens show only that customer’s records.
+
+Enrolment is complete when a staff account can sign in, see its own hotel or shop, and is refused by every endpoint belonging to the other side.
+
 \end{document}
