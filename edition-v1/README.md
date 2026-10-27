@@ -1,94 +1,27 @@
-# LoveLaundry — Edition v1 (monorepo)
+# LoveLaundry Edition v1.0.0 — Release Notes
 
-One repository containing the whole platform: six Python services, four React
-front-ends, a Flutter driver app, the marketing site, the deployment stack and
-the system manual.
+**Developer:** Rasindu Dulshan Siriwardhana  
+**Project:** LoveLaundry Edition  
+**Repository:** https://github.com/LoveLaundry/edition-v1.git
 
-**BEYO.ND · BEYOND — N-DIMENSIONAL**
-_"Behold. Yesterday is oncoming."_
+## Overview
 
----
+LoveLaundry Edition is a software project developed by Rasindu Dulshan Siriwardhana to support the development and management of the LoveLaundry system.
 
-## Layout
+This release represents a version of the project maintained in the LoveLaundry GitHub repository.
 
-```
-edition-v1/
-├─ bill_service/            gate passes, deliveries, bills, linens, shop bills, client portal
-├─ user-service/            auth, laundries (tenants), memberships, hotel/shop client accounts
-├─ quotation-service/       quotations
-├─ laundry-management/      accounting: customers, transactions, expenses, salaries
-├─ worker-service/          workers
-├─ love-ai/                 AI helpers
-├─ lovelaundry-bot/         chat/automation bot
-├─ quotations-ui/           React app — the laundry-side UI
-├─ shop-app/                React app — shop client portal
-├─ hotel-app/               React app — hotel client portal
-├─ linen-room-app/          React app — linen room scanning
-├─ guest-billing/           standalone bill printing tool
-├─ public.lovelaundry.lk/   marketing site
-├─ LoveMobi/                Flutter driver app
-├─ deploy/                  docker compose + env example for the whole stack
-├─ architecture/            app-split plan and the API URI checker
-└─ docs/                    system manual (PDF/Word/HTML/LaTeX), registration guide, test report
-```
+## Developer
 
-## Services and ports
+**Developed by Rasindu Dulshan Siriwardhana**
 
-Every backend listens on `:8000` inside the compose network. nginx publishes a
-single origin and rewrites path prefixes, which is why the front-ends call
-`/api/user/...` and `/api/bills/...` rather than host:port pairs.
+GitHub: https://github.com/DulshanSiriwardhana
 
-| Prefix | Service |
-|---|---|
-| `/api/user` | user-service |
-| `/api/bills` | bill_service |
-| `/api/quotes` | quotation-service |
+## Installation
 
-## Running the stack
+For installation instructions, environment configuration, dependencies, and deployment requirements, refer to the project documentation and `README.md`.
 
-```bash
-cp deploy/backend.env.example deploy/.env      # then fill in the values
-docker compose -f deploy/docker-compose.yml up --build
-```
+## Release Information
 
-The stack expects MongoDB. Nothing else is required.
-
-## Front-ends
-
-| App | Dev | Production path |
-|---|---|---|
-| quotations-ui | `npm run dev` | `/` |
-| shop-app | `npm run dev -- --port 5174` | `/shop` |
-| hotel-app | `npm run dev -- --port 5175` | `/hotel` |
-| linen-room-app | `npm run dev -- --port 5176` | `/linen` |
-
-Each app proxies `/api` to the same host in development, so request paths are
-identical in dev and production.
-
-## The one rule that matters
-
-Data is isolated by `laundry_id`, and for client accounts additionally by
-`client_name`. Staff tokens carry `laundry_id` and a `laundries` membership list.
-Hotel and shop tokens carry only a `client_scope` and deliberately **no**
-`laundry_id`/`laundries`, so every staff endpoint refuses them by construction
-rather than by an explicit check that someone could forget.
-
-See `docs/REGISTRATION.md` for creating hotels, shops and their staff, and
-`docs/manual/` for the full manual (139 pages).
-
-## Tests
-
-```bash
-cd user-service    && .venv/Scripts/python -m pytest tests/ -q
-cd bill_service    && .venv/Scripts/python -m pytest tests/ -q --ignore=tests/test_security_middleware.py
-cd quotations-ui   && npm run build
-```
-
-Latest run: **80 passed** (user-service), **393 passed / 2 skipped**
-(bill_service), all front-ends building.
-
-## Secrets
-
-No `.env` file is committed. Each service ships a `.env.example`; the real values
-live only in the deployment environment. `deploy/backend.env.example` lists what
-the stack needs.
+- **Release version:** v1.0.0
+- **Release status:** Initial release
+- **Maintainer/Developer:** Rasindu Dulshan Siriwardhana
