@@ -123,6 +123,40 @@ services:
     mem_limit: 256m
     networks: [app]
 
+  shop-app:
+    build:
+      context: ../shop-app
+      args:
+        VITE_USER_API_URL: /api/user
+        VITE_BILL_API_URL: /api/bills
+    ports:
+      - "3001:80"
+    depends_on:
+      bills-backend:
+        condition: service_healthy
+      user-backend:
+        condition: service_healthy
+    restart: unless-stopped
+    mem_limit: 256m
+    networks: [app]
+
+  hotel-app:
+    build:
+      context: ../hotel-app
+      args:
+        VITE_USER_API_URL: /api/user
+        VITE_BILL_API_URL: /api/bills
+    ports:
+      - "3002:80"
+    depends_on:
+      bills-backend:
+        condition: service_healthy
+      user-backend:
+        condition: service_healthy
+    restart: unless-stopped
+    mem_limit: 256m
+    networks: [app]
+
 networks:
   app:
     driver: bridge
