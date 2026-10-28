@@ -1,7 +1,7 @@
 # LoveLaundry System - Comprehensive User Manual
 
-**Version**: 2.0
-**Date**: October 2026
+**Version**: 3.0
+**Date**: January 2026
 **Author**: LoveLaundry Team
 
 ---
@@ -21,18 +21,19 @@
 8. Linen Room Management
 9. Worker Management
 10. Quotations & Billing
+11. Mobile Applications
 
 ### Part III: Technical Guide
-11. Architecture Overview
-12. API Reference
-13. Security Best Practices
-14. Data Management
-15. Troubleshooting
+12. Architecture Overview
+13. API Reference
+14. Security Best Practices
+15. Data Management
+16. Troubleshooting
 
 ### Part IV: Appendices
-16. Quick Reference
-17. Glossary
-18. Revision History
+17. Quick Reference
+18. Glossary
+19. Revision History
 
 ---
 
@@ -93,10 +94,20 @@ The LoveLaundry system consists of:
 - Monthly statements
 - Balance management
 
-#### 1.4.5 AI-Powered Features
-- Love AI for intelligent recommendations
-- Automated task assignment
-- Predictive analytics
+#### 1.4.5 Mobile Applications
+- LoveMobi: Full-featured mobile management app
+- LinenScan Pro: Dedicated high-volume scanning app
+- Bluetooth scanner support
+- Real-time synchronization
+- Offline support with automatic sync
+
+#### 1.4.6 Advanced Security
+- AES-256-GCM encryption for sensitive data
+- Content Security Policy (CSP)
+- HSTS with preload
+- Rate limiting per endpoint
+- Request correlation logging
+- Comprehensive audit trails
 
 ---
 
@@ -109,7 +120,8 @@ The LoveLaundry system consists of:
 │                     Frontend Applications                    │
 ├─────────────┬─────────────┬─────────────┬─────────────────┤
 │ Hotel App   │ Shop App    │ Linen Room  │ Quotations UI   │
-│ (React)     │ (React)     │ App (React) │ (React)         │
+│ (port 3002) │ (port 3001) │ App         │ (port 80)       │
+│ (React)     │ (React)     │ (React)     │ (React)         │
 └──────┬──────┴──────┬──────┴──────┬──────┴──────┬──────────┘
        │             │             │             │
        └─────────────┼─────────────┼─────────────┘
@@ -123,9 +135,11 @@ The LoveLaundry system consists of:
 │                    Backend Services (FastAPI)               │
 ├─────────────┬─────────────┬─────────────┬─────────────────┤
 │ User Service│ Bill Service│ Quotation   │ Worker Service  │
+│ (port 8000) │ (port 8000) │ (port 8000) │ (port 8000)     │
 ├─────────────┼─────────────┼─────────────┼─────────────────┤
 │ Laundry     │ Love AI    │             │                 │
-│ Management  │            │             │                 │
+│ Management  │ (port 8000)│             │                 │
+│ (port 8000) │            │             │                 │
 └──────┬──────┴──────┬──────┴──────┬──────┴──────┬──────────┘
        │             │             │             │
        └─────────────┼─────────────┼─────────────┘
@@ -183,6 +197,33 @@ The system uses Docker containers for:
 - Easy scaling
 - Consistent deployment
 - Health monitoring
+
+#### 2.4.1 Available Applications
+
+The system includes the following frontend applications:
+
+- **Hotel Desk App** (port 3002): Hotel staff portal for managing deliveries, gate passes, and invoices
+- **Shop Counter App** (port 3001): Shop staff portal for processing orders, bills, and customer accounts
+- **Linen Room App**: Linen scanning and inventory management
+- **Quotations UI** (port 80): Main management interface for laundry administrators
+- **LoveMobi**: Mobile application for on-the-go management
+
+#### 2.4.2 Docker Compose Services
+
+The docker-compose.yml file includes:
+
+**Backend Services:**
+- quotation-backend (port 8000)
+- bills-backend (port 8000)
+- user-backend (port 8000)
+- workers-backend (port 8000)
+- mgmt-backend (port 8000)
+- ai-backend (port 8000)
+
+**Frontend Applications:**
+- web (port 80) - Quotations UI
+- shop-app (port 3001) - Shop Counter App
+- hotel-app (port 3002) - Hotel Desk App
 
 ---
 
@@ -377,7 +418,43 @@ The administration dashboard provides:
 
 ### 5.2 Client Management
 
-#### 5.2.1 Registering a New Hotel
+#### 5.2.1 Self-Registration for Hotels and Shops
+
+Hotels and shops can now self-register for accounts through the dedicated portal applications:
+
+**Hotel Self-Registration:**
+1. Access the Hotel Desk App at `/register`
+2. Fill in the registration form:
+   - Username (3-64 characters)
+   - Full name
+   - Hotel name
+   - Email (optional)
+   - Laundry ID (if provided by your laundry provider)
+   - Password (minimum 8 characters)
+   - Confirm password
+3. Click "Create Account"
+4. Upon successful registration, sign in with your credentials
+
+**Shop Self-Registration:**
+1. Access the Shop Counter App at `/register`
+2. Fill in the registration form:
+   - Username (3-64 characters)
+   - Full name
+   - Shop name
+   - Email (optional)
+   - Laundry ID (if provided by your laundry provider)
+   - Password (minimum 8 characters)
+   - Confirm password
+3. Click "Create Account"
+4. Upon successful registration, sign in with your credentials
+
+**Note:** Self-registered accounts are created with default roles (HOTEL_MANAGER for hotels, SHOP_STAFF for shops). Laundry administrators can modify roles and permissions as needed.
+
+#### 5.2.2 Admin-Managed Registration
+
+Laundry administrators can also create accounts for hotels and shops through the management interface:
+
+**Registering a New Hotel (Admin Method):**
 1. Navigate to Management → Customers
 2. Click "Add Customer"
 3. Select client type: HOTEL
@@ -391,7 +468,7 @@ The administration dashboard provides:
 6. Set initial credit limit
 7. Save the customer
 
-#### 5.2.2 Registering a New Shop
+**Registering a New Shop (Admin Method):**
 1. Navigate to Management → Customers
 2. Click "Add Customer"
 3. Select client type: SHOP
