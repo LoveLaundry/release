@@ -56,25 +56,30 @@
 \centering
 \vspace*{0.6cm}
 
-\includegraphics[width=0.62\linewidth]{images/cover.png}\par
-\vspace{1.2cm}
-{\headingfont\Large\color{crimson}LOVE LAUNDRY}\par
-\vspace{0.4cm}
-{\headingfont\Huge System Manual}\par
-\vspace{0.5cm}
-{\itshape\large Laundry, Shop, Hotel and Linen Room Operations}\par
-\vfill
-{\large Rasindu Dulshan Siriwardhana}\par
-\vspace{0.3cm}
-{\small\itshape BSc. (Hons) Engineering (Computer Engineering) --- Second Class Upper Division\\
-Faculty of Engineering, University of Ruhuna}\par
-\vspace{0.6cm}
-{\footnotesize\color{midgrey} FIRST EDITION \(\cdot\) OCTOBER 2026}
-\end{titlepage}
+ \includegraphics[width=0.42\linewidth]{images/brand.png}\par
+ \vspace{0.9cm}
+ {\headingfont\Huge System Manual}\par
+ \vspace{0.5cm}
+ {\itshape\large\color{crimson} \textquotedblleft Behold. Yesterday is oncoming.\textquotedblright}\par
+ \vspace{0.5cm}
+ {\large Laundry, Shop, Hotel and Linen Room Operations}\par
+ \vspace{0.3cm}
+ {\small\color{midgrey} n Dimensions. Infinite Possibilities.}\par
+ \vfill
+ {\large Rasindu Dulshan Siriwardhana}\par
+ \vspace{0.3cm}
+ {\small\itshape BSc. (Hons) Engineering (Computer Engineering) --- Second Class Upper Division\\
+ Faculty of Engineering, University of Ruhuna}\par
+ \vspace{0.6cm}
+ {\footnotesize\color{midgrey} SECOND EDITION \(\cdot\) NOVEMBER 2026}
+ \end{titlepage}
 
 \frontmatter
 \tableofcontents
 \mainmatter
+Copyright and document controlLoveLaundry — System Manual
+
+\textsc{\small\color{crimson}Copyright and document control}\par\medskip
 Copyright and document controlLoveLaundry — System Manual
 
 \textsc{\small\color{crimson}Copyright and document control}\par\medskip
@@ -102,6 +107,9 @@ Total pages & 105, including cover and appendices \\ \hline
 Copyright and document controlLoveLaundry — System Manual
 
 \textsc{\small\color{crimson}Copyright and document control · continued}\par\medskip
+LicenceLoveLaundry — System Manual
+
+\textsc{\small\color{crimson}Licence}\par\medskip
 LicenceLoveLaundry — System Manual
 
 \textsc{\small\color{crimson}Licence}\par\medskip
@@ -134,6 +142,8 @@ ContentsLoveLaundry — System Manual
 
 ContentsLoveLaundry — System Manual
 
+ContentsLoveLaundry — System Manual
+
 List of FiguresLoveLaundry — System Manual
 
 \section*{List of Figures}
@@ -141,9 +151,12 @@ List of TablesLoveLaundry — System Manual
 
 \section*{List of Tables}
 \part{Foundation}
+\textsc{\small\color{crimson}Part One ·}\par\medskip
 \textsc{\small\color{crimson}Part One · Introduction}\par\medskip
 \chapter{Introduction}
 \begin{quote}\itshape What LoveLaundry is, the operation it was built for, and the vocabulary its users already speak.\end{quote}
+1 · LoveLaundry — System Manual
+
 \section{1.1 Purpose}
 This manual documents the LoveLaundry platform: a multi-tenant operations system for a commercial laundry that also serves a retail shop counter, hotel clients, and its own linen room. It exists so that the people who run, support and extend the platform have one authoritative description of how it is put together and how it is used — not a marketing overview, and not a substitute for reading the code, but the document that makes the code and the operation legible to each other.
 
@@ -155,6 +168,8 @@ Every statement in this manual is either derived from the implementation as it s
 1 · IntroductionLoveLaundry — System Manual
 
 The manual covers the platform as deployed for a single laundry business operating four front ends against a shared service estate. The boundary is set out below so that readers know when they have left the documented surface.
+
+1 · LoveLaundry — System Manual
 
 \begin{center}\small
 \begin{tabularx}{\linewidth}{|X|X|X|}
@@ -179,6 +194,8 @@ The laundry businessThe core operation: collecting soiled linen and garments by 
 The shop counterA retail and walk-in service point. Customers arrive with a bag, not an account. The Shop Counter app is deliberately narrow: a today view, a bill list, a quick bill pad and a day close.
 
 Hotel clientsHotels are the laundry's largest customers and its most demanding readers of records. A hotel is a separate entity in the platform: it is the carried on gate passes, deliveries, bills and quotations. Hotel staff sign in with a client account and see only their own property's records — never another hotel's, and never the laundry's internal costs.notclient\_name
+
+1 · LoveLaundry — System Manual
 
 The linen roomThe linen room is where physical items are counted, tagged, washed and reconciled. The Linen Room app turns that physical work into a digital trail: each tag is scanned at every stage, from collection through wash, press and readiness to delivery, with explicit actions for items that go missing, arrive damaged or are retired from service. Its users work one-handed with a scanner, so the interface is a single scan field and a short list of valid next actions.
 
@@ -205,6 +222,8 @@ Recoverable by design & Backups, point-in-time recovery and restore drills are p
 \section{1.5 Glossary of domain terms}
 The platform uses the vocabulary of the laundry trade. These terms recur throughout the manual and in the interface, and they do not always mean what a software reader would expect.
 
+1 · LoveLaundry — System Manual
+
 \begin{center}\small
 \begin{tabularx}{\linewidth}{|X|X|}
 \hline
@@ -230,13 +249,14 @@ Discrepancy & A mismatch between expected and scanned linen quantities or status
 1 · IntroductionLoveLaundry — System Manual
 
 \begin{notebox}Note on “hotel”Throughout this manual, “hotel” refers to a client organisation identified by the  string. It is never a database entity, never a tenant, and never a login domain of its own. Chapter 2.8 explains why this matters for isolation.\texttt{client\_name}\end{notebox}
+\textsc{\small\color{crimson}Part One ·}\par\medskip
 \textsc{\small\color{crimson}Part One · System Overview and Architecture}\par\medskip
 \chapter{System Overview and Architecture}
 \begin{quote}\itshape Six services, four front ends, three databases, one tenancy rule.\end{quote}
 \section{2.1 Service map}
 LoveLaundry is a service-oriented system built from Python/FastAPI services, each owning a bounded part of the business, behind four React front ends. There is no shared application server and no shared in-process state: a front end calls a service over HTTPS with a bearer token, and the service answers from the database it owns. Figure 1 shows the estate as deployed.
 
-2 · System Overview and ArchitectureLoveLaundry — System Manual
+2 · LoveLaundry — System Manual
 
 \begin{figure}[htbp]
 \centering
@@ -248,6 +268,8 @@ LoveLaundry is a service-oriented system built from Python/FastAPI services, eac
 Each service is independently deployable and owns its collections. The table below is the authoritative list of services, their responsibilities and their development ports.
 
 2 · System Overview and ArchitectureLoveLaundry — System Manual
+
+2 · LoveLaundry — System Manual
 
 \begin{center}\small
 \begin{tabularx}{\linewidth}{|X|X|X|X|}
@@ -275,6 +297,8 @@ owns the pre-sale conversation. A quotation is a priced proposal with line items
 The ports above are development defaults. In a deployed environment the reverse proxy terminates TLS and routes by path prefix, and the services listen on the loopback interface only. A service port is never published to the internet, and no front end hard-codes one: service base URLs are supplied at build time through Vite environment variables.
 
 2 · System Overview and ArchitectureLoveLaundry — System Manual
+
+2 · LoveLaundry — System Manual
 
 \begin{center}\small
 \begin{tabularx}{\linewidth}{|X|X|X|X|}
@@ -306,6 +330,8 @@ LoveMobi & — & Staff sign-in (Flutter client) & — & Owners and managers on t
 \subsection*{Shared conventions}
 2 · System Overview and ArchitectureLoveLaundry — System Manual
 
+2 · LoveLaundry — System Manual
+
 \begin{itemize}
 \item Each application stores its token under its own key — , ,  — so that two applications open in the same browser cannot overwrite each other's session, and so that a token issued to one audience is never silently reused by another.\textbf{Session storage.}\texttt{ll\_shop\_session}\texttt{ll\_hotel\_session}\texttt{ll\_linen\_session}
 \item Every request attaches . No application puts a token in a query string, and none stores a token in a cookie readable by scripting.\textbf{Token in the header.}\texttt{Authorization: Bearer <token>}
@@ -335,6 +361,8 @@ Every authenticated request follows the same seven-stage path. The order matters
 
 2 · System Overview and ArchitectureLoveLaundry — System Manual
 
+2 · LoveLaundry — System Manual
+
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\linewidth]{images/fig-02.png}
@@ -361,6 +389,8 @@ The platform separates its data into three MongoDB databases along ownership lin
 
 Identity and tenancy — user\_dbHolds , , and . It is small, changes rarely, and is read on every sign-in. Its integrity is a precondition for everything else: if identity is wrong, every downstream decision is wrong. It is written only by user-service.userslaundriesmembershipsclient\_accounts
 
+2 · LoveLaundry — System Manual
+
 Operations — the bill\_service databaseHolds , , , , , , day-close records, dispatch records and the materialised monthly matrix. This is the largest and busiest store, written by every front end and read by dashboards, and it is the one whose loss stops the business trading.gate\_passesdeliveriesbillsshop\_billslinensreturns
 
 2 · System Overview and ArchitectureLoveLaundry — System Manual
@@ -379,6 +409,8 @@ Accounting — laundry-managementHolds , , , , , and salary records. It follows 
 A single database would be simpler to operate and harder to reason about. Three concerns drive the separation. First, blast radius: a runaway reporting aggregation in the operations store must not degrade sign-in. Second, retention: accounting records must survive longer and be restorable to a specific date without replaying operational churn. Third, authority: when an operational balance and an accounting balance disagree, the platform needs an unambiguous rule about which one is corrected — and that rule is only credible if the two live in different stores.
 
 \begin{notebox}NoteThe three databases may run on the same MongoDB replica set in a small deployment. Separation is logical first and physical second; the ownership rules apply either way, and a future move to separate clusters requires no application change.\end{notebox}
+2 · LoveLaundry — System Manual
+
 \begin{center}\small
 \begin{tabularx}{\linewidth}{|X|X|X|X|X|}
 \hline
@@ -415,6 +447,8 @@ customers, transactions, payments & laundry-management & laundry\_id & Accountin
 expenses, salary, employees, items & laundry-management & laundry\_id & Cost side of the business and the priced item catalogue used when raising bills. \\ \hline
 \end{tabularx}
 \end{center}
+2 · LoveLaundry — System Manual
+
 \subsection*{Denormalisation, and why it is deliberate}
 Operational documents copy small fragments of other domains at write time: a gate pass stores the  string, a delivery line stores the item description and rate, a bill stores the client's billing name. This is not a violation of ownership: it is how the platform avoids cross-database joins and keeps historical documents readable after the source record changes.\texttt{client\_name}
 
@@ -432,6 +466,8 @@ The rule is that a copied fragment is a . Renaming a client does not rewrite las
 \section{2.7 JWT and tenancy flow}
 Tenancy is established once, at sign-in, and carried in the token thereafter. The sequence below shows a staff sign-in and the first authenticated read that follows it.
 
+2 · LoveLaundry — System Manual
+
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\linewidth]{images/fig-03.png}
@@ -447,6 +483,8 @@ The  claim is a snapshot of the user's memberships at sign-in. It exists so that
 \begin{notebox}NoteA user with memberships in two laundries has two valid tenants, but a token names exactly one. Switching laundry re-authenticates. This is a deliberate trade of convenience for certainty.\end{notebox}
 \section{2.8 Hotel client-account isolation}
 Hotels are the platform's most sensitive external readers, and the design that protects them is deliberately unusual.  There is no  collection and no hotel tenant. A hotel is the  string carried on gate passes, deliveries, bills and quotations — a value that already existed in the operational data before the hotel portal was built.\textbf{A hotel is not an entity.}\texttt{hotels}\texttt{client\_name}
+
+2 · LoveLaundry — System Manual
 
 Hotel logins live in a separate  collection in user-service. A client account records an email, a password hash, a status, the laundry it belongs to and the  it may see. It holds no role, no membership and no capability list, because a hotel user is not staff and must never be granted a staff permission by accident.\texttt{client\_accounts}\texttt{client\_name}
 
@@ -485,6 +523,8 @@ Rejected by & routes\texttt{/client-portal} & Every staff route, automatically \
 \subsection*{Why not give hotels a tenant?}
 Making a hotel a tenant would multiply the identity surface: every hotel would need a laundry, a membership, a role and a capability set, and every operational query would need a second scoping rule to decide whether the caller was staff or client. It would also make the existing data wrong, because the operational documents already carry  and no hotel identifier.\texttt{client\_name}
 
+2 · LoveLaundry — System Manual
+
 The chosen design keeps one tenant per laundry and one extra dimension —  — that is already present in the data. The cost is that hotel accounts are managed separately from staff accounts, which Chapter 8.3 covers. The benefit is that the two classes of token cannot be confused, and that a defect in hotel-facing code cannot escalate into staff authority.\texttt{client\_name}
 
 \begin{notebox}WarningAdding  to a client token to “simplify” a query destroys this isolation: the token would then satisfy the staff tenant dependency. Hotel portal code must read , never a top-level tenant claim.\texttt{laundry\_id}\texttt{client\_scope}\end{notebox}
@@ -498,6 +538,8 @@ The reference deployment is a single application host behind a TLS-terminating r
 \includegraphics[width=\linewidth]{images/fig-04.png}
 \caption{— Reference deployment topology: proxy at the edge, services on loopback, replica set and object storage behind a private network.Figure 4}
 \end{figure}
+2 · LoveLaundry — System Manual
+
 \subsection*{Operating assumptions}
 \begin{itemize}
 \item The reference deployment accepts a single host as a single point of failure for compute, mitigated by documented rebuild steps and by the fact that all state lives in MongoDB and object storage.\textbf{Single application host.}
@@ -529,6 +571,8 @@ Hosting & Linux host, reverse proxy, object storage & Simple, reproducible, and 
 \subsection*{Version policy}
 Front-end dependencies are pinned in the lockfile and upgraded deliberately, one minor version at a time, with a build and a smoke test after each step. Major upgrades — such as the move to React 19 and Tailwind 4 — are treated as projects: they are scheduled, tested against the four applications and released together, because a split across applications would leave staff switching between two visual languages.
 
+2 · LoveLaundry — System Manual
+
 Python service dependencies are pinned in the requirements file per service. A service may be upgraded independently, which is one of the practical benefits of the split: bill\_service can stay on a proven dependency set while a lower-risk service takes a newer one.
 
 \subsection*{What the stack deliberately excludes}
@@ -556,6 +600,8 @@ React / Vite / Tailwind & 19 / 8 / 4 & Aligned across all four applications. \\ 
 \section*{Service dependency graph}
 Which service calls which, and what fails when an arrow breaks.
 
+2 · LoveLaundry — System Manual
+
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\linewidth]{images/fig-05.png}
@@ -570,6 +616,8 @@ Reading the graph during an incident is a matter of following the arrows backwar
 \textsc{\small\color{crimson}2.12 · Tenancy decision flow}\par\medskip
 \section*{Tenancy decision flow}
 Five checks, in order, before a single document is read.
+
+2 · LoveLaundry — System Manual
 
 \begin{figure}[htbp]
 \centering
@@ -587,6 +635,8 @@ What fails together, and why the backup must live outside the blast radius.
 
 2 · System Overview and ArchitectureLoveLaundry — System Manual
 
+2 · LoveLaundry — System Manual
+
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\linewidth]{images/fig-07.png}
@@ -597,9 +647,57 @@ The topology is drawn as three domains rather than three tiers, because the ques
 The database is the domain that stops trade, and object storage is the domain that makes recovery possible. Keeping them in separate accounts is the control that prevents one compromised credential from removing both the data and its history.
 
 \begin{notebox}RuleIf the database and its backups share an account, ransomware has one target, not two. Separation of accounts is a recovery control, not an administrative preference.\end{notebox}
+\textsc{\small\color{crimson}2.11 · Service dependencies}\par\medskip
+\section*{Service dependency graph}
+Which service calls which, and what fails when an arrow breaks.
+
+2 · LoveLaundry — System Manual
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{images/fig-08.png}
+\caption{— Service dependency graph, drawn as a line diagram: authenticated HTTP between services, per-service credentials to each store.Figure 1}
+\end{figure}
+The graph is deliberately shallow. Clients talk to services; services talk to user-service for identity and to each other only where a business operation genuinely spans two domains. There is no service that every other service depends on except the identity authority, and that is the single point the platform accepts.
+
+Reading the graph during an incident is a matter of following the arrows backwards from the symptom. A shop counter that cannot take payment is not a shop problem: the arrow from shop-app to bill\_service is broken, and the first question is whether bill\_service is reachable or merely slow.
+
+\textsc{\small\color{crimson}2.12 · Tenancy decision flow}\par\medskip
+\section*{Tenancy decision flow}
+Five checks, in order, before a single document is read.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{images/fig-09.png}
+\caption{— The tenancy decision chain. Each failure returns before the next check runs.Figure 2}
+\end{figure}
+2 · LoveLaundry — System Manual
+
+Chapter 3 sets out the enforcement rules in full from page 19. Tenancy is not a filter applied at the end of a query; it is a sequence of decisions that must all succeed before a query is built. The order matters: identity before token kind, token kind before tenant, tenant before membership, membership before the record itself.
+
+The practical consequence is that a handler never asks which laundry is calling. It receives a resolved tenant context or it is never invoked, which removes the class of defect in which a developer forgets a filter.
+
+\begin{notebox}RuleA refusal never distinguishes a foreign record from a missing one. Both return not-found, so the endpoint cannot be used to enumerate another tenant's documents.\end{notebox}
+\textsc{\small\color{crimson}2.13 · Failure domains}\par\medskip
+\section*{Deployment topology and failure domains}
+What fails together, and why the backup must live outside the blast radius.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{images/fig-10.png}
+\caption{— Failure domains in the reference deployment: application host, database replica set, object storage.Figure 3}
+\end{figure}
+The topology is drawn as three domains rather than three tiers, because the question that matters in a disaster is not what talks to what but what disappears together. The application host is disposable: it holds no state and can be rebuilt from the deployment steps.
+
+The database is the domain that stops trade, and object storage is the domain that makes recovery possible. Keeping them in separate accounts is the control that prevents one compromised credential from removing both the data and its history.
+
+\begin{notebox}RuleIf the database and its backups share an account, ransomware has one target, not two. Separation of accounts is a recovery control, not an administrative preference.\end{notebox}
+\textsc{\small\color{crimson}Part One ·}\par\medskip
 \textsc{\small\color{crimson}Part One · Security Model}\par\medskip
 \chapter{Security Model}
 \begin{quote}\itshape Who can sign in, what they may do, and why one laundry can never read another's records.\end{quote}
+3 · LoveLaundry — System Manual
+
 \section{3.1 Authentication}
 The platform recognises three kinds of principal, and each has its own sign-in path. Staff — owners, managers, supervisors and counter staff — sign in against user-service with an email and password and receive a 24-hour staff token. Linen-room staff use the same path with linen-room roles attached to their membership. Hotel clients sign in against a separate endpoint with a separate collection and receive a 12-hour client token with a different claim shape. There is no anonymous access to any business endpoint.
 
@@ -627,6 +725,8 @@ Hotel client & POST /client/auth/login & 12 hours & , , no tenant claim, no capa
 Each application keeps its token under its own key:  for the shop,  for the hotel desk and  for the linen room. Separate keys mean that a supervisor who opens the shop app and the linen app in the same browser holds two independent sessions and cannot accidentally act in the wrong one. On a 401 the application clears its own key and returns to sign-in; it does not retry with the same token and it does not fall back to another stored session.\texttt{ll\_shop\_session}\texttt{ll\_hotel\_session}\texttt{ll\_linen\_session}
 
 \begin{notebox}WarningToken lifetime is a security control, not a convenience setting. Extending the staff lifetime to “avoid signing in every morning” lengthens the window in which a stolen token is usable, because there is no server-side session to revoke. Disable the account or rotate the signing key instead.\end{notebox}
+3 · LoveLaundry — System Manual
+
 \subsection*{What authentication does not do}
 Authentication establishes who is calling. It does not establish what they may do — that is authorisation, covered next — and it does not by itself confine them to a tenant, which is why the tenant dependency runs as a separate stage and fails closed. A valid token with no resolvable tenant is useless: it authenticates a caller the platform then refuses to serve.
 
@@ -652,6 +752,8 @@ HOUSEKEEPER & One laundry & Scans collection and receipt, and moves items throug
 \end{center}
 \subsection*{Capabilities}
 Capabilities are strings of the form . They are carried in the token, checked by a dependency on each route, and used by the front ends to decide which controls to render. The set in use is:\texttt{resource:action}
+
+3 · LoveLaundry — System Manual
 
 \begin{center}\small
 \begin{tabularx}{\linewidth}{|X|X|X|}
@@ -681,6 +783,8 @@ Role names are a poor thing to check inside a handler, because the business will
 \section{3.3 Tenant isolation rules}
 Tenant isolation is the single most important property of the platform, and it is enforced by construction rather than by discipline. The rules below are stated as invariants: each one is either true of every request or the request fails.
 
+3 · LoveLaundry — System Manual
+
 \begin{center}\small
 \begin{tabularx}{\linewidth}{|X|X|X|}
 \hline
@@ -699,7 +803,7 @@ Tenant isolation is the single most important property of the platform, and it i
 \subsection*{How a violation surfaces}
 The platform deliberately does not distinguish “this record belongs to someone else” from “this record does not exist”. Both produce the same 404 or 422. The reason is that a different response would confirm the existence of another tenant's data, which is itself a leak: an attacker could enumerate identifiers and learn how many gate passes a competitor processes.
 
-At the query level the filter is not applied as a post-processing step. A request for  compiles to a lookup on . If the identifier exists in another tenant, the query returns nothing, the handler raises not-found, and no document is ever loaded into memory.\texttt{/gatepasses/\{id\}}\texttt{\{ \_id: id, laundry\_id: <claim> \}}
+At the query level the filter is not applied as a post-processing step. A request for  compiles to a lookup on . If the identifier exists in another tenant, the query returns nothing, the handler raises not-found, and no document is ever loaded into memory.\texttt{/gate-passes/\{id\}}\texttt{\{ \_id: id, laundry\_id: <claim> \}}
 
 \subsection*{Where tenancy is checked, end to end}
 3 · Security ModelLoveLaundry — System Manual
@@ -711,6 +815,8 @@ At the query level the filter is not applied as a post-processing step. A reques
 \item new documents have  stamped from the context, never from the payload. A payload that includes  is rejected rather than trusted.\textbf{In every write:}\texttt{laundry\_id}\texttt{laundry\_id}
 \item the caller's token is forwarded, so the callee applies the same claim and cannot be tricked into a wider scope.\textbf{In cross-domain calls:}
 \end{itemize}
+3 · LoveLaundry — System Manual
+
 \subsection*{Testing the invariant}
 Tenancy is covered by explicit tests in both service suites: a request without a tenant claim must fail, a request with a foreign identifier must return not-found, a payload carrying  must be rejected, and a client token must be refused by staff routes. These are regression tests, not exploratory ones — they exist because the invariant is the product's central promise, and a refactor that quietly weakens it would otherwise pass every functional test.\texttt{laundry\_id}
 
@@ -722,11 +828,13 @@ Sensitive fields are encrypted before they reach MongoDB, using envelope encrypt
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=\linewidth]{images/fig-08.png}
+\includegraphics[width=\linewidth]{images/fig-11.png}
 \caption{— Envelope encryption at rest, with a separate deterministic path for equality search.Figure 8}
 \end{figure}
 \subsection*{The three parts}
 Each document that contains sensitive fields gets its own 256-bit data encryption key. The key is used once to encrypt the sensitive values with AES-256-GCM, a fresh 96-bit initialisation vector per encryption, and the resulting authentication tag is stored with the ciphertext. Reading the document requires the tag to verify; a tampered field fails rather than returning plausible garbage.\textbf{Per-document data key.}
+
+3 · LoveLaundry — System Manual
 
 The data keys are themselves encrypted — wrapped — by a key-encryption key that is held outside the database, in the environment's key store or secret manager. The database therefore contains wrapped keys that are useless without the KEK. A stolen database backup yields ciphertext and wrapped keys, not plaintext.\textbf{Key-encryption key.}
 
@@ -746,6 +854,8 @@ Internal calls stay inside the private network and are authenticated with the ca
 
 \subsection*{Audit}
 Security-relevant events are recorded with the actor, the tenant, the action, the target and the outcome. Audit records are append-only and are written even when the action fails, because a rejected attempt is often more interesting than a successful one.
+
+3 · LoveLaundry — System Manual
 
 \begin{center}\small
 \begin{tabularx}{\linewidth}{|X|X|}
@@ -785,6 +895,8 @@ Thresholds are configuration values rather than code constants, so that a busy S
 \section{3.6 Secrets management}
 The platform depends on a few high-value secrets: the JWT signing key, the key-encryption key, the search key for HMAC tokens, database credentials for each service, and the object-storage credential used by backups.
 
+3 · LoveLaundry — System Manual
+
 \subsection*{Rules}
 \begin{itemize}
 \item Configuration files in the repository contain placeholders only. A committed secret is treated as compromised and rotated, even if the commit is reverted.\textbf{No secret in source control.}
@@ -811,6 +923,8 @@ Because tokens are stateless, rotation must be staged so that valid sessions are
 \subsection*{Rotating the KEK and search key}
 The KEK is rotated by introducing a new key identifier and re-wrapping each document's data key with it. Documents are not re-encrypted, so the operation is fast and can run in the background; each document records the  of the KEK that wrapped its DEK, which makes the migration resumable and safe to interrupt. The old KEK is retained until every document reports the new identifier, then retired.\texttt{key\_id}
 
+3 · LoveLaundry — System Manual
+
 The search key is harder to rotate because its output is stored: changing the key invalidates every existing token. Rotation therefore requires a backfill that recomputes tokens for all affected documents, performed during a maintenance window with writes paused for the affected collection. Chapter 13.4 schedules this annually rather than continuously, because the cost is real and the benefit is marginal unless the key is suspected compromised.
 
 \subsection*{Response to a suspected secret leak}
@@ -830,8 +944,24 @@ Two kinds of session, deliberately unequal.
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=\linewidth]{images/fig-09.png}
+\includegraphics[width=\linewidth]{images/fig-12.png}
 \caption{— Claim-by-claim comparison of staff and hotel client tokens.Figure 9}
+\end{figure}
+The two tokens are not variants of one design; they are different instruments. A staff token asserts a person, a tenant and a set of capabilities. A client token asserts a property and a scope, and nothing else — no tenant claim, no role, no capability list.
+
+3 · LoveLaundry — System Manual
+
+The asymmetry is what makes the isolation automatic. Staff endpoints resolve a tenant from the token, so a token without one cannot pass, no matter which route it is sent to. Hotel endpoints read the scope object, so a staff token cannot satisfy them either.
+
+\begin{notebox}RuleAdding a tenant claim to a client token to simplify a query would collapse the distinction and let a hotel satisfy a staff authorisation check. The absence is the control.\end{notebox}
+\textsc{\small\color{crimson}3.7 · Token shapes compared}\par\medskip
+\section*{Token shapes compared}
+Two kinds of session, deliberately unequal.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{images/fig-13.png}
+\caption{— Claim-by-claim comparison of staff and hotel client tokens.Figure 4}
 \end{figure}
 The two tokens are not variants of one design; they are different instruments. A staff token asserts a person, a tenant and a set of capabilities. A client token asserts a property and a scope, and nothing else — no tenant claim, no role, no capability list.
 
@@ -839,15 +969,18 @@ The asymmetry is what makes the isolation automatic. Staff endpoints resolve a t
 
 \begin{notebox}RuleAdding a tenant claim to a client token to simplify a query would collapse the distinction and let a hotel satisfy a staff authorisation check. The absence is the control.\end{notebox}
 \part{The Applications}
+\textsc{\small\color{crimson}Part Two ·}\par\medskip
 \textsc{\small\color{crimson}Part Two · User Manual — Laundry App}\par\medskip
 \chapter{User Manual — Laundry App}
 \begin{quote}\itshape The full-surface application for the laundry business: passes, deliveries, bills, quotations, workers, reports and day close.\end{quote}
+4 · LoveLaundry — System Manual
+
 \section{4.1 Sign-in}
 The laundry app is the quotations-ui application, extended for the operational modules. It is the only surface that exposes the complete commercial picture, and therefore the only one where a manager can move from a gate pass to the bill it produced and the payment that settled it.
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=\linewidth]{images/fig-10.png}
+\includegraphics[width=\linewidth]{images/fig-14.png}
 \caption{— Laundry app sign-in with field annotations.Figure 10}
 \end{figure}
 \subsubsection*{Procedure — signing in}
@@ -863,6 +996,8 @@ The laundry app is the quotations-ui application, extended for the operational m
 \begin{notebox}NoteSign-in failures do not distinguish between a wrong password and an unknown account. This is deliberate: a different message would let an outsider discover which email addresses have accounts.\end{notebox}
 \section{4.2 Dashboards}
 The dashboard answers one question: what needs attention today? It is not a reporting surface — reports live under  — and it is not a workflow queue. Every tile is either a count that should be driven to zero, or a total that should match a physical count.\textbf{Reports}
+
+4 · LoveLaundry — System Manual
 
 \begin{center}\small
 \begin{tabularx}{\linewidth}{|X|X|}
@@ -899,12 +1034,14 @@ Day close & Today's collections & Reconcile cash and card totals against the dra
 \end{tabularx}
 \end{center}
 \begin{notebox}WarningA dashboard that shows zero unbilled deliveries at the end of the day is only meaningful if every delivery was recorded as it happened. Recording a week of deliveries retrospectively makes the figures look correct while destroying their value for decisions.\end{notebox}
+4 · LoveLaundry — System Manual
+
 \section{4.3 Gate passes}
 The gate-pass register is the operational spine of the laundry. Every collection is recorded here, every delivery refers back to a pass, and every bill is built from delivered quantities. A pass records who sent what, when it arrived and when it is promised back.
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=\linewidth]{images/fig-11.png}
+\includegraphics[width=\linewidth]{images/fig-15.png}
 \caption{— Gate-pass register with annotations.Figure 11}
 \end{figure}
 \subsubsection*{Columns and statuses}
@@ -917,9 +1054,11 @@ A gate pass is created at the moment goods are handed over. Doing it later, from
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=\linewidth]{images/fig-12.png}
+\includegraphics[width=\linewidth]{images/fig-16.png}
 \caption{— Gate-pass editor, showing header fields and item lines.Figure 12}
 \end{figure}
+4 · LoveLaundry — System Manual
+
 \subsubsection*{Procedure — creating a gate pass}
 \begin{enumerate}
 \item From the register, select .\textbf{+ New gate pass}
@@ -951,6 +1090,8 @@ Short delivery closed & Requires a reason and a supervisor. The undelivered quan
 Delivery corrected after billing & Requires a credit note; the original delivery is not edited once a bill has consumed it. \\ \hline
 \end{tabularx}
 \end{center}
+4 · LoveLaundry — System Manual
+
 \subsubsection*{Procedure — recording a delivery}
 \begin{enumerate}
 \item Open  and select , or open the pass and choose  from its detail view.\textbf{Deliveries}\textbf{Record delivery}\textbf{Deliver}
@@ -972,6 +1113,8 @@ A bill is raised against a client for deliveries in a period. It states quantiti
 
 \subsubsection*{Raising a bill}
 4 · User Manual — Laundry AppLoveLaundry — System Manual
+
+4 · LoveLaundry — System Manual
 
 \begin{enumerate}
 \item Open  and select .\textbf{Bills}\textbf{Raise bill}
@@ -1005,6 +1148,8 @@ A draft bill can be edited freely — lines added, rates corrected, the period c
 \item Tax computed by the platform from configuration, with the rate stated on the face of the bill.
 \end{itemize}
 \begin{notebox}WarningIf a bill total looks wrong after issue, do not edit the bill. Raise a credit note or an additional charge and reference the original. Editing an issued bill breaks the client's copy, the statement and the audit trail at once.\end{notebox}
+4 · LoveLaundry — System Manual
+
 4 · User Manual — Laundry AppLoveLaundry — System Manual
 
 \textsc{\small\color{crimson}4.7 · Bill detail and payments}\par\medskip
@@ -1041,6 +1186,8 @@ A payment posted in error is reversed, never deleted. The reversal creates a neg
 A quotation is a priced offer. It carries line items, rates, validity and terms, and it can be converted into operational work — but it never becomes a bill by itself. The separation matters: a quotation is a promise about price, while a bill is a statement of work actually delivered.
 
 4 · User Manual — Laundry AppLoveLaundry — System Manual
+
+4 · LoveLaundry — System Manual
 
 \begin{center}\small
 \begin{tabularx}{\linewidth}{|X|X|X|}
@@ -1084,6 +1231,8 @@ Contact & Phone for shift coordination & Optional; treated as personal data \\ \
 \end{center}
 4 · User Manual — Laundry AppLoveLaundry — System Manual
 
+4 · LoveLaundry — System Manual
+
 \subsubsection*{Procedure — adding a worker}
 \begin{enumerate}
 \item Open  and select .\textbf{Workers}\textbf{Add worker}
@@ -1116,6 +1265,8 @@ Worker productivity & Items or batches attributed per worker & Piece-rate payrol
 The matrix is a grid: clients down the side, days of the month across the top, and a cell for each day holding the quantity and value processed for that client. It exists because a monthly total hides the pattern that matters — a client whose volume collapses for four days, or a day on which one client's items were entered against another's name.
 
 4 · User Manual — Laundry AppLoveLaundry — System Manual
+
+4 · LoveLaundry — System Manual
 
 Rows are clients, columns are calendar days, and the final columns total the month. Cells are derived from gate passes (received) and deliveries (returned), so the matrix is a view, not a ledger: nothing is typed into it, and it cannot be edited. A cell that looks wrong is a pass that was entered wrongly, and that is where the correction belongs.
 
@@ -1150,6 +1301,8 @@ Day-close record & Immutable; a correction requires a reopening with a reason \\
 
 \textsc{\small\color{crimson}4.12 · Administration, users and common errors}\par\medskip
 \section*{Administration, users and common errors}
+4 · LoveLaundry — System Manual
+
 Administration in the laundry app is limited to the tenant you are signed in to: users, their memberships and roles, and hotel client accounts for your own clients. Creating a laundry is a platform operation, described in Chapter 8.1, and is not available from this application.
 
 \subsubsection*{Users and roles}
@@ -1175,9 +1328,11 @@ What has to be true before a date can be frozen, and what happens when it is not
 
 4 · User Manual — Laundry AppLoveLaundry — System Manual
 
+4 · LoveLaundry — System Manual
+
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=\linewidth]{images/fig-13.png}
+\includegraphics[width=\linewidth]{images/fig-17.png}
 \caption{— Day-close sequence, including the blocked branch when unbilled deliveries remain.Figure 13}
 \end{figure}
 Closing a day is a transaction with a precondition, not a button that writes a total. The service counts unbilled deliveries first; if any exist, it refuses and returns the list. Nothing is frozen, so the operator can correct the cause and try again.
@@ -1185,6 +1340,23 @@ Closing a day is a transaction with a precondition, not a button that writes a t
 When the close succeeds, the totals and the close record commit together. That single unit is what makes the day's figures defensible: there is no state in which a date is marked closed but its totals were never written.
 
 \begin{notebox}RuleA close that fails is cheaper than a close that succeeds with an unresolved discrepancy. Reopening is itself an audited event and is never the first resort.\end{notebox}
+\textsc{\small\color{crimson}4.13 · Day-close sequence}\par\medskip
+\section*{Day-close sequence}
+What has to be true before a date can be frozen, and what happens when it is not.
+
+4 · LoveLaundry — System Manual
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{images/fig-18.png}
+\caption{— Day-close sequence, including the blocked branch when unbilled deliveries remain.Figure 5}
+\end{figure}
+Closing a day is a transaction with a precondition, not a button that writes a total. The service counts unbilled deliveries first; if any exist, it refuses and returns the list. Nothing is frozen, so the operator can correct the cause and try again.
+
+When the close succeeds, the totals and the close record commit together. That single unit is what makes the day's figures defensible: there is no state in which a date is marked closed but its totals were never written.
+
+\begin{notebox}RuleA close that fails is cheaper than a close that succeeds with an unresolved discrepancy. Reopening is itself an audited event and is never the first resort.\end{notebox}
+\textsc{\small\color{crimson}Part Two ·}\par\medskip
 \textsc{\small\color{crimson}Part Two · User Manual — Shop Counter App}\par\medskip
 \chapter{User Manual — Shop Counter App}
 \begin{quote}\itshape A point-of-sale surface for walk-in customers: fast, narrow, and reconciled at the end of every shift.\end{quote}
@@ -1204,6 +1376,8 @@ Core records & Shop bills, today's takings, day-close totals \\ \hline
 Typical user & Counter staff, shop supervisor \\ \hline
 \end{tabularx}
 \end{center}
+5 · LoveLaundry — System Manual
+
 5 · User Manual — Shop Counter AppLoveLaundry — System Manual
 
 \subsubsection*{Procedure — signing in at the counter}
@@ -1220,7 +1394,7 @@ The today view is the shop's home screen and, for most staff, the only screen th
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=\linewidth]{images/fig-14.png}
+\includegraphics[width=\linewidth]{images/fig-19.png}
 \caption{— Shop Counter today view.Figure 14}
 \end{figure}
 \subsubsection*{What the tiles mean}
@@ -1228,6 +1402,8 @@ is the sum of paid shop bills for the business date, split by tender in the deta
 
 \begin{notebox}WarningA large open-bill count at closing time usually means bills were abandoned mid-transaction rather than held deliberately. Resolve them before day close; an abandoned bill is a customer who left without paying and without a receipt.\end{notebox}
 5 · User Manual — Shop Counter AppLoveLaundry — System Manual
+
+5 · LoveLaundry — System Manual
 
 \textsc{\small\color{crimson}5.3 · Bills}\par\medskip
 \section*{Shop bills}
@@ -1264,9 +1440,11 @@ Quick bill is the counter's fast path: a numeric keypad, the most-used services 
 
 5 · User Manual — Shop Counter AppLoveLaundry — System Manual
 
+5 · LoveLaundry — System Manual
+
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=\linewidth]{images/fig-15.png}
+\includegraphics[width=\linewidth]{images/fig-20.png}
 \caption{— Quick bill pad: item list left, one-touch services and tender right.Figure 15}
 \end{figure}
 \subsubsection*{Procedure — a cash sale in under a minute}
@@ -1286,6 +1464,8 @@ The shop's day close is shorter than the laundry's, and it has one job: prove th
 
 \subsubsection*{Procedure — closing the shop day}
 5 · User Manual — Shop Counter AppLoveLaundry — System Manual
+
+5 · LoveLaundry — System Manual
 
 \begin{enumerate}
 \item Resolve every open bill: complete payment, or void it with a reason.
@@ -1327,6 +1507,8 @@ The app hides actions the signed-in user cannot perform, so a counter assistant 
 
 5 · User Manual — Shop Counter AppLoveLaundry — System Manual
 
+5 · LoveLaundry — System Manual
+
 \begin{center}\small
 \begin{tabularx}{\linewidth}{|X|X|X|}
 \hline
@@ -1366,6 +1548,8 @@ Open the paid bill and select . The reprint carries the same number and a  marke
 
 5 · User Manual — Shop Counter AppLoveLaundry — System Manual
 
+5 · LoveLaundry — System Manual
+
 \begin{notebox}WarningNever re-enter a sale to correct a receipt. That creates a second bill and inflates takings; void the original and re-enter once, or reprint it.\end{notebox}
 \textsc{\small\color{crimson}5.8 · Shift handover and reconciliation}\par\medskip
 \section*{Shift handover and reconciliation}
@@ -1399,6 +1583,8 @@ The messages below account for nearly all counter incidents. Each names what the
 
 5 · User Manual — Shop Counter AppLoveLaundry — System Manual
 
+5 · LoveLaundry — System Manual
+
 \begin{center}\small
 \begin{tabularx}{\linewidth}{|X|X|X|}
 \hline
@@ -1417,9 +1603,12 @@ Day close blocked & Open bills or unapproved refunds remain & Resolve the listed
 Stop and escalate if the app shows a total that disagrees with the items, if a paid bill cannot be found, or if the drawer difference exceeds the shop's threshold. In each case the correct action is to preserve the state — do not void, refund or re-enter — and to record what was on screen, because a second transaction taken to “fix” the first is what turns a reportable discrepancy into an unexplainable one.
 
 \begin{notebox}NoteReport the exact message text. “It wouldn't let me” cannot be diagnosed; “403 payment:write required” identifies the cause immediately.\end{notebox}
+\textsc{\small\color{crimson}Part Two ·}\par\medskip
 \textsc{\small\color{crimson}Part Two · User Manual — Hotel Desk App}\par\medskip
 \chapter{User Manual — Hotel Desk App}
 \begin{quote}\itshape A read-only portal in which a hotel sees its own laundry records — and nothing else.\end{quote}
+6 · LoveLaundry — System Manual
+
 \section{6.1 Hotel client sign-in}
 The Hotel Desk app is the hotel-app front end. It is used by hotel front-office and housekeeping managers to check what they sent, what came back, and what they owe. It is not a staff application and it cannot change operational records: a hotel observes, it does not edit.
 
@@ -1451,9 +1640,11 @@ Scope & One laundry, one client\_name \\ \hline
 \section*{Overview}
 The overview is the hotel's single screen: what is currently with the laundry, what has been returned this month, what is outstanding financially. Every figure is filtered by the hotel's own  within the issuing laundry, so no other property's volume can appear in a total.\texttt{client\_name}
 
+6 · LoveLaundry — System Manual
+
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=\linewidth]{images/fig-16.png}
+\includegraphics[width=\linewidth]{images/fig-21.png}
 \caption{— Hotel Desk overview for a single property.Figure 16}
 \end{figure}
 \subsubsection*{Reading the tiles}
@@ -1481,6 +1672,8 @@ Last update & When the status last changed \\ \hline
 \end{center}
 \subsubsection*{What the hotel can see on a pass}
 The hotel sees the items, the quantities, the service type and the status history. It does not see rates on the pass view — pricing is a commercial matter between the laundry and the property, stated on the invoice — and it never sees the laundry's internal cost, worker assignment or route information.
+
+6 · LoveLaundry — System Manual
 
 \subsubsection*{Procedure — finding a pass}
 \begin{enumerate}
@@ -1519,6 +1712,8 @@ A pass may come back in several deliveries. The hotel sees each one separately, 
 \item Report the difference the same day. A difference found a week later cannot be checked against the laundry floor.
 \item Do not sign for a delivery you have not counted; the recorded receiver is the evidence that the count was accepted.
 \end{enumerate}
+6 · LoveLaundry — System Manual
+
 \begin{notebox}NoteDeliveries are read-only here. If a count was signed for in error, the correction is made by the laundry and appears in the history, including the reason.\end{notebox}
 \textsc{\small\color{crimson}6.5 · Invoices}\par\medskip
 \section*{Invoices}
@@ -1551,6 +1746,8 @@ Invoices state quantities and agreed rates. They do not show the laundry's inter
 \begin{notebox}WarningIf an invoice includes a pass you do not recognise, do not pay it and do not ignore it. Report it with the pass number the same day; a misposted pass is easy to correct before the period closes and hard afterwards.\end{notebox}
 \textsc{\small\color{crimson}6.6 · Statements}\par\medskip
 \section*{Statements}
+6 · LoveLaundry — System Manual
+
 A statement lists every invoice, payment and adjustment for a period with a running balance. It is the document a hotel's finance team reconciles against its own ledger, and it is the reason the portal exists for many properties.
 
 \begin{center}\small
@@ -1579,6 +1776,8 @@ Closing balance & Opening balance plus invoices, less payments and credits \\ \h
 \textsc{\small\color{crimson}6.7 · What a hotel can and cannot do}\par\medskip
 \section*{What a hotel can and cannot do}
 The hotel portal is read-only by design. The table below is the complete statement of a hotel account's authority; anything not listed as permitted is refused by the server, not merely hidden in the interface.
+
+6 · LoveLaundry — System Manual
 
 \begin{center}\small
 \begin{tabularx}{\linewidth}{|X|X|X|}
@@ -1615,6 +1814,8 @@ These are the five tasks a hotel performs in the portal. All of them end in read
 \item For each pass, check the due-back date against housekeeping's requirement for the coming days.
 \item If a pass is overdue, contact the laundry with the pass number and the date it was due.
 \end{enumerate}
+6 · LoveLaundry — System Manual
+
 \subsubsection*{Procedure — preparing a month-end reconciliation}
 \begin{enumerate}
 \item Open  and select the closed month.\textbf{Statements}
@@ -1646,6 +1847,8 @@ Statement shows an unknown invoice & Pass posted to this property in error & Rep
 \subsubsection*{Support path}
 The hotel's first contact is the laundry that issued the account: they own the records, the invoicing and the client account itself. The laundry escalates to the platform operator only for authentication faults that survive a password reset — for example, a client account whose scope is missing or a token that is refused by every endpoint.
 
+6 · LoveLaundry — System Manual
+
 \subsubsection*{What to include in a support request}
 \begin{itemize}
 \item The property name and the client account email (never the password).
@@ -1662,7 +1865,7 @@ How one property's records are separated from every other property's, on every r
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=\linewidth]{images/fig-17.png}
+\includegraphics[width=\linewidth]{images/fig-22.png}
 \caption{— Request path from a client token to a scoped query, with the rejected paths shown.Figure 17}
 \end{figure}
 The portal has no endpoint that accepts a client name as a parameter. The name comes from the token's scope, so a hotel cannot ask for another property's records even by guessing an identifier.
@@ -1670,9 +1873,28 @@ The portal has no endpoint that accepts a client name as a parameter. The name c
 The dual filter is the mechanism: every query carries both the laundry and the client name. Filtering on the name alone would be unsafe across laundries; filtering on the laundry alone would expose every hotel to every other hotel.
 
 \begin{notebox}RuleA request for another property's invoice returns not-found, identical to an invoice that does not exist. The portal never confirms that another property's records exist.\end{notebox}
+6 · LoveLaundry — System Manual
+
+\textsc{\small\color{crimson}6.10 · Hotel portal request path}\par\medskip
+\section*{Hotel portal request path}
+How one property's records are separated from every other property's, on every request.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{images/fig-23.png}
+\caption{— Request path from a client token to a scoped query, with the rejected paths shown.Figure 6}
+\end{figure}
+The portal has no endpoint that accepts a client name as a parameter. The name comes from the token's scope, so a hotel cannot ask for another property's records even by guessing an identifier.
+
+The dual filter is the mechanism: every query carries both the laundry and the client name. Filtering on the name alone would be unsafe across laundries; filtering on the laundry alone would expose every hotel to every other hotel.
+
+\begin{notebox}RuleA request for another property's invoice returns not-found, identical to an invoice that does not exist. The portal never confirms that another property's records exist.\end{notebox}
+\textsc{\small\color{crimson}Part Two ·}\par\medskip
 \textsc{\small\color{crimson}Part Two · User Manual — Linen Room App}\par\medskip
 \chapter{User Manual — Linen Room App}
 \begin{quote}\itshape Scan-driven tracking of every tagged item, from collection to retirement.\end{quote}
+7 · LoveLaundry — System Manual
+
 \section{7.1 Overview and scanning}
 The Linen Room app is the linen-room-app front end, used on a tablet or handheld at the wash station. Its users work one-handed with a scanner, so the interface is a single scan field, a large current-item card, and a short list of valid next actions. Everything else is history.
 
@@ -1706,9 +1928,11 @@ A typed tag number is a guess with a keyboard. A scan is the identifier itself. 
 \section*{Lifecycle statuses}
 Each tag moves through a fixed sequence. Statuses advance only by recording the action that caused the move, and each action is attributed to a user and a time. The sequence is enforced server-side: a scan that would skip a stage is rejected.
 
+7 · LoveLaundry — System Manual
+
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=\linewidth]{images/fig-18.png}
+\includegraphics[width=\linewidth]{images/fig-24.png}
 \caption{— Linen state machine. Exceptions (, , ) branch from the active state.Figure 18mark\_missingmark\_damagedretire}
 \end{figure}
 7 · User Manual — Linen Room AppLoveLaundry — System Manual
@@ -1735,9 +1959,11 @@ retire & any → retired & Item withdrawn from service permanently \\ \hline
 \section*{Scan workflow}
 The station screen is built around one loop: scan, confirm, act. The current item card shows what the platform knows, and the action buttons show only what is legal next — which is how a fast operator avoids invalid transitions without memorising the rules.
 
+7 · LoveLaundry — System Manual
+
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=\linewidth]{images/fig-19.png}
+\includegraphics[width=\linewidth]{images/fig-25.png}
 \caption{— Scan station: scan field, current tag card and legal next actions.Figure 19}
 \end{figure}
 \subsubsection*{Procedure — scanning a batch through}
@@ -1767,6 +1993,8 @@ By age & Tags whose current status is older than expected & Find items stuck in 
 Retired & Tags withdrawn from service & Asset history and replacement rate \\ \hline
 \end{tabularx}
 \end{center}
+7 · LoveLaundry — System Manual
+
 \subsubsection*{What inventory is not}
 It is not a valuation. The platform counts tags and items, not their book value; asset accounting belongs to the accounting service and to the laundry's own fixed-asset register. It is also not a guarantee of physical presence: a tag can be scanned and then lost, which is exactly what the discrepancy process exists to catch.
 
@@ -1797,6 +2025,8 @@ Short delivery & Fewer items delivered than the client expected & Pass remains o
 Unscanned & Item found physically but absent from the batch record & Item is scanned into the correct stage; cause noted \\ \hline
 \end{tabularx}
 \end{center}
+7 · LoveLaundry — System Manual
+
 \subsubsection*{Procedure — recording a missing item}
 \begin{enumerate}
 \item Search the station, the batch and the rack before recording anything. Most missing items are in the previous batch.
@@ -1835,6 +2065,8 @@ Printing requires linen:write & HOUSEKEEPER can scan but not print \\ \hline
 \item Print, then apply each tag to an item immediately. Do not leave printed tags loose at the station.
 \item Confirm the batch in the app so that the tags are recorded as issued and attached.
 \end{enumerate}
+7 · LoveLaundry — System Manual
+
 \subsubsection*{Replacing a damaged tag}
 Where a tag is unreadable but the item is identifiable, retire the old tag and issue a replacement, recording the reason. Where the item is not identifiable, treat it as an unscanned item: count it, assign it to the client whose linen it matches, and record how the identification was made. Guessing the client is worse than leaving the item unassigned.
 
@@ -1864,6 +2096,8 @@ The four procedures below cover a normal shift: receiving a pass, running a batc
 Delivery is recorded in the laundry app against the gate pass, not in the linen room. The linen room's part is to ensure that every item on the rack has been scanned to , so that the delivery quantity is supported by tag history. Where the linen room is also the dispatch point, scan the items out as  at handover so that the tag and the delivery agree.\emph{ready}\textbf{deliver}
 
 \begin{notebox}NoteShift handover: confirm the batch count on screen matches the physical count, note any open discrepancies, and sign out. An unsigned station is an unattributable one.\end{notebox}
+7 · LoveLaundry — System Manual
+
 \textsc{\small\color{crimson}7.8 · Troubleshooting}\par\medskip
 \section*{Linen room — troubleshooting}
 \begin{center}\small
@@ -1892,9 +2126,11 @@ Escalate to a supervisor when an item cannot be identified, when a discrepancy i
 \section*{Linen lifecycle state machine}
 Seven forward states, three exception states, and no way back.
 
+7 · LoveLaundry — System Manual
+
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=\linewidth]{images/fig-20.png}
+\includegraphics[width=\linewidth]{images/fig-26.png}
 \caption{— The linen state machine with its exception branches. Transitions are written by scan events only.Figure 20}
 \end{figure}
 The scan procedure that writes these transitions is on page 75. The forward path is linear because the physical process is linear: goods are collected, received, washed, finished, pressed, made ready and delivered. Modelling it as a chain rather than a set of flags means an item cannot be simultaneously ready and in wash.
@@ -1902,7 +2138,24 @@ The scan procedure that writes these transitions is on page 75. The forward path
 The exception states branch off the active state rather than replacing the chain. An item marked missing leaves the batch but keeps its history, so when it is found it can be scanned back into the correct stage without inventing a new tag.
 
 \begin{notebox}RuleThere is no reverse transition and no status dropdown. A wrongly scanned item is corrected by recording the event and scanning it forward again, which leaves both facts visible.\end{notebox}
+\textsc{\small\color{crimson}7.9 · Linen lifecycle state machine}\par\medskip
+\section*{Linen lifecycle state machine}
+Seven forward states, three exception states, and no way back.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{images/fig-27.png}
+\caption{— The linen state machine with its exception branches. Transitions are written by scan events only.Figure 7}
+\end{figure}
+7 · LoveLaundry — System Manual
+
+The scan procedure that writes these transitions is on page 64. The forward path is linear because the physical process is linear: goods are collected, received, washed, finished, pressed, made ready and delivered. Modelling it as a chain rather than a set of flags means an item cannot be simultaneously ready and in wash.
+
+The exception states branch off the active state rather than replacing the chain. An item marked missing leaves the batch but keeps its history, so when it is found it can be scanned back into the correct stage without inventing a new tag.
+
+\begin{notebox}RuleThere is no reverse transition and no status dropdown. A wrongly scanned item is corrected by recording the event and scanning it forward again, which leaves both facts visible.\end{notebox}
 \part{Operating the Business}
+\textsc{\small\color{crimson}Part Three ·}\par\medskip
 \textsc{\small\color{crimson}Part Three · Administration and Configuration}\par\medskip
 \chapter{Administration and Configuration}
 \begin{quote}\itshape Creating tenants, granting access, and configuring an installation that can be rebuilt from documentation.\end{quote}
@@ -1921,7 +2174,7 @@ First administrator & An existing user granted ADMIN membership, or a new user c
 \end{tabularx}
 \end{center}
 \subsubsection*{Procedure — creating a laundry}
-8 · Administration and ConfigurationLoveLaundry — System Manual
+8 · LoveLaundry — System Manual
 
 \begin{enumerate}
 \item Sign in as a platform administrator and open the tenant administration screen.
@@ -1959,6 +2212,8 @@ HOUSEKEEPER & Scanning and finishing staff & Anyone who prints tags or retires i
 \subsubsection*{Removing access}
 8 · Administration and ConfigurationLoveLaundry — System Manual
 
+8 · LoveLaundry — System Manual
+
 Removing someone's access means removing the membership or disabling the user, never deleting history. A deleted user leaves records attributed to nobody, which is exactly the situation an audit cannot tolerate. Disabling the user prevents new sign-ins; existing tokens remain valid until they expire, so a departure that requires immediate certainty also requires a signing-key rotation or a documented acceptance of the residual window.
 
 \begin{notebox}NoteChanging a role takes effect at the next sign-in, because capabilities are carried in the token. If a change must apply immediately, disable the user and re-enable them so that a fresh token is issued.\end{notebox}
@@ -1991,6 +2246,8 @@ Status & Active or disabled \\ \hline
 A client account is disabled when a property changes management, when a member of staff leaves, or when credentials are suspected compromised. Disabling is immediate for new sign-ins and is recorded with the operator and reason. The endpoints are  for the account's own state,  for listing and creating accounts, and  for changing an account's state.\texttt{GET /client/auth/status}\texttt{GET|POST /clients}\texttt{PATCH /clients/\{id\}/status}
 
 8 · Administration and ConfigurationLoveLaundry — System Manual
+
+8 · LoveLaundry — System Manual
 
 \begin{notebox}WarningNever create a client account with a staff role, and never add a client account to a membership. The two identity systems are separate so that a hotel token can never satisfy a staff authorisation check.\end{notebox}
 \textsc{\small\color{crimson}8.4 · Environment variables}\par\medskip
@@ -2025,6 +2282,8 @@ VITE_ENABLE_AI_ASSIST=true
 \begin{notebox}WarningChanging a signing key or a KEK is not a routine configuration edit. Follow the rotation procedures in 3.6; an unplanned change invalidates every session or makes encrypted fields unreadable.\end{notebox}
 \textsc{\small\color{crimson}8.5 · Deployment steps}\par\medskip
 \section*{Deployment steps}
+8 · LoveLaundry — System Manual
+
 A deployment is a build, a configuration check, a service restart and a smoke test — in that order. The steps below assume a single application host behind a reverse proxy, as described in 2.9.
 
 8 · Administration and ConfigurationLoveLaundry — System Manual
@@ -2051,9 +2310,12 @@ Slow but functional & No & Investigate before rolling back a working system \\ \
 \end{tabularx}
 \end{center}
 \begin{notebox}WarningNever deploy on a Friday afternoon or immediately before a day close. A release that fails at close leaves the business unable to bill, and the person who can fix it is least available.\end{notebox}
+\textsc{\small\color{crimson}Part Three ·}\par\medskip
 \textsc{\small\color{crimson}Part Three · Disaster Management}\par\medskip
 \chapter{Disaster Management}
 \begin{quote}\itshape What can go wrong, how bad it would be, and who does what in the first hour.\end{quote}
+9 · LoveLaundry — System Manual
+
 \section{9.1 Framework and risk method}
 Disaster management here means the decisions made before an incident, so that during one nobody has to invent a process. The framework has four parts: a risk register that names and ranks the threats, a severity matrix that determines the response, a runbook that sequences the first hour, and a review that turns each incident into a change.
 
@@ -2091,6 +2353,8 @@ Silent billing error after a release & Medium & High & Suite gates, no Friday de
 \end{tabularx}
 \end{center}
 \begin{notebox}NoteThe last entry is the one most often missed. A release that produces subtly wrong bills is worse than an outage, because nobody notices until clients do.\end{notebox}
+9 · LoveLaundry — System Manual
+
 \textsc{\small\color{crimson}9.3 · Threat scenarios}\par\medskip
 \section*{Threat scenario — database loss}
 The operations database is lost or corrupted: a failed migration, an accidental drop, or storage failure on the primary. Sign-in still works, because user\_db is intact, which makes the incident look smaller than it is — staff can reach a dashboard that shows nothing.\textbf{Scenario.}
@@ -2120,6 +2384,8 @@ Do not run a repair against the only copy. Do not restore over a database that m
 \section*{Threat scenario — credential compromise}
 A staff password is phished, or a token is copied from a shared terminal. Because tokens are stateless, the attacker can act as that user until the token expires — up to 24 hours — and every action will be attributed to the real person.\textbf{Scenario.}
 
+9 · LoveLaundry — System Manual
+
 \subsubsection*{Detection}
 \begin{itemize}
 \item Sign-ins from unfamiliar addresses or at unusual hours, visible in the authentication log.
@@ -2146,6 +2412,8 @@ Force a password reset for the user, review whether the password was reused else
 \subsection*{Ransomware on the application host}
 The host is encrypted by ransomware, either through a compromised remote-access account or through a downloaded file. The application stops; the database may be on the same host or reachable from it.\textbf{Scenario.}
 
+9 · LoveLaundry — System Manual
+
 \begin{enumerate}
 \item Isolate the host from the network immediately. Do not shut it down if evidence may be needed, but do isolate it.
 \item Confirm that off-host backups exist and are immutable. This is the moment the design decision in 10.1 proves itself.
@@ -2169,6 +2437,8 @@ A member of staff issues refunds to themselves, voids bills after taking cash, a
 \section*{Threat scenario — region outage and supplier outage}
 \subsection*{Cloud region outage}
 The region hosting the application and database becomes unavailable: a provider incident, a network partition, or a sustained control-plane failure. Both the application and its primary database are unreachable, and the provider's own console may be degraded too.\textbf{Scenario.}
+
+9 · LoveLaundry — System Manual
 
 \begin{enumerate}
 \item Confirm the outage is the provider's, not yours: check status pages from outside the region and test connectivity from a second location.
@@ -2208,6 +2478,8 @@ SEV3 & A minor function degraded, business continues & One report failing; tag p
 SEV4 & Cosmetic or single-user inconvenience & Label misaligned; a filter not remembered & Next planned release \\ \hline
 \end{tabularx}
 \end{center}
+9 · LoveLaundry — System Manual
+
 \subsubsection*{Who decides}
 The first responder declares the severity using this table, and the platform operator confirms or raises it. When in doubt, declare higher: the cost of an unnecessary SEV1 is a wasted hour, and the cost of a late SEV1 is a day of unbilled work.
 
@@ -2231,9 +2503,11 @@ The runbook is written to be followed in the first hour, when information is inc
 \item Identify work performed on paper during the outage, enter it with the correct dates, and note the delay in the record.\textbf{T+4 h — Reconcile.}
 \item Hold the post-incident review within one business day, while memory is fresh; publish actions with owners and dates.\textbf{T+24 h — Review.}
 \end{enumerate}
+9 · LoveLaundry — System Manual
+
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=\linewidth]{images/fig-21.png}
+\includegraphics[width=\linewidth]{images/fig-28.png}
 \caption{— Incident roles. In a small team one person may hold two roles, but the scribe role is never dropped.Figure 21}
 \end{figure}
 \begin{notebox}NoteThe scribe is the most valuable role in a long incident and the first one omitted. A timeline written during the event is worth more than a reconstruction afterwards.\end{notebox}
@@ -2259,6 +2533,8 @@ Communication during an incident is factual and time-bound. Say what is known, w
 \section{9.7 Post-incident review}
 Every SEV1 and SEV2 incident gets a written review within one business day. The review is blameless in method but specific in outcome: it must produce changes with owners and dates, not a narrative of what everyone did wrong.
 
+9 · LoveLaundry — System Manual
+
 \begin{center}\small
 \begin{tabularx}{\linewidth}{|X|X|}
 \hline
@@ -2281,7 +2557,7 @@ One table that decides who is called and how fast.
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=\linewidth]{images/fig-22.png}
+\includegraphics[width=\linewidth]{images/fig-29.png}
 \caption{— Severity bands with response targets and the people they summon.Figure 22}
 \end{figure}
 Severity is assigned at declaration, from business impact rather than technical curiosity. A dull configuration error that stops billing is Sev1; an exotic defect in a report nobody reads is Sev3.
@@ -2289,13 +2565,30 @@ Severity is assigned at declaration, from business impact rather than technical 
 The matrix is read downwards, not upwards: start at the impact, then take the response target that belongs to it. The target is measured from declaration, not from the moment someone understands the cause.
 
 \begin{notebox}RuleSeverity may be raised during an incident and is never lowered. Lowering it mid-incident invites people to stand down before the work is finished.\end{notebox}
+9 · LoveLaundry — System Manual
+
+\textsc{\small\color{crimson}9.8 · Incident severity matrix}\par\medskip
+\section*{Incident severity matrix}
+One table that decides who is called and how fast.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{images/fig-30.png}
+\caption{— Severity bands with response targets and the people they summon.Figure 8}
+\end{figure}
+Severity is assigned at declaration, from business impact rather than technical curiosity. A dull configuration error that stops billing is Sev1; an exotic defect in a report nobody reads is Sev3.
+
+The matrix is read downwards, not upwards: start at the impact, then take the response target that belongs to it. The target is measured from declaration, not from the moment someone understands the cause.
+
+\begin{notebox}RuleSeverity may be raised during an incident and is never lowered. Lowering it mid-incident invites people to stand down before the work is finished.\end{notebox}
+\textsc{\small\color{crimson}Part Three ·}\par\medskip
 \textsc{\small\color{crimson}Part Three · Backup and Recovery}\par\medskip
 \chapter{Backup and Recovery}
 \begin{quote}\itshape What is protected, how quickly it must come back, and how the restore is proved rather than assumed.\end{quote}
 \section{10.1 What is backed up}
 Backups exist to restore a business, not to archive a server. The inventory below therefore follows the three-database model: everything that cannot be rebuilt from source is backed up, and everything that can be rebuilt is not.
 
-10 · Backup and RecoveryLoveLaundry — System Manual
+10 · LoveLaundry — System Manual
 
 \begin{center}\small
 \begin{tabularx}{\linewidth}{|X|X|X|}
@@ -2334,9 +2627,11 @@ Full estate & 15 minutes & 4 hours & Sequential restore in dependency order \\ \
 \end{center}
 10 · Backup and RecoveryLoveLaundry — System Manual
 
+10 · LoveLaundry — System Manual
+
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=\linewidth]{images/fig-23.png}
+\includegraphics[width=\linewidth]{images/fig-31.png}
 \caption{— Backup, retention and point-in-time recovery timeline.Figure 23}
 \end{figure}
 \begin{notebox}NoteThe 15-minute RPO depends on the oplog being intact. If the oplog is lost with the database, the achievable RPO becomes 24 hours, which is why the oplog is replicated off-host and monitored as a first-class backup artefact.\end{notebox}
@@ -2364,6 +2659,8 @@ The three dumps are staggered so that they do not compete for disk or network, a
 \subsubsection*{Monitoring the schedule}
 10 · Backup and RecoveryLoveLaundry — System Manual
 
+10 · LoveLaundry — System Manual
+
 \begin{itemize}
 \item A missed job raises an alert within 15 minutes of its expected completion.
 \item A job that completes with a size more than 20 percent below its recent average is treated as suspect and alerted, not accepted.
@@ -2389,6 +2686,8 @@ Restore order is fixed: user\_db first, operations second, accounting third. Ope
 \end{enumerate}
 \begin{notebox}WarningDo not restore over a live database in place. Restore into a fresh database, verify, then switch the connection string. An in-place restore that fails halfway leaves neither the old data nor the new.\end{notebox}
 10 · Backup and RecoveryLoveLaundry — System Manual
+
+10 · LoveLaundry — System Manual
 
 \textsc{\small\color{crimson}10.5 · Verification and integrity checks}\par\medskip
 \section*{Verification and integrity checks}
@@ -2425,6 +2724,8 @@ Point-in-time recovery (PITR) restores the database to a moment before a damagin
 
 \subsubsection*{Procedure — recovering to a chosen moment}
 10 · Backup and RecoveryLoveLaundry — System Manual
+
+10 · LoveLaundry — System Manual
 
 \begin{enumerate}
 \item Identify the exact time of the harmful change from the audit log or the application log. Precision matters: replaying one minute too far re-applies the damage.
@@ -2469,6 +2770,8 @@ The drill is performed quarterly against an isolated environment, using the same
 \end{center}
 10 · Backup and RecoveryLoveLaundry — System Manual
 
+10 · LoveLaundry — System Manual
+
 \subsubsection*{What the drill must produce}
 \begin{itemize}
 \item A measured restore duration, compared with the RTO. A drill that is not timed does not test the objective.
@@ -2481,19 +2784,28 @@ The drill is performed quarterly against an isolated environment, using the same
 \section*{Backup and recovery timeline}
 Three overlapping protections, and the fifteen minutes that separates them.
 
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=\linewidth]{images/fig-24.png}
-\caption{— Daily dumps, continuous oplog and the off-host copy, against the recovery-point target.Figure 24}
-\end{figure}
 The restore procedure itself begins on page 98, and the drill checklist on page 100. The timeline explains why the recovery-point target is fifteen minutes rather than a day. The nightly dump sets the floor, the oplog closes the gap to the moment of failure, and the off-host copy survives the loss of the host that wrote it.
 
 Each layer answers a different failure. The dump answers corruption, the oplog answers a bad change made an hour ago, and the off-host copy answers the loss of the account in which everything else lives.
 
 \begin{notebox}RuleThe oplog is a backup artefact, not a log to be pruned for space. If it is lost with the database, the achievable recovery point becomes the last dump.\end{notebox}
+\textsc{\small\color{crimson}B.2 · Capability heat map}\par\medskip
+\section*{Capability heat map}
+The role matrix as a shape rather than a table.
+
+10 · LoveLaundry — System Manual
+
+Read as a shape, the matrix shows the intended separation: operational entry is broad and shallow, money is narrow and deep, and linen work is confined to the roles that touch linen. Hotel roles sit outside the grid because their access is granted by scope rather than by capability.
+
+The two capabilities that are never granted to STAFF — payment write and linen write — are the two that change money or remove an asset. That is not an accident of configuration; it is the reason the roles exist in this shape.
+
+\begin{notebox}RuleHiding a control in the interface is not authorisation. Every route re-checks the capability server-side, because a hidden button is one request away from being called.\end{notebox}
+\textsc{\small\color{crimson}Part Three ·}\par\medskip
 \textsc{\small\color{crimson}Part Three · Fail-Safes and Resilience}\par\medskip
 \chapter{Fail-Safes and Resilience}
 \begin{quote}\itshape How the platform behaves when something is missing, slow, or called twice.\end{quote}
+11 · LoveLaundry — System Manual
+
 \section{11.1 Fail-closed tenancy}
 The platform's most important fail-safe is also its simplest: when the tenant cannot be established, nothing happens. There is no default tenant, no fallback to an unscoped query, and no “system” mode that skips the check. A request that cannot name its laundry is refused before it reaches any data.
 
@@ -2523,11 +2835,8 @@ Two failures cause most duplicate records in operational systems: a retried requ
 \subsubsection*{Idempotency keys}
 Every write that creates money or possession — bill, payment, delivery, gate pass — accepts an idempotency key generated by the client. The server records the key with the result. A retry with the same key returns the original result instead of creating a second record, whether the first attempt succeeded, failed, or is still in progress.
 
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=\linewidth]{images/fig-25.png}
-\caption{— Idempotent write path. The key and the record are committed together, so a crash cannot leave one without the other.Figure 25}
-\end{figure}
+11 · LoveLaundry — System Manual
+
 \subsubsection*{Optimistic concurrency}
 Documents that can be edited carry a version. An update must state the version it read; if the stored version has moved, the write is rejected with a conflict instead of silently overwriting a colleague's change. The user is shown both versions and chooses — which is slower by one interaction and correct by construction.
 
@@ -2562,6 +2871,8 @@ Record delivery & Delivery document; pass line delivered quantities; pass status
 Close day & Day-close record with totals; frozen date marker; audit entry \\ \hline
 \end{tabularx}
 \end{center}
+11 · LoveLaundry — System Manual
+
 MongoDB multi-document transactions make each of these a single unit. The platform uses them only where the invariant spans documents — a transaction has a cost, and paying it on a read is waste. Where a single document holds the whole invariant, an atomic update on that document is sufficient and cheaper.
 
 \subsubsection*{Why the bill is not edited after issue}
@@ -2586,6 +2897,8 @@ Reads retry automatically with exponential backoff and jitter, up to a small lim
 
 \subsubsection*{Circuit breaking}
 When a dependency fails repeatedly, the caller stops calling it for a short period and fails fast instead of queueing requests that will time out. This protects the healthy services from thread and connection exhaustion caused by one sick dependency. The breaker closes automatically after a successful probe, and its state is exposed as a health detail so that an operator can see “degraded because accounting is down” rather than a generic error.
+
+11 · LoveLaundry — System Manual
 
 \begin{notebox}NoteFail fast is a feature. A request that waits thirty seconds and then fails is worse for the user and for the system than one that fails in fifty milliseconds and says why.\end{notebox}
 \textsc{\small\color{crimson}11.5 · Degraded-mode matrix}\par\medskip
@@ -2615,6 +2928,8 @@ The first column that is empty tells you the severity. If sign-in is down, every
 \begin{notebox}WarningA workaround that bypasses a control is not a workaround. Paper records are acceptable; entering a bill twice “to be safe”, or marking a card payment as cash, is not.\end{notebox}
 \textsc{\small\color{crimson}11.6 · Guard rails against double billing}\par\medskip
 \section*{Guard rails against double billing}
+11 · LoveLaundry — System Manual
+
 Double billing is the failure clients notice fastest and forgive slowest. The platform defends against it at four layers, so that no single mistake — human or technical — can produce a duplicate charge.
 
 \begin{center}\small
@@ -2645,11 +2960,8 @@ Void the duplicate with a reason and re-check the client's balance. Do not delet
 \section*{Guard layers against double billing}
 Four independent defences, so that no single mistake produces a duplicate charge.
 
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=\linewidth]{images/fig-26.png}
-\caption{— Layered defences against double billing, from the data model to the day-close review.Figure 26}
-\end{figure}
+11 · LoveLaundry — System Manual
+
 11 · Fail-Safes and ResilienceLoveLaundry — System Manual
 
 A duplicate charge is the failure clients notice fastest and forgive slowest, so the platform does not rely on one control. The data model prevents a delivered line from belonging to two bills; the transaction prevents a bill from existing without consuming its lines; the idempotency key prevents a retry from creating a second document.
@@ -2657,20 +2969,27 @@ A duplicate charge is the failure clients notice fastest and forgive slowest, so
 The fourth layer is human and deliberately boring: the day-close review looks for consecutive bills with identical totals. It exists to catch the combinations the first three layers cannot foresee.
 
 \begin{notebox}RuleEach layer is also a test in the bill\_service suite. A control that is not asserted is a comment, and comments do not survive refactoring.\end{notebox}
+\textsc{\small\color{crimson}11.7 · Guard layers against double billing}\par\medskip
+\section*{Guard layers against double billing}
+Four independent defences, so that no single mistake produces a duplicate charge.
+
+11 · LoveLaundry — System Manual
+
+A duplicate charge is the failure clients notice fastest and forgive slowest, so the platform does not rely on one control. The data model prevents a delivered line from belonging to two bills; the transaction prevents a bill from existing without consuming its lines; the idempotency key prevents a retry from creating a second document.
+
+The fourth layer is human and deliberately boring: the day-close review looks for consecutive bills with identical totals. It exists to catch the combinations the first three layers cannot foresee.
+
+\begin{notebox}RuleEach layer is also a test in the bill\_service suite. A control that is not asserted is a comment, and comments do not survive refactoring.\end{notebox}
 \part{Assurance and Reference}
+\textsc{\small\color{crimson}Part Four ·}\par\medskip
 \textsc{\small\color{crimson}Part Four · Testing and Quality Assurance}\par\medskip
 \chapter{Testing and Quality Assurance}
 \begin{quote}\itshape What is tested, what the suites actually report, and what remains unproven.\end{quote}
 \section{12.1 Test strategy}
 The strategy is a pyramid, and it is deliberately bottom-heavy. Most behaviour is verified by fast service-level tests that exercise real handlers against a test database; a smaller number of integration tests cover cross-service contracts; and the top of the pyramid — where confidence is most expensive — is thin. That is a deliberate trade: a browser-driven suite for four applications would be slow, brittle, and rarely run.
 
-12 · Testing and Quality AssuranceLoveLaundry — System Manual
+12 · LoveLaundry — System Manual
 
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=\linewidth]{images/fig-27.png}
-\caption{— Test strategy pyramid: broad service-level coverage, thin top layer.Figure 27}
-\end{figure}
 \begin{center}\small
 \begin{tabularx}{\linewidth}{|X|X|X|}
 \hline
@@ -2689,6 +3008,8 @@ Manual & Exploratory checks of new screens and print layouts & Before each relea
 The figures below are measured from the suites as they stand. They are reported as counts of passing tests, not as coverage percentages, because a coverage number would say more about the size of the codebase than about whether the important behaviour is verified.
 
 12 · Testing and Quality AssuranceLoveLaundry — System Manual
+
+12 · LoveLaundry — System Manual
 
 \begin{center}\small
 \begin{tabularx}{\linewidth}{|X|X|X|}
@@ -2720,6 +3041,8 @@ The table below is the honest boundary. It should be read before any release dec
 
 12 · Testing and Quality AssuranceLoveLaundry — System Manual
 
+12 · LoveLaundry — System Manual
+
 \begin{center}\small
 \begin{tabularx}{\linewidth}{|X|X|X|}
 \hline
@@ -2735,11 +3058,6 @@ Hotel client portal & Scope filtering, summary, passes, deliveries, bills & PDF 
 Front-end applications & TypeScript compilation and production build & No rendered-DOM or interaction tests \\ \hline
 \end{tabularx}
 \end{center}
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=\linewidth]{images/fig-28.png}
-\caption{— Measured coverage by layer.Figure 28}
-\end{figure}
 \begin{notebox}WarningThere is no browser-driven end-to-end suite and no load testing. A regression that only appears when a real browser renders a real form will not be caught by these suites; it must be caught by the manual release check.\end{notebox}
 \textsc{\small\color{crimson}12.4 · Running the suites}\par\medskip
 \section*{Running the suites}
@@ -2747,6 +3065,8 @@ Each service has its own virtual environment and its own suite. Running them is 
 
 \subsubsection*{Service suites}
 12 · Testing and Quality AssuranceLoveLaundry — System Manual
+
+12 · LoveLaundry — System Manual
 
 \begin{verbatim}
 cd user-service
@@ -2787,6 +3107,8 @@ One suite cannot be collected in the local virtual environment.  imports , which
 
 12 · Testing and Quality AssuranceLoveLaundry — System Manual
 
+12 · LoveLaundry — System Manual
+
 \begin{center}\small
 \begin{tabularx}{\linewidth}{|X|X|X|}
 \hline
@@ -2803,6 +3125,7 @@ Scanner hardware not simulated & Scan timing and wedge-mode behaviour are not as
 A manual that lists only what works is a sales document. The value of this chapter is that a new maintainer can see exactly where confidence ends — and can decide, with the owner, whether a gap matters for the next release. The gaps above are known, bounded and owned; none of them is a surprise waiting to be discovered during an incident.
 
 \begin{notebox}NoteClosing the  gap requires only adding the dependency to the test requirements. It is listed as a limitation rather than fixed here because this manual reports the environment as measured, not as it could be.\texttt{httpx2}\end{notebox}
+\textsc{\small\color{crimson}Part Four ·}\par\medskip
 \textsc{\small\color{crimson}Part Four · Operations Runbook and Monitoring}\par\medskip
 \chapter{Operations Runbook and Monitoring}
 \begin{quote}\itshape The routine that keeps the platform observable, and the first five minutes of the incidents that interrupt it.\end{quote}
@@ -2820,13 +3143,8 @@ Deep health & Database round-trip, key version, outbox backlog & Monitoring, eve
 Auth probe & A known test account can sign in (staging only) & Release verification \\ \hline
 \end{tabularx}
 \end{center}
-13 · Operations Runbook and MonitoringLoveLaundry — System Manual
+13 · LoveLaundry — System Manual
 
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=\linewidth]{images/fig-29.png}
-\caption{— Health dependency chain. The proxy routes only to services whose readiness probe passes.Figure 29}
-\end{figure}
 Health output is JSON with a status per dependency, so that a monitoring system can alert on the specific dependency rather than on “service unhealthy”. The outbox backlog is included because a service that is healthy but cannot drain its queue is failing slowly and silently.
 
 \begin{notebox}NoteNever use a deep health check as a liveness probe. A database blip would then restart healthy services, turning a short dependency failure into a restart storm.\end{notebox}
@@ -2860,6 +3178,8 @@ duration\_ms & Handler duration \\ \hline
 \end{itemize}
 13 · Operations Runbook and MonitoringLoveLaundry — System Manual
 
+13 · LoveLaundry — System Manual
+
 \subsubsection*{Retention and access}
 Application logs are retained for 30 days at full detail and 12 months at reduced detail. Audit entries are retained for seven years and are append-only. Access to logs is restricted to the platform operator; a laundry administrator may be given a filtered extract for their own tenant when investigating a dispute, but never a cross-tenant view.
 
@@ -2892,6 +3212,8 @@ Acknowledge, then act. An alert acknowledged and forgotten is worse than one ign
 
 \textsc{\small\color{crimson}13.4 · Routine maintenance calendar}\par\medskip
 \section*{Routine maintenance calendar}
+13 · LoveLaundry — System Manual
+
 Maintenance is scheduled so that it never competes with a day close or a Monday collection. The calendar is deliberately boring: the same tasks, at the same cadence, with the same owner.
 
 \begin{center}\small
@@ -2911,11 +3233,6 @@ Annually & Rotate the search key with a planned backfill & Platform operator \\ 
 Annually & Review roles, memberships and dormant accounts & Laundry administrator \\ \hline
 \end{tabularx}
 \end{center}
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=\linewidth]{images/fig-30.png}
-\caption{— Maintenance calendar by cadence.Figure 30}
-\end{figure}
 \begin{notebox}WarningNever apply security updates to the database host during trading hours without a tested rollback. A patched database that will not start is an outage with a maintenance window's worth of warning wasted.\end{notebox}
 \textsc{\small\color{crimson}13.5 · Alert and escalation flow}\par\medskip
 \section*{Alert and escalation flow}
@@ -2923,11 +3240,17 @@ From signal to review, with the loop that raises severity when nobody answers.
 
 13 · Operations Runbook and MonitoringLoveLaundry — System Manual
 
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=\linewidth]{images/fig-31.png}
-\caption{— Alert lifecycle and the escalation loop when acknowledgement does not happen within target.Figure 31}
-\end{figure}
+13 · LoveLaundry — System Manual
+
+An alert is only useful if the first action is obvious, so every alert in the catalogue names a likely cause and the first thing to check. The flow above is the path from a signal to a written action, and it is deliberately short.
+
+The loop at the top is the part that is usually missing: if nobody acknowledges within the target, severity is raised rather than the window quietly extended.
+
+\begin{notebox}RuleAn alert that fires routinely without action is a design defect. Either the threshold is wrong or the cause should be fixed; leaving it trains people to ignore the one that matters.\end{notebox}
+\textsc{\small\color{crimson}13.5 · Alert and escalation flow}\par\medskip
+\section*{Alert and escalation flow}
+From signal to review, with the loop that raises severity when nobody answers.
+
 An alert is only useful if the first action is obvious, so every alert in the catalogue names a likely cause and the first thing to check. The flow above is the path from a signal to a written action, and it is deliberately short.
 
 The loop at the top is the part that is usually missing: if nobody acknowledges within the target, severity is raised rather than the window quietly extended.
@@ -2950,9 +3273,9 @@ POST & /users & Create a user & ADMIN \\ \hline
 PATCH & /users/\{id\} & Update display name or status & ADMIN \\ \hline
 GET & /laundries & List laundries & PLATFORM\_ADMIN \\ \hline
 POST & /laundries & Create a laundry (tenant) & PLATFORM\_ADMIN \\ \hline
-GET & /laundries/\{laundry\_id\}/members & List memberships for the tenant & ADMIN \\ \hline
-POST & /laundries/\{laundry\_id\}/members & Grant a role to a user & ADMIN \\ \hline
-DELETE & /laundries/\{laundry\_id\}/members/\{id\} & Remove a user's access & ADMIN \\ \hline
+GET & /memberships & List memberships for the tenant & ADMIN \\ \hline
+POST & /memberships & Grant a role to a user & ADMIN \\ \hline
+DELETE & /memberships/\{id\} & Remove a user's access & ADMIN \\ \hline
 \end{tabularx}
 \end{center}
 \begin{center}\small
@@ -2972,16 +3295,18 @@ PATCH & /clients/\{id\}/status & Enable or disable a client account & ADMIN \\ \
 \section*{API reference — bill\_service}
 AppendicesLoveLaundry — System Manual
 
+AppendicesLoveLaundry — System Manual
+
 \begin{center}\small
 \begin{tabularx}{\linewidth}{|X|X|X|}
 \hline
 \rowcolor{lightgrey}
 \textbf{Method} & \textbf{Path} & \textbf{Purpose} \\ \hline
-GET & /gatepasses & List passes for the tenant, filtered by status and date \\ \hline
-POST & /gatepasses & Create a pass with item lines \\ \hline
-GET & /gatepasses/\{id\} & Pass detail with lines and delivery history \\ \hline
-PATCH & /gatepasses/\{id\} & Amend a pass (manager or above) \\ \hline
-POST & /gatepasses/\{id\}/cancel & Cancel with a reason; the number is retained \\ \hline
+GET & /gate-passes & List passes for the tenant, filtered by status and date \\ \hline
+POST & /gate-passes & Create a pass with item lines \\ \hline
+GET & /gate-passes/\{id\} & Pass detail with lines and delivery history \\ \hline
+PATCH & /gate-passes/\{id\} & Amend a pass (manager or above) \\ \hline
+POST & /gate-passes/\{id\}/cancel & Cancel with a reason; the number is retained \\ \hline
 GET & /deliveries & List deliveries \\ \hline
 POST & /deliveries & Record a delivery against pass lines \\ \hline
 GET & /deliveries/\{id\} & Delivery detail and receiver \\ \hline
@@ -2990,7 +3315,7 @@ GET & /bills & List bills with status and balance \\ \hline
 POST & /bills & Raise a bill from unbilled deliveries \\ \hline
 GET & /bills/\{id\} & Bill detail with lines and payments \\ \hline
 POST & /bills/\{id\}/payments & Post a payment against the bill \\ \hline
-POST & /payments/\{payment\_id\}/reverse & Reverse a posted payment \\ \hline
+POST & /payments/\{id\}/reverse & Reverse a posted payment \\ \hline
 \end{tabularx}
 \end{center}
 \begin{center}\small
@@ -3000,11 +3325,11 @@ POST & /payments/\{payment\_id\}/reverse & Reverse a posted payment \\ \hline
 \textbf{Method} & \textbf{Path} & \textbf{Purpose} \\ \hline
 GET & /shop-bills & List counter sales for a business date \\ \hline
 POST & /shop-bills & Create a shop bill \\ \hline
-POST & /shop-bills/\{id\}/record-payment & Complete payment and issue the receipt \\ \hline
+POST & /shop-bills/\{id\}/pay & Complete payment and issue the receipt \\ \hline
 POST & /shop-bills/\{id\}/void & Void before payment, with a reason \\ \hline
 POST & /shop-bills/\{id\}/refund & Refund a paid bill; requires approval \\ \hline
-GET & /monthly/\{kind\}/\{client\}/\{yy\}/\{mm\} & Client-by-day quantities and values \\ \hline
-GET & /bills/unbilled-gatepasses & Deliveries not yet on a bill \\ \hline
+GET & /reports/monthly-matrix & Client-by-day quantities and values \\ \hline
+GET & /reports/unbilled & Deliveries not yet on a bill \\ \hline
 POST & /day-close & Close the business date \\ \hline
 GET & /day-close/\{date\} & Close record for a date \\ \hline
 GET & /dashboard & Operational tiles for the tenant \\ \hline
@@ -3014,18 +3339,20 @@ GET & /dashboard & Operational tiles for the tenant \\ \hline
 \section*{API reference — linen, portal and supporting services}
 AppendicesLoveLaundry — System Manual
 
+AppendicesLoveLaundry — System Manual
+
 \begin{center}\small
 \begin{tabularx}{\linewidth}{|X|X|X|}
 \hline
 \rowcolor{lightgrey}
 \textbf{Method} & \textbf{Path} & \textbf{Purpose} \\ \hline
 GET & /linens & List tags by status, client or item type \\ \hline
-POST & /linens/\{doc\_id\}/scan & Submit a scan event for a tag \\ \hline
+POST & /linens/scan & Submit a scan event for a tag \\ \hline
 POST & /linens/\{tag\}/action & Apply a lifecycle action to a tag \\ \hline
 GET & /linens/\{tag\}/history & Full event history for a tag \\ \hline
 POST & /linens/\{tag\}/retire & Retire an item (supervisor only) \\ \hline
-GET & /linens & Counts by status, type and client \\ \hline
-GET & /linens/stats/summary & Open and closed discrepancies \\ \hline
+GET & /linens/inventory & Counts by status, type and client \\ \hline
+GET & /linens/discrepancies & Open and closed discrepancies \\ \hline
 \end{tabularx}
 \end{center}
 \begin{center}\small
@@ -3034,7 +3361,7 @@ GET & /linens/stats/summary & Open and closed discrepancies \\ \hline
 \rowcolor{lightgrey}
 \textbf{Method} & \textbf{Path} & \textbf{Purpose} \\ \hline
 GET & /client-portal/summary & Passes in progress, items returned, outstanding balance \\ \hline
-GET & /client-portal/gatepasses & Passes scoped to the client\_name in client\_scope \\ \hline
+GET & /client-portal/gate-passes & Passes scoped to the client\_name in client\_scope \\ \hline
 GET & /client-portal/deliveries & Deliveries scoped to the client\_name \\ \hline
 GET & /client-portal/bills & Invoices for this property \\ \hline
 GET & /client-portal/bills/\{id\} & Invoice detail, scoped by both keys \\ \hline
@@ -3055,6 +3382,8 @@ love-ai & Drafting and summarised answers over permitted data & quotations-ui \\
 \textsc{\small\color{crimson}Appendix B}\par\medskip
 \section*{Role and capability matrix}
 The matrix is the authoritative statement of which role holds which capability.  means granted; a blank cell means refused, and a refused capability is refused by the server regardless of what the interface shows.●
+
+AppendicesLoveLaundry — System Manual
 
 AppendicesLoveLaundry — System Manual
 
@@ -3089,6 +3418,8 @@ Statuses are stored as fixed strings. They are listed here because they appear i
 
 AppendicesLoveLaundry — System Manual
 
+AppendicesLoveLaundry — System Manual
+
 \begin{center}\small
 \begin{tabularx}{\linewidth}{|X|X|X|}
 \hline
@@ -3113,6 +3444,8 @@ Free-text statuses make reports unreliable, because every spelling becomes a cat
 \textsc{\small\color{crimson}Appendix D}\par\medskip
 \section*{Glossary}
 Terms as they are used in this manual and in the interface. Where a term has a narrower meaning here than in general use, the narrower meaning applies.
+
+AppendicesLoveLaundry — System Manual
 
 AppendicesLoveLaundry — System Manual
 
@@ -3157,6 +3490,8 @@ token\_kind & A claim distinguishing staff tokens from client tokens. \\ \hline
 \subsection*{Document conventions}
 AppendicesLoveLaundry — System Manual
 
+AppendicesLoveLaundry — System Manual
+
 \begin{center}\small
 \begin{tabularx}{\linewidth}{|X|X|}
 \hline
@@ -3179,94 +3514,15 @@ The manual is reviewed at every minor release and after every Severity 1 or 2 in
 \section*{Index}
 Page references are to the printed page numbers in the footer.
 
+\textsc{\small\color{crimson}10.8 · Backup and recovery timeline}\par\medskip
+\section*{Backup and recovery timeline}
+Three overlapping protections, and the fifteen minutes that separates them.
+
 AppendicesLoveLaundry — System Manual
 
-\begin{notebox}NoteBold page numbers in a printed index conventionally denote the principal treatment; this index gives a single page per term to keep the reference unambiguous.\end{notebox}
-\textsc{\small\color{crimson}Appendix E · Registration}\par\medskip
-\chapter{Registration and Enrolment}
-\begin{quote}\itshape Who creates an account, what it is bound to, and how the two sides stay apart.\end{quote}
-\subsection*{E.1 The three identities}
-Every account belongs to one laundry, the business that does the washing. Staff accounts belong to the laundry itself and carry a membership. Client accounts belong to a laundry and to a customer name: the hotel or the shop. That pair is the isolation boundary, which is why a client session never receives a staff claim.
+The restore procedure itself begins on page 87, and the drill checklist on page 91. The timeline explains why the recovery-point target is fifteen minutes rather than a day. The nightly dump sets the floor, the oplog closes the gap to the moment of failure, and the off-host copy survives the loss of the host that wrote it.
 
-A hotel account is created with  HOTEL and a role of HOTEL\_ADMIN or HOTEL\_MANAGER. A shop account uses SHOP with SHOP\_ADMIN or SHOP\_STAFF. The same login may exist at several laundries, and each is a separate account row, so switching laundries changes what a session may read rather than widening it.\texttt{client\_type}
+Each layer answers a different failure. The dump answers corruption, the oplog answers a bad change made an hour ago, and the off-host copy answers the loss of the account in which everything else lives.
 
-The first account of any hotel or shop is created by a laundry administrator. After that the customer’s own administrator can add colleagues on the same side, and only on the same side.
-
-Appendix E · RegistrationLoveLaundry — System Manual
-
-\subsection*{E.2 Who may create whom}
-\begin{center}\small
-\begin{tabularx}{\linewidth}{|X|X|X|X|X|X|}
-\hline
-\rowcolor{lightgrey}
-\textbf{Action} & \textbf{Laundry admin} & \textbf{Hotel admin} & \textbf{Hotel staff} & \textbf{Shop admin} & \textbf{Shop staff} \\ \hline
-Create a hotel or shop & yes & no & no & no & no \\ \hline
-Create another administrator & yes & no & no & no & no \\ \hline
-Add own staff & yes & yes & no & yes & no \\ \hline
-Read own records & n/a & yes & yes & yes & yes \\ \hline
-Raise a shop order & n/a & no & no & yes & yes \\ \hline
-Confirm receipt & staff API & no & no & no & no \\ \hline
-\end{tabularx}
-\end{center}
-Two rules keep the table true. The laundry and customer name of a new staff account are taken from the caller’s token, never from the request, so an administrator cannot enrol staff into somebody else’s hotel. And staff creation accepts only the non-administrator role of the same side, so the endpoint cannot mint a peer administrator.
-
-Creating an administrator therefore always requires the laundry, which is also the party able to suspend the account afterwards.
-
-Appendix E · RegistrationLoveLaundry — System Manual
-
-\subsection*{E.3 Registering a hotel}
-The laundry administrator posts the hotel’s first account. That customer name becomes the hotel’s identity on every gate pass, delivery and bill, so one spelling must be used everywhere: records are matched on it exactly.
-
-with the client type, the role, the customer name, a login and a password. The laundry comes from the caller’s token, not the body.\textbf{Request.}\texttt{POST /clients}
-
-The account without its password. A duplicate login inside the same laundry returns 409; a role that does not belong to the chosen client type returns 400.\textbf{Response.}
-
-The administrator then signs in at  with the client type set. If the same login exists at more than one laundry the reply is 409 listing them, and the call is repeated with an explicit laundry.\texttt{POST /client/auth/login}
-
-Appendix E · RegistrationLoveLaundry — System Manual
-
-\subsection*{E.4 Registering a shop and its staff}
-The shop flow is identical with one substitution:  is SHOP, the first account is SHOP\_ADMIN, and colleagues are SHOP\_STAFF. Endpoints, isolation and the 409 rules are unchanged.\texttt{client\_type}
-
-Once the shop administrator is signed in, adding a colleague is  with a login, a name and a password. The role defaults to SHOP\_STAFF and any other value is refused.  lists everyone under that shop and nobody from another.\texttt{POST /client/staff}\texttt{GET /client/staff}
-
-Appendix E · RegistrationLoveLaundry — System Manual
-
-\subsection*{E.5 Sessions across several laundries}
-A login registered at two laundries signs in once and then chooses. Without an explicit laundry the login is ambiguous, and the server refuses to guess: it returns 409 with the list. Once the choice is made, the token carries exactly that laundry.
-
-\begin{center}\small
-\begin{tabularx}{\linewidth}{|X|X|}
-\hline
-\rowcolor{lightgrey}
-\textbf{Call} & \textbf{Purpose} \\ \hline
-\texttt{POST /client/auth/login} & Sign in; 409 lists the laundries when ambiguous \\ \hline
-\texttt{GET /client/auth/laundries} & Every laundry this login may enter, on its own side \\ \hline
-\texttt{POST /client/auth/switch} & Re-issue the token for another of those laundries \\ \hline
-\texttt{POST /client/auth/refresh} & New expiry, claims re-read from the database \\ \hline
-\texttt{PATCH /clients/\{id\}/status} & Laundry admin suspends or archives an account \\ \hline
-\end{tabularx}
-\end{center}
-Switching does not extend a session’s reach. The old token keeps its original scope and the new one carries a different single scope. A suspension takes effect at the next refresh or sign-in, so revocation is bounded by the token lifetime rather than immediate.
-
-Appendix E · RegistrationLoveLaundry — System Manual
-
-\subsection*{E.6 Failures worth recognising}
-\begin{center}\small
-\begin{tabularx}{\linewidth}{|X|X|X|}
-\hline
-\rowcolor{lightgrey}
-\textbf{Status} & \textbf{Meaning} & \textbf{What to do} \\ \hline
-409 & That login already exists in this laundry & Choose another login, or suspend the old account \\ \hline
-409 & Sign-in is ambiguous across laundries & Repeat the call with an explicit laundry \\ \hline
-403 & Token belongs to the other side, or lacks the role & Use the correct app and the correct role \\ \hline
-400 & Role does not belong to the chosen client type & Hotel roles with HOTEL, shop roles with SHOP \\ \hline
-404 & The record exists but not for this account & Check the laundry and the customer name \\ \hline
-\end{tabularx}
-\end{center}
-\subsection*{E.7 Enrolment checklist}
-Confirm the laundry exists. Fix the customer name spelling before the first account, because later records match it exactly. Create the administrator, sign in as that administrator, add staff, then suspend any placeholder account. Finally sign in as a staff member and confirm the screens show only that customer’s records.
-
-Enrolment is complete when a staff account can sign in, see its own hotel or shop, and is refused by every endpoint belonging to the other side.
-
+\begin{notebox}RuleThe oplog is a backup artefact, not a log to be pruned for space. If it is lost with the database, the achievable recovery point becomes the last dump.\end{notebox}
 \end{document}

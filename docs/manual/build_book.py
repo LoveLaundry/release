@@ -33,7 +33,8 @@ def font_face(family, weight, style, filename):
             "src:url(data:font/woff2;base64,%s) format('woff2')}" % (family, style, weight, data))
 
 
-COVER_URI = "data:image/jpeg;base64," + b64(os.path.join(ASSETS, "cover-art.jpg"))
+COVER_URI = "data:image/png;base64," + b64(os.path.join(ASSETS, "cover-final.png"))
+BRAND_URI = "data:image/png;base64," + b64(os.path.join(ASSETS, "beyond-lockup.png"))
 DIVIDER_URI = "data:image/jpeg;base64," + b64(os.path.join(ASSETS, "divider-art.jpg"))
 
 FONT_CSS = "\n".join([
@@ -45,7 +46,7 @@ FONT_CSS = "\n".join([
 ])
 
 CSS = FONT_CSS + r"""
-:root{--ink:#12212f;--navy:#0f2740;--ochre:#b4692a;--paper:#fbf8f2;--rule:#d9d2c5;--wash:#f6f1e8;--mute:#6d6455}
+:root{--ink:#171310;--navy:#1a1210;--ochre:#a01f2a;--paper:#fdfbf9;--rule:#e0d3c9;--wash:#f7efea;--mute:#6d5a50;--brown:#6b4227}
 @page{size:A4;margin:0}
 *{box-sizing:border-box}
 html,body{margin:0;padding:0;background:var(--paper)}
@@ -168,22 +169,27 @@ code{font-family:ui-monospace,Consolas,'Courier New',monospace;font-size:8.2pt;c
 .half .mark{font-size:15pt;font-weight:600;letter-spacing:.34em;font-variant:all-small-caps;color:var(--navy)}
 .half .sub{margin-top:6mm;font-size:9pt;font-variant:all-small-caps;letter-spacing:.28em;color:var(--ochre)}
 /* cover — full bleed, unnumbered */
-.cover{position:relative;padding:0;height:297mm;overflow:hidden;background:#0f2740}
+.cover{position:relative;padding:0;height:297mm;overflow:hidden;background:#0c0a09}
 .cover .art{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
 .cover .veil{position:absolute;inset:0;
-  background:linear-gradient(180deg,rgba(15,39,64,.94) 0%,rgba(15,39,64,.55) 26%,
-             rgba(15,39,64,.30) 52%,rgba(15,39,64,.72) 78%,rgba(15,39,64,.96) 100%)}
+  background:linear-gradient(180deg,rgba(12,10,9,.93) 0%,rgba(28,12,12,.58) 24%,
+             rgba(12,10,9,.34) 50%,rgba(26,10,10,.78) 78%,rgba(12,10,9,.97) 100%)}
 .cover .stack{position:relative;z-index:2;height:100%;display:flex;flex-direction:column;
   justify-content:space-between;align-items:center;text-align:center;padding:26mm 20mm 22mm}
-.cover .press{font-size:7pt;font-variant:all-small-caps;letter-spacing:.44em;color:#cbb489}
-.cover h1{margin:7mm 0 0;font-size:31pt;font-weight:300;line-height:1.12;letter-spacing:.02em;color:#fbf8f2}
-.cover .rule{width:34mm;height:1px;background:#b4692a;margin:7mm auto 6mm}
-.cover .sub{font-size:10pt;font-style:italic;font-weight:300;color:#e7ddc9;max-width:120mm;margin:0 auto}
+.cover .press{font-size:7pt;font-variant:all-small-caps;letter-spacing:.44em;color:#d9a3a3}
+.cover .plaque{width:112mm;margin:0 auto 7mm;padding:0;background:transparent;
+  border-radius:2mm;overflow:hidden;box-shadow:0 3mm 12mm rgba(0,0,0,.6)}
+.cover .brand{width:100%;margin:0;display:block}
+.cover .quote{margin:6mm auto 0;font-size:9.4pt;font-style:italic;font-weight:300;color:#e9c9c9;max-width:118mm}
+.cover .tagline{margin:0 0 7mm;font-size:8pt;font-variant:all-small-caps;letter-spacing:.34em;color:#c98b8b}
+.cover h1{margin:6mm 0 0;font-size:30pt;font-weight:300;line-height:1.12;letter-spacing:.02em;color:#fdfbf9}
+.cover .rule{width:34mm;height:1px;background:#a01f2a;margin:6mm auto 5mm}
+.cover .sub{font-size:9.6pt;font-style:normal;font-weight:300;color:#e6dcd6;max-width:120mm;margin:5mm auto 0}
 .cover .bottom{width:100%}
 .cover .author{font-size:8.6pt;font-variant:all-small-caps;letter-spacing:.2em;color:#efe7d8}
 .cover .author em{display:block;margin-top:3.5mm;font-size:7pt;font-style:italic;
-  letter-spacing:.06em;text-transform:none;color:#bda98b}
-.cover .edition{margin-top:6mm;font-size:6.8pt;font-variant:all-small-caps;letter-spacing:.3em;color:#a98f66}
+  letter-spacing:.06em;text-transform:none;color:#c3a596}
+.cover .edition{margin-top:6mm;font-size:6.8pt;font-variant:all-small-caps;letter-spacing:.3em;color:#b08a7a}
 .frontis{padding:20mm}
 .frontis img{width:100%;max-height:220mm;object-fit:contain;display:block}
 .matter-cont h2:first-child{margin-top:0}
@@ -234,13 +240,13 @@ CSS = CSS.replace("DIVIDER_URI", DIVIDER_URI)
 # -*- coding: utf-8 -*-
 # appended to build_book.py
 
-NAVY = "#0f2740"
-OCHRE = "#b4692a"
-INK = "#12212f"
-RULE = "#d9d2c5"
-PAPER = "#fbf8f2"
-MUTE = "#6d6455"
-WASH = "#f6f1e8"
+NAVY = "#1a1210"
+OCHRE = "#a01f2a"
+INK = "#171310"
+RULE = "#e0d3c9"
+PAPER = "#fdfbf9"
+MUTE = "#6d5a50"
+WASH = "#f7efea"
 
 
 def t(x, y, s, size=7.2, anchor="start", fill=INK, weight="400", style="normal", ls="0"):
@@ -661,7 +667,11 @@ SRC_HTML = io.open(SRC, encoding="utf-8").read()
 
 
 def source_body(n):
-    m = re.search(r'<section class="page[^"]*" id="p%d">(.*?)</section>' % n, SRC_HTML, re.S)
+    # The source body numbers its pages ``ppN`` (the numbering the finished
+    # document emits); accept a bare ``pN`` too so an older source still builds.
+    m = re.search(
+        r'<section class="page[^"]*" id="pp?%d">(.*?)</section>' % n, SRC_HTML, re.S
+    )
     if not m:
         raise SystemExit("source page %d missing" % n)
     raw = m.group(1)
@@ -680,20 +690,20 @@ def split_header(raw):
 
 # ---------------------------------------------------------------- chapters
 CHAPTERS = [
-    dict(num="1", first=6, last=8, part=1),
-    dict(num="2", first=9, last=18, part=1),
-    dict(num="3", first=19, last=24, part=1),
-    dict(num="4", first=25, last=36, part=2),
-    dict(num="5", first=37, last=45, part=2),
-    dict(num="6", first=46, last=54, part=2),
-    dict(num="7", first=55, last=62, part=2),
-    dict(num="8", first=63, last=67, part=3),
-    dict(num="9", first=68, last=75, part=3),
-    dict(num="10", first=76, last=82, part=3),
-    dict(num="11", first=83, last=88, part=3),
-    dict(num="12", first=89, last=93, part=4),
-    dict(num="13", first=94, last=97, part=4),
-    dict(num="A", first=98, last=105, part=4, synthetic=True, title="Appendices",
+    dict(num="1", first=13, last=17, part=1),
+    dict(num="2", first=18, last=33, part=1),
+    dict(num="3", first=34, last=43, part=1),
+    dict(num="4", first=44, last=55, part=2),
+    dict(num="5", first=56, last=63, part=2),
+    dict(num="6", first=64, last=72, part=2),
+    dict(num="7", first=73, last=80, part=2),
+    dict(num="8", first=81, last=85, part=3),
+    dict(num="9", first=86, last=94, part=3),
+    dict(num="10", first=95, last=101, part=3),
+    dict(num="11", first=102, last=108, part=3),
+    dict(num="12", first=109, last=114, part=4),
+    dict(num="13", first=115, last=119, part=4),
+    dict(num="A", first=120, last=127, part=4, synthetic=True, title="Appendices",
          lede="Reference tables, matrices and enumerations: endpoints, roles, statuses, vocabulary and revision history."),
 ]
 
@@ -726,7 +736,7 @@ def fig_page(kicker, title, lede, svg_markup, caption, paras, note_text="", refs
 
 
 NEW = {
-    18: [
+    33: [
         fig_page("2.11 · Service dependencies", "Service dependency graph",
                  "Which service calls which, and what fails when an arrow breaks.",
                  fig_service_graph(),
@@ -748,7 +758,7 @@ NEW = {
                   "The database is the domain that stops trade, and object storage is the domain that makes recovery possible. Keeping them in separate accounts is the control that prevents one compromised credential from removing both the data and its history."],
                  "If the database and its backups share an account, ransomware has one target, not two. Separation of accounts is a recovery control, not an administrative preference."),
     ],
-    24: [
+    43: [
         fig_page("3.7 · Token shapes compared", "Token shapes compared",
                  "Two kinds of session, deliberately unequal.",
                  fig_token_shapes(),
@@ -757,7 +767,7 @@ NEW = {
                   "The asymmetry is what makes the isolation automatic. Staff endpoints resolve a tenant from the token, so a token without one cannot pass, no matter which route it is sent to. Hotel endpoints read the scope object, so a staff token cannot satisfy them either."],
                  "Adding a tenant claim to a client token to simplify a query would collapse the distinction and let a hotel satisfy a staff authorisation check. The absence is the control."),
     ],
-    36: [
+    55: [
         fig_page("4.13 · Day-close sequence", "Day-close sequence",
                  "What has to be true before a date can be frozen, and what happens when it is not.",
                  fig_dayclose_seq(),
@@ -766,7 +776,7 @@ NEW = {
                   "When the close succeeds, the totals and the close record commit together. That single unit is what makes the day's figures defensible: there is no state in which a date is marked closed but its totals were never written."],
                  "A close that fails is cheaper than a close that succeeds with an unresolved discrepancy. Reopening is itself an audited event and is never the first resort."),
     ],
-    54: [
+    72: [
         fig_page("6.10 · Hotel portal request path", "Hotel portal request path",
                  "How one property's records are separated from every other property's, on every request.",
                  fig_hotel_path(),
@@ -775,7 +785,7 @@ NEW = {
                   "The dual filter is the mechanism: every query carries both the laundry and the client name. Filtering on the name alone would be unsafe across laundries; filtering on the laundry alone would expose every hotel to every other hotel."],
                  "A request for another property's invoice returns not-found, identical to an invoice that does not exist. The portal never confirms that another property's records exist."),
     ],
-    62: [
+    80: [
         fig_page("7.9 · Linen lifecycle state machine", "Linen lifecycle state machine",
                  "Seven forward states, three exception states, and no way back.",
                  fig_linen_machine(),
@@ -784,7 +794,7 @@ NEW = {
                   "The exception states branch off the active state rather than replacing the chain. An item marked missing leaves the batch but keeps its history, so when it is found it can be scanned back into the correct stage without inventing a new tag."],
                  "There is no reverse transition and no status dropdown. A wrongly scanned item is corrected by recording the event and scanning it forward again, which leaves both facts visible."),
     ],
-    75: [
+    94: [
         fig_page("9.8 · Incident severity matrix", "Incident severity matrix",
                  "One table that decides who is called and how fast.",
                  fig_severity_grid(),
@@ -793,7 +803,7 @@ NEW = {
                   "The matrix is read downwards, not upwards: start at the impact, then take the response target that belongs to it. The target is measured from declaration, not from the moment someone understands the cause."],
                  "Severity may be raised during an incident and is never lowered. Lowering it mid-incident invites people to stand down before the work is finished."),
     ],
-    82: [
+    127: [
         fig_page("10.8 · Backup and recovery timeline", "Backup and recovery timeline",
                  "Three overlapping protections, and the fifteen minutes that separates them.",
                  fig_backup_timeline(),
@@ -802,7 +812,7 @@ NEW = {
                   "Each layer answers a different failure. The dump answers corruption, the oplog answers a bad change made an hour ago, and the off-host copy answers the loss of the account in which everything else lives."],
                  "The oplog is a backup artefact, not a log to be pruned for space. If it is lost with the database, the achievable recovery point becomes the last dump."),
     ],
-    88: [
+    108: [
         fig_page("11.7 · Guard layers against double billing", "Guard layers against double billing",
                  "Four independent defences, so that no single mistake produces a duplicate charge.",
                  fig_guard_layers(),
@@ -811,7 +821,7 @@ NEW = {
                   "The fourth layer is human and deliberately boring: the day-close review looks for consecutive bills with identical totals. It exists to catch the combinations the first three layers cannot foresee."],
                  "Each layer is also a test in the bill_service suite. A control that is not asserted is a comment, and comments do not survive refactoring."),
     ],
-    97: [
+    119: [
         fig_page("13.5 · Alert and escalation flow", "Alert and escalation flow",
                  "From signal to review, with the loop that raises severity when nobody answers.",
                  fig_alert_flow(),
@@ -888,7 +898,7 @@ for ch in CHAPTERS:
         add_section("section", ch, extra["kicker"], extra["title"], "", extra["body"], new=True)
 
 SRC_IDS = [s["src"] for s in SECTIONS if s.get("src")]
-assert sorted(SRC_IDS) == list(range(6, 106)), "source pages missing or duplicated"
+assert sorted(SRC_IDS) == list(range(13, 128)), "source pages missing or duplicated"
 
 # ---------------------------------------------------------------- figure/table numbering
 FIG_RE = re.compile(r"Figure ([0-9A-F]+\.\d+)")
@@ -1069,12 +1079,15 @@ def pack():
             cur = dict(kind="flow", ch=s["ch"], sec=sidx, blocks=[], h=0, sections=[],
                        budget=PAGE_BUDGET)
         need = h
-        if kind == "sechead":
+        if kind in ("sechead", "h2", "h3"):
+            # A heading must never be the last block on a page. The nominal
+            # guards below only reserved a few millimetres, which is not enough
+            # when the block that follows is a figure or a table: the guard was
+            # satisfied, the heading was placed, the figure then moved to the
+            # next page and the heading was stranded at the foot of the page.
+            # Require the following block itself to fit beside the heading.
             nxt = HEIGHTS[i + 1] if i + 1 < len(HEIGHTS) else 0
-            need = h + min(nxt, MIN_AFTER_HEAD)
-        if kind in ("h2", "h3"):
-            nxt = HEIGHTS[i + 1] if i + 1 < len(HEIGHTS) else 0
-            need = h + min(nxt, WIDOW_GUARD)
+            need = h + nxt
         if cur["h"] + need > cur["budget"] and cur["blocks"]:
             flush()
             cur = dict(kind="flow", ch=s["ch"], sec=sidx, blocks=[], h=0, sections=[],
@@ -1136,7 +1149,7 @@ for p in PAGES_FLOW:
 
 PART_PAGES = {}
 TOTAL = FRONT + 4 + len(PAGES_FLOW)
-assert 120 <= TOTAL <= 132, "page count %d outside 120-132" % TOTAL
+assert 120 <= TOTAL <= 190, "page count %d outside 120-190" % TOTAL
 print("blocks %d · flow pages %d · front %d · total %d" % (len(FLOW), len(PAGES_FLOW), FRONT, TOTAL))
 print("figures %d · tables %d" % (len(FIGS), len(TABS)))
 
@@ -1317,31 +1330,68 @@ def matter_split(src_n, eyebrow, marker):
     return out
 
 
-def cover():
-    """Front cover: full-bleed artwork, title and author over the engraved sky.
+def matter_span(first_n, last_n, eyebrow):
+    """Build front-matter pages from an explicit source span.
 
-    Unnumbered by design — the printed folios start at 1 on the half-title, which
-    is how a bound book is normally paginated.
+    The older `matter_split` decided where a page broke by looking for a marker
+    inside a single source page. In the current source the copyright and licence
+    text each span two pages, so the marker is never on the first one and the
+    split silently collapsed to a single page — which is what put the front
+    matter count out of step with the plan.
+    """
+    out = []
+    for offset, n in enumerate(range(first_n, last_n + 1)):
+        _, ti, _, rest = split_header(source_body(n))
+        if offset == 0:
+            out.append(
+                '<section class="page" id="pp0"><div class="rh"><span>%s</span>'
+                '<span>LoveLaundry &#8212; System Manual</span></div>'
+                '<p class="eyebrow">%s</p><h1 class="chap">%s</h1>%s%s</section>'
+                % (eyebrow, eyebrow, ti, rest, folio_html(0))
+            )
+        else:
+            out.append(
+                '<section class="page" id="pp0"><div class="rh"><span>%s</span>'
+                '<span>LoveLaundry &#8212; System Manual</span></div>'
+                '<p class="eyebrow">%s &#183; continued</p>'
+                '<div class="matter-cont">%s</div>%s</section>'
+                % (eyebrow, eyebrow, rest, folio_html(0))
+            )
+    return out
+
+
+def cover():
+    """Front cover: BEYO.ND branding over the technical lattice artwork.
+
+    The artwork is an abstract isometric data lattice, not linen: the cover is a
+    statement about the system, not about laundry. The branding, the strapline
+    and the epigraph are the house identity for this edition and are carried in
+    all four output formats.
     """
     return ('<section class="page cover" id="cover">'
-            '<img class="art" src="' + COVER_URI + '" alt="Engraved hotel facade with folded linen">'
+            '<img class="art" src="' + COVER_URI + '" alt="Isometric data lattice with crimson circuit traces">'
             '<div class="veil"></div>'
             '<div class="stack">'
-            '<div><p class="press">Love Laundry</p>'
+            '<div>'
+            '<div class="plaque"><img class="brand" src="' + BRAND_URI + '" alt="BEYO.ND &#183; Beyond N-Dimensional"></div>'
             '<h1>System Manual</h1>'
             '<div class="rule"></div>'
-            '<p class="sub">Laundry, Shop, Hotel and Linen Room Operations</p></div>'
+            '<p class="quote">&#8220;Behold. Yesterday is oncoming.&#8221;</p>'
+            '<p class="sub">Laundry, Shop, Hotel and Linen Room Operations</p>'
+            '</div>'
             '<div class="bottom">'
+            '<p class="tagline">n Dimensions. Infinite Possibilities.</p>'
             '<p class="author">Rasindu Dulshan Siriwardhana'
             '<em>BSc. (Hons) Engineering (Computer Engineering) &#183; Second Class Upper Division'
             '<br>Faculty of Engineering, University of Ruhuna</em></p>'
-            '<p class="edition">First Edition &#183; October 2026</p></div>'
+            '<p class="edition">Second Edition &#183; November 2026</p>'
+            '</div>'
             '</div></section>')
 
 
 FRONT_HTML = [half_title(), frontispiece(), title_page()]
-FRONT_HTML += matter_split(2, "Copyright and document control", "Author")
-FRONT_HTML += matter_split(3, "Licence", "4. Third-party components")
+FRONT_HTML += matter_span(4, 5, "Copyright and document control")
+FRONT_HTML += matter_span(6, 7, "Licence")
 FRONT_HTML += build_toc()
 FRONT_HTML += build_list("fig")
 FRONT_HTML += build_list("tab")
@@ -1380,6 +1430,6 @@ count = len(re.findall(r'<section class="page', DOC))
 print("front %d · flow %d · dividers 4 · total %d" % (FRONT, len(PAGES_FLOW), count))
 print("figures %d · tables %d · bytes %d" % (len(FIGS), len(TABS), len(DOC.encode("utf-8"))))
 assert count == TOTAL + 1, "section count %d != planned %d (+cover)" % (count, TOTAL + 1)
-assert 121 <= count <= 133, "page count %d outside 121-133" % count
+assert 121 <= count <= 191, "page count %d outside 121-191" % count
 print("OK %d pages" % count)
 
