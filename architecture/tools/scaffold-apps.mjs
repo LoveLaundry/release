@@ -245,9 +245,13 @@ dist
 `,
 
     '.env.example': `# user-service: sign-in and session validation
-VITE_USER_API_URL=http://localhost:8002
+VITE_USER_API_URL=https://love-laundry-user-service.vercel.app
 # bill_service: operational data
-VITE_BILL_API_URL=http://localhost:8001
+VITE_BILL_API_URL=https://bill-service-puce.vercel.app
+
+# Local development overrides:
+# VITE_USER_API_URL=http://localhost:8002
+# VITE_BILL_API_URL=http://localhost:8001
 `,
 
     'vercel.json': json({
