@@ -15,7 +15,8 @@ SRC = os.path.join(D, "lovelaundry-system-manual.html")
 FIGDIR = os.path.join(D, "assets", "figures")
 PROJ = os.path.join(D, "overleaf")
 IMGDIR = os.path.join(PROJ, "images")
-COVER = os.path.abspath(os.path.join(D, "..", "..", "media-output", "img-mvlyao1h-cd5f6c4a.png"))
+COVER = os.path.abspath(os.path.join(D, "assets", "cover-final.png"))
+BRAND = os.path.abspath(os.path.join(D, "assets", "beyond-lockup.png"))
 
 TEX_SPECIALS = {
     "\\": r"\textbackslash{}", "&": r"\&", "%": r"\%", "$": r"\$", "#": r"\#",
@@ -250,6 +251,8 @@ def main():
             shutil.copy2(os.path.join(FIGDIR, name), os.path.join(IMGDIR, name))
     if os.path.exists(COVER):
         shutil.copy2(COVER, os.path.join(IMGDIR, "cover.png"))
+    if os.path.exists(BRAND):
+        shutil.copy2(BRAND, os.path.join(IMGDIR, "brand.png"))
 
     body_parts, counter = [], [0]
     for section in sections:
@@ -266,21 +269,23 @@ def main():
             body_parts.append(block)
 
     cover_block = r"""
-\includegraphics[width=0.62\linewidth]{images/cover.png}\par
-\vspace{1.2cm}
-{\headingfont\Large\color{crimson}LOVE LAUNDRY}\par
-\vspace{0.4cm}
-{\headingfont\Huge System Manual}\par
-\vspace{0.5cm}
-{\itshape\large Laundry, Shop, Hotel and Linen Room Operations}\par
-\vfill
-{\large Rasindu Dulshan Siriwardhana}\par
-\vspace{0.3cm}
-{\small\itshape BSc. (Hons) Engineering (Computer Engineering) --- Second Class Upper Division\\
-Faculty of Engineering, University of Ruhuna}\par
-\vspace{0.6cm}
-{\footnotesize\color{midgrey} FIRST EDITION \(\cdot\) OCTOBER 2026}
-\end{titlepage}
+ \includegraphics[width=0.42\linewidth]{images/brand.png}\par
+ \vspace{0.9cm}
+ {\headingfont\Huge System Manual}\par
+ \vspace{0.5cm}
+ {\itshape\large\color{crimson} \textquotedblleft Behold. Yesterday is oncoming.\textquotedblright}\par
+ \vspace{0.5cm}
+ {\large Laundry, Shop, Hotel and Linen Room Operations}\par
+ \vspace{0.3cm}
+ {\small\color{midgrey} n Dimensions. Infinite Possibilities.}\par
+ \vfill
+ {\large Rasindu Dulshan Siriwardhana}\par
+ \vspace{0.3cm}
+ {\small\itshape BSc. (Hons) Engineering (Computer Engineering) --- Second Class Upper Division\\
+ Faculty of Engineering, University of Ruhuna}\par
+ \vspace{0.6cm}
+ {\footnotesize\color{midgrey} SECOND EDITION \(\cdot\) NOVEMBER 2026}
+ \end{titlepage}
 
 \frontmatter
 \tableofcontents

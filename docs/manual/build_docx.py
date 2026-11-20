@@ -290,20 +290,21 @@ def main():
     setup(doc)
     footer_page_numbers(doc)
 
-    # cover page
-    cover_png = os.path.join(D, "..", "..", "media-output", "img-mvlyao1h-cd5f6c4a.png")
-    if os.path.exists(cover_png):
-        doc.add_picture(os.path.abspath(cover_png), width=Cm(9.6))
+    # cover page — BEYO.ND identity, matching the HTML/PDF cover
+    brand_png = os.path.join(D, "assets", "beyond-lockup.png")
+    if os.path.exists(brand_png):
+        doc.add_picture(os.path.abspath(brand_png), width=Cm(8.2))
         doc.paragraphs[-1].alignment = WD_ALIGN_PARAGRAPH.CENTER
-    for text, size, color, bold in (
-        ("LOVE LAUNDRY", 9, RED, False),
-        ("System Manual", 26, INK, False),
-        ("Laundry, Shop, Hotel and Linen Room Operations", 11.5, GREY, False),
-        ("", 10, INK, False),
-        ("Rasindu Dulshan Siriwardhana", 12, INK, True),
-        ("BSc. (Hons) Engineering (Computer Engineering) · Second Class Upper Division", 9.5, GREY, False),
-        ("Faculty of Engineering, University of Ruhuna", 9.5, GREY, False),
-        ("First Edition · October 2026", 9, GREY, False),
+    for text, size, color, bold, italic in (
+        ("System Manual", 26, INK, False, False),
+        ("“Behold. Yesterday is oncoming.”", 11, RED, False, True),
+        ("Laundry, Shop, Hotel and Linen Room Operations", 11.5, GREY, False, False),
+        ("n Dimensions. Infinite Possibilities.", 9, GREY, False, False),
+        ("", 10, INK, False, False),
+        ("Rasindu Dulshan Siriwardhana", 12, INK, True, False),
+        ("BSc. (Hons) Engineering (Computer Engineering) · Second Class Upper Division", 9.5, GREY, False, False),
+        ("Faculty of Engineering, University of Ruhuna", 9.5, GREY, False, False),
+        ("Second Edition · November 2026", 9, GREY, False, False),
     ):
         para = doc.add_paragraph()
         para.alignment = WD_ALIGN_PARAGRAPH.CENTER
@@ -311,6 +312,7 @@ def main():
         run.font.size = Pt(size)
         run.font.color.rgb = color
         run.bold = bold
+        run.italic = italic
 
     fig_counter = [0]
     first = True
