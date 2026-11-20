@@ -722,32 +722,55 @@ export function AppShell() {
 }
 `,
 
-    'src/pages/SectionPage.tsx': `import type { NavItem } from '../config/app'
+    'src/pages/SectionPage.tsx': `import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { appConfig, type NavItem } from '../config/app'
 
-/**
- * Placeholder for a screen that is not built yet.
- *
- * It deliberately shows the endpoint the screen will call instead of fake
- * sample data: a mock total on a money screen is indistinguishable from a real
- * one, and someone would eventually act on it.
- */
 export function SectionPage({ item }: { item: NavItem }) {
+  const { pathname } = useLocation()
+  const navigate = useNavigate()
+  const current = appConfig.nav.find((route) => route.path === pathname) ?? item
+
+  function goBack() {
+    if (window.history.length > 1) {
+      navigate(-1)
+    } else {
+      navigate('/')
+    }
+  }
+
   return (
     <section className="rounded-2xl border border-slate-200 bg-white p-6">
-      <h1 className="text-lg font-semibold">{item.label}</h1>
-      <p className="mt-1 max-w-prose text-sm text-slate-600">{item.blurb}</p>
+      <h1 className="text-lg font-semibold">{current.label}</h1>
+      <p className="mt-1 max-w-prose text-sm text-slate-600">{current.blurb}</p>
+      <p className="mt-2 text-xs text-slate-500">
+        Current route: <code className="font-mono">{pathname}</code>
+      </p>
 
-      <div className="mt-6 rounded-xl border border-dashed border-slate-300 bg-slate-50 p-4">
-        <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
-          Screen not built yet
-        </p>
-        <p className="mt-2 text-sm text-slate-700">
-          Will read from{' '}
-          <code className="rounded bg-slate-900 px-1.5 py-0.5 font-mono text-xs text-white">
-            {item.endpoint}
-          </code>
-        </p>
-      </div>
+      <button
+        type="button"
+        onClick={goBack}
+        className="mt-6 rounded-lg border border-slate-300 px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
+      >
+        Back
+      </button>
+
+      <nav aria-label="Application routes" className="mt-6">
+        <h2 className="text-sm font-semibold text-slate-900">Application routes</h2>
+        <ul className="mt-3 grid gap-2 sm:grid-cols-2">
+          {appConfig.nav.map((route) => (
+            <li key={route.path}>
+              <Link
+                to={route.path}
+                aria-current={route.path === pathname ? 'page' : undefined}
+                className="block rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-700 transition hover:border-slate-400 hover:bg-slate-50"
+              >
+                <span className="font-medium">{route.label}</span>
+                <span className="mt-0.5 block font-mono text-xs text-slate-500">{route.path}</span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </nav>
     </section>
   )
 }
