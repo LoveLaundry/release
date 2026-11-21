@@ -15,9 +15,11 @@ import ErrorPage from '../features/quotations/pages/error-page'
 
 const LoginPage = lazy(() => import('../features/auth/pages/login-page'))
 const GuestQuotationsPage = lazy(() => import('../features/quotations/pages/guest-quotations-page'))
+const LinenTrackPage = lazy(() => import('../features/linen/pages/linen-track-page'))
 
 // Daily Operations (landing page)
 const TodayPage = lazy(() => import('../features/today/pages/today-page'))
+const TodaySheetPage = lazy(() => import('../features/today/pages/today-sheet-page'))
 
 // Operations pages
 const DashboardPage = lazy(() => import('../features/quotations/pages/dashboard-page'))
@@ -32,6 +34,9 @@ const BillsListPage = lazy(() => import('../features/quotations/pages/bills-list
 const IncomePage = lazy(() => import('../features/quotations/pages/income-page'))
 const LedgerPage = lazy(() => import('../features/quotations/pages/ledger-page'))
 const LaundriesPage = lazy(() => import('../features/platform/pages/laundries-page'))
+const ShopsPage = lazy(() => import('../features/platform/pages/shops-page'))
+const HotelsPage = lazy(() => import('../features/platform/pages/hotels-page'))
+const RouteAccessPage = lazy(() => import('../features/platform/pages/route-access-page'))
 const CreateBillPage = lazy(() => import('../features/quotations/pages/create-bill-page'))
 const BillDetailPage = lazy(() => import('../features/quotations/pages/bill-detail-page'))
 const InvoiceCreatePage = lazy(() => import('../features/quotations/pages/invoice-create-page'))
@@ -77,6 +82,7 @@ const LinenInventory = lazy(() => import('../features/linen/pages/linen-inventor
 const LinenProfile = lazy(() => import('../features/linen/pages/linen-profile'))
 const LinenScanner = lazy(() => import('../features/linen/pages/linen-scanner'))
 const LinenBulkScan = lazy(() => import('../features/linen/pages/linen-bulk-scan'))
+const LinenSession = lazy(() => import('../features/linen/pages/linen-session'))
 const LinenTagGenerator = lazy(() => import('../features/linen/pages/linen-tag-generator'))
 
 // Gate Pass (Camelot) receipt templates
@@ -122,6 +128,11 @@ export const router = createBrowserRouter([
     element: <GuestQuotationsPage />,
     errorElement: <ErrorPage />,
   },
+  {
+    path: '/track/linen/:code',
+    element: <LinenTrackPage />,
+    errorElement: <ErrorPage />,
+  },
 
   // ── Protected routes (require auth) ──────────────────────────────────────────
   {
@@ -134,6 +145,7 @@ export const router = createBrowserRouter([
         children: [
           { index: true, element: <LandingRedirect /> },
           { path: 'today', element: <TodayPage /> },
+          { path: 'today-sheet', element: <TodaySheetPage /> },
           { path: 'dashboard', element: <DashboardPage /> },
           { path: 'business-dashboard', element: <BusinessDashboardPage /> },
           { path: 'notifications', element: <NotificationsPage /> },
@@ -194,6 +206,7 @@ export const router = createBrowserRouter([
           { path: 'linen/:id', element: <LinenProfile /> },
           { path: 'linen/scanner', element: <LinenScanner /> },
           { path: 'linen/bulk-scan', element: <LinenBulkScan /> },
+          { path: 'linen/session', element: <LinenSession /> },
           { path: 'linen/tags', element: <LinenTagGenerator /> },
 
           // Public chatbot (ADMIN / MANAGER)
@@ -242,17 +255,20 @@ export const router = createBrowserRouter([
           {
             element: <AdminRoute />,
             children: [
-              { path: 'users', element: <UsersPage /> },
               { path: 'database-sync', element: <DatabaseSyncPage /> },
               { path: 'reports-backup', element: <ReportsBackupPage /> },
             ],
           },
 
-          // Platform-only routes (laundry registry — never tenant admins)
+          // Platform-only routes (registries and identities — never tenant admins)
           {
             element: <PlatformAdminRoute />,
             children: [
               { path: 'laundries', element: <LaundriesPage /> },
+              { path: 'users', element: <UsersPage /> },
+              { path: 'shops', element: <ShopsPage /> },
+              { path: 'hotels', element: <HotelsPage /> },
+              { path: 'route-access', element: <RouteAccessPage /> },
             ],
           },
 

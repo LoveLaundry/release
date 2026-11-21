@@ -10,7 +10,7 @@ repository. Nothing in `edition-v1/`, the submodule pointers, `deploy/`, or
 
 | | Edition v1 | Edition v2 (this folder) |
 |---|---|---|
-| Architecture | ~10 independently deployed services | One FastAPI backend + 5 web apps |
+| Architecture | ~10 independently deployed services | One FastAPI backend + 6 web apps |
 | Backend | Separate `bill-service`, `user-service`, `laundry-management`, … | `backend/app` with feature modules |
 | Identity | Service-local auth/tenancy helpers | Centralised principals, capabilities, RBAC |
 | Reliability | Per-service storage | Event outbox + consumer, reconciliation, audit |
@@ -36,6 +36,10 @@ repository. Nothing in `edition-v1/`, the submodule pointers, `deploy/`, or
   `backend/app/analytics/`, and the corresponding API routers.
 - **Databases** — schema + idempotent migrations for `central_system`,
   `laundry_internal`, `linen_tracking` (`databases/`).
+- **Public website** — customer-facing marketing site with hotel linen, public
+  drop-off and partner-collection information, one responsive navbar, a
+  no-API-key embedded map (Google/OpenStreetMap) and lightweight scroll reveals
+  (`apps/public-site/`).
 - **Deployment** — Docker Compose, reverse-proxy config, monitoring, and
   Vercel serverless handlers (`infrastructure/`, `backend/api/index.py`,
   per-app `vercel.json`).
@@ -45,7 +49,8 @@ repository. Nothing in `edition-v1/`, the submodule pointers, `deploy/`, or
 ```
 edition-v2/
 ├── apps/                  # hotel-scanner, laundry-internal, laundry-scanner,
-│                          # linen-tracking, platform-admin (Vite + React)
+│                          # linen-tracking, platform-admin, public-site
+│                          # (Vite + React)
 ├── backend/               # FastAPI application, API routers, tests
 ├── databases/             # schemas, versioned migrations, migration runner
 ├── infrastructure/        # deployment, monitoring, reverse proxy
@@ -86,6 +91,9 @@ npm install
 cp .env.example .env.local    # then fill in real values
 npm run dev
 ```
+
+`apps/public-site` is a standalone Vite app and does not require the backend or
+environment variables to build.
 
 ### Tests
 

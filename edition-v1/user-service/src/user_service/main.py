@@ -5,6 +5,7 @@ from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 import bcrypt
 import base64
+from datetime import datetime, timezone
 
 from .config import DB_TYPE, DatabaseType
 from .repository import UserRepository
@@ -1513,3 +1514,49 @@ def list_client_staff(session: dict = Depends(get_client_session)):
         elif str(account.get("client_name")) == scope["client_name"]:
             items.append(account)
     return {"items": items, "total": len(items), field: entity_id or None}
+
+
+class RouteAccessUpdate(BaseModel):
+    role: str = Field(..., min_length=1, max_length=64)
+    disabled_routes: list[str] = Field(default_factory=list)
+
+
+@app.get("/admin/route-access")
+async def admin_get_route_access(current_user: dict = Depends(require_role(["ADMIN", "PLATFORM_ADMIN"]))):
+    from .database.main_db import route_access_overrides_collection
+
+    docs = list(route_access_overrides_collection.find({}, {"_id": 0}))
+    out = {}
+    for d in docs:
+        role = str(d.get("role") or "").upper()
+        if not role:
+            continue
+        out[role] = {"disabled_routes": d.get("disabled_routes") or []}
+    return {"overrides": out}
+
+
+@app.put("/admin/route-access")
+async def admin_put_route_access(payload: RouteAccessUpdate, current_user: dict = Depends(require_role(["ADMIN", "PLATFORM_ADMIN"]))):
+    from .database.main_db import route_access_overrides_collection
+
+    role = str(payload.role or "").strip().upper()
+    if not role:
+        raise HTTPException(status_code=400, detail="role is required")
+    disabled = []
+    for p in (payload.disabled_routes or []):
+        ps = str(p or "").strip()
+        if ps.startswith("/"):
+            disabled.append(ps)
+    route_access_overrides_collection.update_one(
+        {"role": role},
+        {
+            "$set": {
+                "role": role,
+                "disabled_routes": disabled,
+                "updated_at": datetime.now(timezone.utc),
+                "updated_by": current_user.get("user_id"),
+            }
+        },
+        upsert=True,
+    )
+    return {"role": role, "disabled_routes": disabled}

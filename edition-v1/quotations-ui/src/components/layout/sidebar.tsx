@@ -242,14 +242,14 @@ function SidebarContent({ collapsed, onToggle, isMobile, onMobileClose }: Sideba
 
     return NAV_GROUPS.map((group) => {
       const items = ROUTES.filter(
-        (r) => r.group === group.id && r.navLabel && canAccess(specFor(r.path)),
+        (r) => r.group === group.id && r.navLabel && canAccess(specFor(r.path), r.path),
       )
         .filter((r) => !INHERIT[r.path])
         .map<NavItem>((r) => {
           const kids =
             CHILDREN[r.path]
               ?.map((p) => ROUTES.find((x) => x.path === p))
-              .filter((x): x is (typeof ROUTES)[number] => Boolean(x) && canAccess(specFor(x!.path)))
+              .filter((x): x is (typeof ROUTES)[number] => Boolean(x) && canAccess(specFor(x!.path), x!.path))
               .map<NavItem>((x) => ({
                 to: x.path,
                 label: x.navLabel ?? x.title,

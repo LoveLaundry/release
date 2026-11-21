@@ -106,8 +106,14 @@ export function canAccess(
   user: User | null | undefined,
   spec: AccessSpec = {},
   supportActive = false,
+  opts?: { routePath?: string; disabledPaths?: string[] },
 ): boolean {
   if (!user) return false
+
+  // Admin-managed route disable override (by role + path)
+  if (opts?.routePath && opts?.disabledPaths && opts.disabledPaths.includes(opts.routePath)) {
+    return false
+  }
 
   const role = roleOf(user)
   const platform = isPlatformOnly(user, supportActive)
@@ -137,10 +143,6 @@ export function canAccess(
  * The best landing route for a session. Used by the index redirect and by any
  * "you cannot see that" bounce, so a user is never dropped on a page their own
  * session cannot render.
- *
- * Platform sessions land on the registry; tenant sessions land on the first
- * surface their capabilities allow, falling back to the profile (which every
- * authenticated session may always open).
  */
 export function landingPathFor(user: User | null | undefined, supportActive = false): string {
   if (!user) return '/login'
@@ -152,5 +154,7 @@ export function landingPathFor(user: User | null | undefined, supportActive = fa
     { path: '/management', spec: {} },
     { path: '/profile', spec: {} },
   ]
+  // Note: landingPathFor doesn't have overrides context; callers should be careful.
+  // For now, keep simple.
   return candidates.find((c) => canAccess(user, c.spec, supportActive))?.path ?? '/profile'
 }

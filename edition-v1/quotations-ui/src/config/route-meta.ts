@@ -43,6 +43,7 @@ export interface RouteMeta extends AccessSpec {
 export const ROUTES: RouteMeta[] = [
   // ── Overview ────────────────────────────────────────────────────────────────
   { path: '/today', title: 'Daily Operations', navLabel: 'Today', group: 'Overview', icon: 'Lightning', keywords: 'today daily operations home' },
+  { path: '/today-sheet', title: 'Today Sheet', navLabel: 'Today Sheet', group: 'Overview', icon: 'ClipboardText', keywords: 'today sheet daily operations' },
   { path: '/dashboard', title: 'Dashboard', navLabel: 'Dashboard', group: 'Overview', icon: 'House', keywords: 'dashboard overview' },
   { path: '/business-dashboard', title: 'Business Intelligence', navLabel: 'Business Intelligence', group: 'Overview', icon: 'ChartBar', keywords: 'business dashboard analytics insights' },
   { path: '/live-chat', title: 'Live Chat', navLabel: 'Live Chat', group: 'Overview', icon: 'ChatCircleDots', keywords: 'chat assistant', roles: ['ADMIN', 'MANAGER'] },
@@ -76,6 +77,7 @@ export const ROUTES: RouteMeta[] = [
   { path: '/linen/inventory', title: 'Linen Inventory', navLabel: 'Inventory', group: 'Linen', icon: 'ClipboardText', keywords: 'linen stock inventory' },
   { path: '/linen/scanner', title: 'Scan Linen', navLabel: 'Scan Linen', group: 'Linen', icon: 'Scan', keywords: 'linen scan barcode' },
   { path: '/linen/bulk-scan', title: 'Bulk Scan', navLabel: 'Bulk Scan', group: 'Linen', icon: 'Scan', keywords: 'linen bulk scan barcode' },
+  { path: '/linen/session', title: 'Linen Session', navLabel: 'Session', group: 'Linen', icon: 'Scan', keywords: 'linen session' },
   { path: '/linen/tags', title: 'Tag Generator', navLabel: 'Tag Generator', group: 'Linen', icon: 'FileText', keywords: 'linen tags qr barcode' },
   { path: '/linen/gate-pass', title: 'Gate Pass (Camelot)', navLabel: 'Gate Pass (Camelot)', group: 'Linen', icon: 'FileText', keywords: 'linen receipt uniform camelot' },
   { path: '/linen/gate-pass/linen', title: 'Camelot Linen Receipt', keywords: 'camelot linen receipt' },
@@ -114,12 +116,15 @@ export const ROUTES: RouteMeta[] = [
   // ── System ──────────────────────────────────────────────────────────────────
   { path: '/profile', title: 'My Profile', keywords: 'profile account' },
   { path: '/settings', title: 'Settings', navLabel: 'Settings', group: 'System', icon: 'GearSix', keywords: 'settings preferences' },
-  { path: '/users', title: 'Users', navLabel: 'Users', group: 'System', icon: 'Users', keywords: 'users staff accounts', roles: ['ADMIN', 'PLATFORM_ADMIN'], guarded: true },
   { path: '/database-sync', title: 'Database Sync', navLabel: 'Database Sync', group: 'System', icon: 'Database', keywords: 'database synchronization offline', roles: ['ADMIN'], guarded: true },
   { path: '/reports-backup', title: 'Reports & Backup', navLabel: 'Reports & Backup', group: 'System', icon: 'CloudArrowDown', keywords: 'backup restore export', roles: ['ADMIN'], guarded: true },
 
   // ── Platform (registry) ─────────────────────────────────────────────────────
   { path: '/laundries', title: 'Laundries', navLabel: 'Laundries', group: 'Platform', icon: 'Buildings', keywords: 'laundries platform tenants registry businesses', platformOnly: true, guarded: true },
+  { path: '/users', title: 'Users', navLabel: 'Users', group: 'Platform', icon: 'Users', keywords: 'users staff accounts', platformOnly: true, guarded: true },
+  { path: '/shops', title: 'Shops', navLabel: 'Shops', group: 'Platform', icon: 'Buildings', keywords: 'shops stores', platformOnly: true, guarded: true },
+  { path: '/hotels', title: 'Hotels', navLabel: 'Hotels', group: 'Platform', icon: 'Buildings', keywords: 'hotels clients', platformOnly: true, guarded: true },
+  { path: '/route-access', title: 'Route Access', navLabel: 'Route Access', group: 'Platform', icon: 'GearSix', keywords: 'route access permissions toggles roles shop hotel', platformOnly: true, guarded: true },
 ]
 
 /** The navigation groups, in sidebar order, each with the routes it lists. */
