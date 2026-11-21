@@ -13,6 +13,7 @@ from .lifecycle import (
     ACTION_STAGE,
     AVAILABLE,
     REGISTERED,
+    WASHING,
     can_transition,
     is_exception_stage,
     resolve_stage,

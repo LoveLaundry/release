@@ -35,7 +35,8 @@ class InMemoryReaderRepository(ReaderRepository):
         return dict(reader)
 
     async def get(self, reader_id: str) -> dict | None:
-        return dict(self.readers.get(reader_id) or {})
+        row = self.readers.get(reader_id)
+        return dict(row) if row is not None else None
 
     async def list(self, organization_id=None, limit=200) -> list[dict]:
         rows = [

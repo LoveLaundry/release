@@ -108,7 +108,8 @@ class InMemoryBillingRepository(BillingRepository):
         return dict(candidates[-1]) if candidates else None
 
     async def find_run(self, idempotency_key):
-        return dict(self.runs.get(idempotency_key) or {})
+        row = self.runs.get(idempotency_key)
+        return dict(row) if row is not None else None
 
     async def find_run_by_scope(self, organization_id, hotel_id, start, end):
         matches = [

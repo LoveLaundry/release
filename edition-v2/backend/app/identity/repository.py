@@ -124,7 +124,8 @@ class InMemoryIdentityRepository(IdentityRepository):
         return self.counters[name]
 
     async def get_item(self, linen_id: str) -> dict | None:
-        return dict(self.items.get(linen_id) or {})
+        row = self.items.get(linen_id)
+        return dict(row) if row is not None else None
 
     async def find_by_qr(self, qr_id: str) -> dict | None:
         return next(
@@ -166,7 +167,8 @@ class InMemoryIdentityRepository(IdentityRepository):
         return dict(batch)
 
     async def get_batch(self, batch_id: str) -> dict | None:
-        return dict(self.batches.get(batch_id) or {})
+        row = self.batches.get(batch_id)
+        return dict(row) if row is not None else None
 
     async def list_batches(self, limit=200) -> list[dict]:
         return [dict(row) for row in self.batches.values()][:limit]
@@ -242,7 +244,8 @@ class InMemoryIdentityRepository(IdentityRepository):
         return dict(row)
 
     async def get_import(self, import_id: str) -> dict | None:
-        return dict(self.imports.get(import_id) or {})
+        row = self.imports.get(import_id)
+        return dict(row) if row is not None else None
 
     async def list_imports(self, batch_id=None, limit=200) -> list[dict]:
         rows = [

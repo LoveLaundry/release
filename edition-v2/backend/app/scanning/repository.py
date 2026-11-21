@@ -65,7 +65,8 @@ class InMemoryScanningRepository(ScanningRepository):
         return True
 
     async def get_transaction(self, scan_id: str) -> dict | None:
-        return dict(self.transactions.get(scan_id) or {})
+        row = self.transactions.get(scan_id)
+        return dict(row) if row is not None else None
 
     async def update_transaction(self, transaction_id: str, patch: dict) -> None:
         for row in self.transactions.values():
@@ -86,7 +87,8 @@ class InMemoryScanningRepository(ScanningRepository):
         return dict(row)
 
     async def get_session(self, session_id: str) -> dict | None:
-        return dict(self.sessions.get(session_id) or {})
+        row = self.sessions.get(session_id)
+        return dict(row) if row is not None else None
 
     async def list_sessions(self, organization_id=None, limit=200) -> list[dict]:
         rows = [
