@@ -3072,8 +3072,7 @@ button:not(:disabled):active,
    verbatim from the canonical design-tokens.css.
    ═══════════════════════════════════════════════════════════════════════════ */
 html:root,
-html:root[data-theme='light'],
-html:root:not([data-theme='dark']):not([data-theme='nightblue']):not([data-theme='contrast-dark']):not(.dark) {
+html:root[data-theme='light'] {
   color-scheme: light;
 
   --bg: color-mix(in srgb, var(--ll-black) 4%, var(--ll-white));
