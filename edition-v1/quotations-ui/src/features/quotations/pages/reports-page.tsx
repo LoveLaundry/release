@@ -27,19 +27,19 @@ const ANALYTICS_SECTIONS: { id: AnalyticsSection; label: string; description: st
 
 const reportPrintStyles = `
   @page { size: A4 portrait; margin: 12mm; }
-  .reports-print-root { display: none; width: 190mm; margin: 0 auto; background: #fff; color: #17202a; font-family: Georgia, serif; }
-  .reports-print-header { display: flex; justify-content: space-between; align-items: center; gap: 16px; border-bottom: 3px solid #b91c1c; padding-bottom: 12px; }
-  .reports-print-title { color: #b91c1c; font-size: 22px; letter-spacing: 2px; font-weight: 800; text-align: right; }
+  .reports-print-root { display: none; width: 190mm; margin: 0 auto; background: #fff; color: var(--text-primary); font-family: Georgia, serif; }
+  .reports-print-header { display: flex; justify-content: space-between; align-items: center; gap: 16px; border-bottom: 3px solid #FF0000; padding-bottom: 12px; }
+  .reports-print-title { color: var(--danger-deep); font-size: 22px; letter-spacing: 2px; font-weight: 800; text-align: right; }
   .reports-print-section { margin-top: 22px; page-break-inside: avoid; break-inside: avoid; }
-  .reports-print-section h2 { margin: 0 0 9px; padding-bottom: 5px; border-bottom: 1px solid #b91c1c; color: #991b1b; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; }
+  .reports-print-section h2 { margin: 0 0 9px; padding-bottom: 5px; border-bottom: 1px solid #FF0000; color: var(--danger-deep); font-size: 13px; letter-spacing: 1px; text-transform: uppercase; }
   .reports-print-table { width: 100%; border-collapse: collapse; font-size: 9px; }
-  .reports-print-table th, .reports-print-table td { border: 1px solid #cbd5e1; padding: 5px; text-align: left; vertical-align: top; overflow-wrap: anywhere; }
-  .reports-print-table th { background: #b91c1c; color: #fff; font-weight: 700; }
-  .reports-print-table tbody tr:nth-child(even) { background: #fff7ed; }
+  .reports-print-table th, .reports-print-table td { border: 1px solid #BFBFBF; padding: 5px; text-align: left; vertical-align: top; overflow-wrap: anywhere; }
+  .reports-print-table th { background: var(--danger-deep); color: #fff; font-weight: 700; }
+  .reports-print-table tbody tr:nth-child(even) { background: var(--surface); }
   .reports-print-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-  .reports-print-stat { border: 1px solid #cbd5e1; padding: 9px; }
-  .reports-print-stat strong { display: block; margin-top: 4px; color: #991b1b; font-size: 13px; }
-  .reports-print-footer { margin-top: 26px; padding-top: 8px; border-top: 2px solid #b91c1c; text-align: center; font-size: 9px; }
+  .reports-print-stat { border: 1px solid #BFBFBF; padding: 9px; }
+  .reports-print-stat strong { display: block; margin-top: 4px; color: var(--danger-deep); font-size: 13px; }
+  .reports-print-footer { margin-top: 26px; padding-top: 8px; border-top: 2px solid #FF0000; text-align: center; font-size: 9px; }
   @media print {
     html, body { margin: 0; padding: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     body * { visibility: hidden !important; }
@@ -190,14 +190,14 @@ function StatusBadge({ status }: { status: string }) {
   const s = (status || '').toLowerCase()
   const cfg =
     s === 'delivered' || s === 'paid' || s === 'completed' || s === 'full'
-      ? 'bg-[#F0FDF4] text-[#16A34A] border-[#BBF7D0]'
+      ? 'bg-[var(--surface-2)] text-[var(--success-text)] border-[var(--success-border)]'
       : s === 'pending' || s === 'draft'
-        ? 'bg-[#FFF7ED] text-[#C2410C] border-[#FED7AA]'
+        ? 'bg-[var(--surface-2)] text-[var(--danger-deep)] border-[var(--danger-border)]'
         : s === 'partial' || s === 'partially_paid'
-          ? 'bg-[#EFF6FF] text-[#2563EB] border-[#BFDBFE]'
+          ? 'bg-[var(--surface-2)] text-[var(--brand-text)] border-[var(--brand-border)]'
           : s === 'cancelled'
-            ? 'bg-[var(--surface-3)] text-[#4B5563] border-[var(--border)]'
-            : 'bg-[var(--surface-2)] text-[#374151] border-[var(--border)]'
+            ? 'bg-[var(--surface-3)] text-[var(--text-secondary)] border-[var(--border)]'
+            : 'bg-[var(--surface-2)] text-[var(--text-primary)] border-[var(--border)]'
   return (
     <span className={`inline-flex items-center rounded-full border px-2 py-0.5 text-micro font-semibold capitalize ${cfg}`}>
       {status || '—'}
@@ -208,10 +208,10 @@ function StatusBadge({ status }: { status: string }) {
 function ActionBadge({ action }: { action: string }) {
   const a = (action || '').toUpperCase()
   const cfg =
-    a.includes('CREATE') ? 'bg-[#F0FDF4] text-[#16A34A] border-[#BBF7D0]' :
-      a.includes('UPDATE') || a.includes('EDIT') ? 'bg-[#EFF6FF] text-[#2563EB] border-[#BFDBFE]' :
-        a.includes('DELETE') || a.includes('REMOVE') ? 'bg-[#FFF1F1] text-[#DC2626] border-[#FECACA]' :
-          'bg-[var(--surface-2)] text-[#374151] border-[var(--border)]'
+    a.includes('CREATE') ? 'bg-[var(--surface-2)] text-[var(--success-text)] border-[var(--success-border)]' :
+      a.includes('UPDATE') || a.includes('EDIT') ? 'bg-[var(--surface-2)] text-[var(--brand-text)] border-[var(--brand-border)]' :
+        a.includes('DELETE') || a.includes('REMOVE') ? 'bg-[var(--surface-2)] text-[var(--danger-deep)] border-[var(--danger-border)]' :
+          'bg-[var(--surface-2)] text-[var(--text-primary)] border-[var(--border)]'
   return (
     <span className={`inline-flex items-center rounded-full border px-2 py-0.5 text-micro font-semibold ${cfg}`}>
       {action || '—'}
@@ -262,14 +262,14 @@ function ClientSearch() {
     <div className="space-y-5">
       <form onSubmit={handleSearch} className="flex gap-2">
         <div className="relative flex-1">
-          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#98A2B3]" />
+          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--text-faint)]" />
           <input
             type="text"
             list="client-list"
             value={input}
             onChange={e => setInput(e.target.value)}
             placeholder="Enter client / hotel name…"
-            className="h-10 w-full rounded-lg border border-[var(--border)] bg-white pl-9 pr-3 text-[13px] outline-none focus:border-[#DC2626] focus:ring-2 focus:ring-[#DC2626]/10 shadow-sm"
+            className="h-10 w-full rounded-lg border border-[var(--border)] bg-white pl-9 pr-3 text-[13px] outline-none focus:border-[var(--danger-deep)] focus:ring-2 focus:ring-[var(--danger-deep)]/10 shadow-sm"
           />
           <datalist id="client-list">
             {clientNames.map(name => (
@@ -279,7 +279,7 @@ function ClientSearch() {
         </div>
         <button
           type="submit"
-          className="h-10 px-5 rounded-lg bg-[#DC2626] text-white text-[13px] font-medium hover:bg-[#B91C1C] transition cursor-pointer"
+          className="h-10 px-5 rounded-lg bg-[var(--danger-deep)] text-white text-[13px] font-medium hover:bg-[var(--danger-deep)] transition cursor-pointer"
         >
           Search
         </button>
@@ -300,12 +300,12 @@ function ClientSearch() {
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
             <StatCard label="Gate Passes" value={data.stats.total_gate_passes} icon={ClipboardList} />
             <StatCard label="Items Received" value={data.stats.total_items_received} icon={Package} />
-            <StatCard label="Items Delivered" value={data.stats.total_items_delivered} icon={TrendingUp} accent="#16A34A" />
-            <StatCard label="Pending Items" value={data.stats.pending_items} icon={Clock} accent="#D97706" />
-            <StatCard label="Open Mismatches" value={data.stats.open_mismatches} icon={AlertTriangle} accent="#DC2626" />
-            <StatCard label="Pending Bills" value={data.stats.pending_bills} icon={Banknote} accent="#C2410C" />
-            <StatCard label="Total Billed" value={`LKR ${data.stats.total_billed.toLocaleString()}`} icon={Banknote} accent="#2563EB" />
-            <StatCard label="Outstanding" value={`LKR ${data.stats.outstanding_amount.toLocaleString()}`} icon={AlertTriangle} accent="#DC2626" />
+            <StatCard label="Items Delivered" value={data.stats.total_items_delivered} icon={TrendingUp} accent="var(--success-text)" />
+            <StatCard label="Pending Items" value={data.stats.pending_items} icon={Clock} accent="var(--danger-text)" />
+            <StatCard label="Open Mismatches" value={data.stats.open_mismatches} icon={AlertTriangle} accent="var(--danger-deep)" />
+            <StatCard label="Pending Bills" value={data.stats.pending_bills} icon={Banknote} accent="var(--danger-deep)" />
+            <StatCard label="Total Billed" value={`LKR ${data.stats.total_billed.toLocaleString()}`} icon={Banknote} accent="var(--brand-text)" />
+            <StatCard label="Outstanding" value={`LKR ${data.stats.outstanding_amount.toLocaleString()}`} icon={AlertTriangle} accent="var(--danger-deep)" />
           </div>
 
           {/* Pending Balances */}
@@ -313,7 +313,7 @@ function ClientSearch() {
             <Card>
               <CardHeader className="border-b border-[var(--border)] pb-3">
                 <div className="flex items-center gap-2">
-                  <Clock className="h-4 w-4 text-[#D97706]" />
+                  <Clock className="h-4 w-4 text-[var(--danger-text)]" />
                   <CardTitle>Pending Item Balances</CardTitle>
                 </div>
               </CardHeader>
@@ -328,12 +328,12 @@ function ClientSearch() {
                   </thead>
                   <tbody className="divide-y divide-[var(--surface-2)]">
                     {data.pending_balances.map((b: any, i: number) => (
-                      <tr key={i} className={b.pending > 0 ? 'bg-[#FFFBEB]' : ''}>
+                      <tr key={i} className={b.pending > 0 ? 'bg-[var(--surface-2)]' : ''}>
                         <td className="px-4 py-3 font-medium text-[var(--text-primary)]">{b.item_name}</td>
                         <td className="px-4 py-3" style={{ color: 'var(--text-secondary)' }}>{b.received}</td>
                         <td className="px-4 py-3" style={{ color: 'var(--text-secondary)' }}>{b.delivered}</td>
                         <td className="px-4 py-3">
-                          <span className={`font-bold ${b.pending > 0 ? 'text-[#D97706]' : 'text-[#16A34A]'}`}>
+                          <span className={`font-bold ${b.pending > 0 ? 'text-[var(--danger-text)]' : 'text-[var(--success-text)]'}`}>
                             {b.pending > 0 ? b.pending : '✓ 0'}
                           </span>
                         </td>
@@ -350,7 +350,7 @@ function ClientSearch() {
             <Card>
               <CardHeader className="border-b border-[var(--border)] pb-3">
                 <div className="flex items-center gap-2">
-                  <ClipboardList className="h-4 w-4 text-[#2563EB]" />
+                  <ClipboardList className="h-4 w-4 text-[var(--brand-text)]" />
                   <CardTitle>Recent Gate Passes</CardTitle>
                 </div>
               </CardHeader>
@@ -384,7 +384,7 @@ function ClientSearch() {
             <Card>
               <CardHeader className="border-b border-[var(--border)] pb-3">
                 <div className="flex items-center gap-2">
-                  <Banknote className="h-4 w-4 text-[#16A34A]" />
+                  <Banknote className="h-4 w-4 text-[var(--success-text)]" />
                   <CardTitle>Recent Bills</CardTitle>
                 </div>
               </CardHeader>
@@ -403,7 +403,7 @@ function ClientSearch() {
                         <td className="px-4 py-3 font-mono text-[12px] font-semibold text-[var(--text-primary)]">{b.bill_number || b.id}</td>
                         <td className="px-4 py-3" style={{ color: 'var(--text-secondary)' }}>{formatCalendarDate(b.created_at)}</td>
                         <td className="px-4 py-3 font-semibold text-[var(--text-primary)]">LKR {(b.total_amount || 0).toLocaleString()}</td>
-                        <td className="px-4 py-3 font-semibold text-[#16A34A]">LKR {(b.paid_amount || 0).toLocaleString()}</td>
+                        <td className="px-4 py-3 font-semibold text-[var(--success-text)]">LKR {(b.paid_amount || 0).toLocaleString()}</td>
                         <td className="px-4 py-3"><StatusBadge status={b.payment_status} /></td>
                       </tr>
                     ))}
@@ -417,7 +417,7 @@ function ClientSearch() {
 
       {!data && !isLoading && !isError && (
         <div className="py-16 text-center space-y-2">
-          <Users className="h-8 w-8 mx-auto text-[#D1D5DB]" />
+          <Users className="h-8 w-8 mx-auto text-[var(--text-primary)]" />
           <p className="text-[13px]" style={{ color: 'var(--text-tertiary)' }}>Enter a client name above to view their complete summary</p>
         </div>
       )}
@@ -454,23 +454,23 @@ function ItemWiseReport() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: i * 0.02 }}
-              className={`hover:bg-[var(--surface-2)] transition-colors ${(row.pending > 0) ? 'bg-[#FFFBEB]' : ''}`}
+              className={`hover:bg-[var(--surface-2)] transition-colors ${(row.pending > 0) ? 'bg-[var(--surface-2)]' : ''}`}
             >
               <td className="px-4 py-3 font-medium text-[var(--text-primary)]">{row.item_name || '—'}</td>
               <td className="px-4 py-3 font-semibold text-[var(--text-primary)]">{row.total_received ?? '—'}</td>
-              <td className="px-4 py-3 text-[#16A34A] font-semibold">{row.total_delivered ?? '—'}</td>
+              <td className="px-4 py-3 text-[var(--success-text)] font-semibold">{row.total_delivered ?? '—'}</td>
               <td className="px-4 py-3">
                 {row.pending > 0
-                  ? <span className="font-bold text-[#D97706]">{row.pending}</span>
-                  : <span className="text-[#16A34A] font-semibold">✓ 0</span>
+                  ? <span className="font-bold text-[var(--danger-text)]">{row.pending}</span>
+                  : <span className="text-[var(--success-text)] font-semibold">✓ 0</span>
                 }
               </td>
               <td className="px-4 py-3">
                 {row.mismatch_count > 0
-                  ? <span className="inline-flex items-center gap-1 rounded-full bg-[#FFF1F1] border border-[#FECACA] px-2 py-0.5 text-micro font-semibold text-[#DC2626]">
+                  ? <span className="inline-flex items-center gap-1 rounded-full bg-[var(--surface-2)] border border-[var(--danger-border)] px-2 py-0.5 text-micro font-semibold text-[var(--danger-deep)]">
                     <AlertTriangle className="h-2.5 w-2.5" />{row.mismatch_count}
                   </span>
-                  : <span className="text-[#16A34A]">—</span>
+                  : <span className="text-[var(--success-text)]">—</span>
                 }
               </td>
               <td className="px-4 py-3" style={{ color: 'var(--text-secondary)' }}>{row.client_count ?? '—'}</td>
@@ -518,10 +518,10 @@ function GatePassReport() {
               <td className="px-4 py-3 whitespace-nowrap" style={{ color: 'var(--text-secondary)' }}>{formatCalendarDate(row.receiving_date)}</td>
               <td className="px-4 py-3" style={{ color: 'var(--text-secondary)' }}>{row.received_by || '—'}</td>
               <td className="px-4 py-3 font-semibold text-[var(--text-primary)]">{row.total_received ?? '—'}</td>
-              <td className="px-4 py-3 font-semibold text-[#16A34A]">{row.total_delivered ?? '—'}</td>
+              <td className="px-4 py-3 font-semibold text-[var(--success-text)]">{row.total_delivered ?? '—'}</td>
               <td className="px-4 py-3">
                 {row.mismatch_count > 0
-                  ? <span className="inline-flex items-center gap-1 rounded-full bg-[#FFF1F1] border border-[#FECACA] px-2 py-0.5 text-micro font-semibold text-[#DC2626]">
+                  ? <span className="inline-flex items-center gap-1 rounded-full bg-[var(--surface-2)] border border-[var(--danger-border)] px-2 py-0.5 text-micro font-semibold text-[var(--danger-deep)]">
                     <AlertTriangle className="h-2.5 w-2.5" />{row.mismatch_count}
                   </span>
                   : <span style={{ color: 'var(--text-tertiary)' }}>—</span>
@@ -557,10 +557,10 @@ function BillingReport() {
     <div className="space-y-5">
       {/* Summary cards */}
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-        <StatCard label="Total Revenue" value={`LKR ${(data.total_sales || 0).toLocaleString()}`} accent="#DC2626" icon={TrendingUp} />
-        <StatCard label="Paid" value={`LKR ${(data.paid_bills_amount || 0).toLocaleString()}`} accent="#16A34A" icon={CheckCircle} />
-        <StatCard label="Pending" value={`LKR ${(data.pending_bills_amount || 0).toLocaleString()}`} accent="#D97706" icon={Clock} />
-        <StatCard label="Outstanding" value={`LKR ${(data.outstanding_amount || 0).toLocaleString()}`} accent="#2563EB" icon={AlertTriangle} />
+        <StatCard label="Total Revenue" value={`LKR ${(data.total_sales || 0).toLocaleString()}`} accent="var(--danger-deep)" icon={TrendingUp} />
+        <StatCard label="Paid" value={`LKR ${(data.paid_bills_amount || 0).toLocaleString()}`} accent="var(--success-text)" icon={CheckCircle} />
+        <StatCard label="Pending" value={`LKR ${(data.pending_bills_amount || 0).toLocaleString()}`} accent="var(--danger-text)" icon={Clock} />
+        <StatCard label="Outstanding" value={`LKR ${(data.outstanding_amount || 0).toLocaleString()}`} accent="var(--brand-text)" icon={AlertTriangle} />
       </div>
 
       {/* Per-client breakdown */}
@@ -569,7 +569,7 @@ function BillingReport() {
         <Card>
           <CardHeader className="border-b border-[var(--border)] pb-3">
             <div className="flex items-center gap-2">
-              <Users className="h-4 w-4 text-[#2563EB]" />
+              <Users className="h-4 w-4 text-[var(--brand-text)]" />
               <CardTitle>Per-Client Billing Breakdown</CardTitle>
             </div>
           </CardHeader>
@@ -591,16 +591,16 @@ function BillingReport() {
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ delay: i * 0.02 }}
-                      className={`hover:bg-[var(--surface-2)] transition-colors ${outstanding > 0 ? 'bg-[#FFFBEB]' : ''}`}
+                      className={`hover:bg-[var(--surface-2)] transition-colors ${outstanding > 0 ? 'bg-[var(--surface-2)]' : ''}`}
                     >
                       <td className="px-4 py-3 font-semibold text-[var(--text-primary)]">{row.client_name}</td>
                       <td className="px-4 py-3" style={{ color: 'var(--text-secondary)' }}>{row.gate_pass_count ?? '—'}</td>
                       <td className="px-4 py-3 font-semibold text-[var(--text-primary)]">LKR {(row.total_billed || 0).toLocaleString()}</td>
-                      <td className="px-4 py-3 font-semibold text-[#16A34A]">LKR {(row.paid_amount || 0).toLocaleString()}</td>
+                      <td className="px-4 py-3 font-semibold text-[var(--success-text)]">LKR {(row.paid_amount || 0).toLocaleString()}</td>
                       <td className="px-4 py-3">
                         {outstanding > 0
-                          ? <span className="font-bold text-[#DC2626]">LKR {outstanding.toLocaleString()}</span>
-                          : <span className="text-[#16A34A] font-semibold">✓ Settled</span>
+                          ? <span className="font-bold text-[var(--danger-deep)]">LKR {outstanding.toLocaleString()}</span>
+                          : <span className="text-[var(--success-text)] font-semibold">✓ Settled</span>
                         }
                       </td>
                       <td className="px-4 py-3">
@@ -743,8 +743,8 @@ export default function ReportsPage() {
       <div>
         <Breadcrumb items={[{ label: 'Dashboard', href: '/' }, { label: 'Reports' }]} />
         <div className="flex items-center gap-3 mt-1">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#FFF1F1] border border-[#FECACA]">
-            <BarChart3 className="h-4 w-4 text-[#DC2626]" />
+          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[var(--surface-2)] border border-[var(--danger-border)]">
+            <BarChart3 className="h-4 w-4 text-[var(--danger-deep)]" />
           </div>
           <div>
             <h1 className="text-dashboard-title">Reports</h1>
@@ -795,7 +795,7 @@ export default function ReportsPage() {
               type="button"
               onClick={handlePrint}
               disabled={!selectedAnalytics.length || printLoading || printError}
-              className="flex items-center gap-2 rounded-lg bg-[#DC2626] px-4 py-2 text-[12px] font-semibold text-white transition hover:bg-[#B91C1C] disabled:cursor-not-allowed disabled:opacity-50"
+              className="flex items-center gap-2 rounded-lg bg-[var(--danger-deep)] px-4 py-2 text-[12px] font-semibold text-white transition hover:bg-[var(--danger-deep)] disabled:cursor-not-allowed disabled:opacity-50"
               title={printError ? 'A selected report could not be loaded' : undefined}
             >
               <Printer className="h-3.5 w-3.5" />
@@ -810,7 +810,7 @@ export default function ReportsPage() {
               <label
                 key={section.id}
                 className="flex cursor-pointer items-start gap-2.5 rounded-lg border p-3 transition hover:bg-surface-hover"
-                style={{ borderColor: checked ? '#FECACA' : 'var(--border)', backgroundColor: checked ? '#FFF8F8' : undefined }}
+                style={{ borderColor: checked ? 'var(--danger-border)' : 'var(--border)', backgroundColor: checked ? 'var(--surface)' : undefined }}
               >
                 <input
                   type="checkbox"
@@ -818,7 +818,7 @@ export default function ReportsPage() {
                   onChange={() => setSelectedAnalytics(current => (
                     checked ? current.filter(item => item !== section.id) : [...current, section.id]
                   ))}
-                  className="mt-0.5 accent-[#DC2626]"
+                  className="mt-0.5 accent-[var(--danger-deep)]"
                 />
                 <span>
                   <span className="block text-[12px] font-semibold" style={{ color: 'var(--text-primary)' }}>{section.label}</span>
@@ -829,7 +829,7 @@ export default function ReportsPage() {
           })}
         </div>
         {printError && (
-          <p className="mt-3 text-[12px] text-[#DC2626]" role="alert">
+          <p className="mt-3 text-[12px] text-[var(--danger-deep)]" role="alert">
             One or more selected analytics could not be loaded. Retry after checking your connection.
           </p>
         )}
@@ -845,7 +845,7 @@ export default function ReportsPage() {
               className={[
                 'flex items-center gap-2 rounded-xl px-4 py-2.5 text-[13px] font-medium whitespace-nowrap transition cursor-pointer',
                 activeTab === id
-                  ? 'bg-[#DC2626] text-white shadow-sm'
+                  ? 'bg-[var(--danger-deep)] text-white shadow-sm'
                   : 'hover:bg-[var(--surface-3)]',
               ].join(' ')}
               style={activeTab !== id ? { color: 'var(--text-secondary)' } : {}}

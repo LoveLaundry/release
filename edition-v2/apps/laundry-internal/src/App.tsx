@@ -15,6 +15,7 @@ import {
 } from "./api";
 import { actorId, getSession, logout, type SessionUser } from "./auth";
 import { LoginScreen } from "./LoginScreen";
+import { ThemeSwitcher } from "./ll-theme";
 
 const CURRENT_PERIOD = new Date().toISOString().slice(0, 7);
 
@@ -207,7 +208,8 @@ export function App() {
           <p style={{ margin: 0 }}>Signed in as {session.user_name}</p>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-          <span style={{ fontSize: "0.8rem", color: "#666" }}>
+          <ThemeSwitcher compact />
+          <span style={{ fontSize: "0.8rem", color: "var(--text-muted)" }}>
             {lastUpdated ? `Updated ${lastUpdated}` : ""}
           </span>
           <button type="button" onClick={() => void refreshPage()} disabled={refreshing}>
@@ -235,21 +237,21 @@ export function App() {
 
       <section style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: "0.75rem", marginTop: "1rem" }}>
         {tiles.map((tile) => (
-          <div key={tile.label} style={{ border: "1px solid #d1d5db", borderRadius: "0.5rem", padding: "0.75rem" }}>
-            <p style={{ margin: 0, fontSize: "0.75rem", color: "#6b7280" }}>{tile.label}</p>
+          <div key={tile.label} style={{ border: "1px solid var(--border-2)", borderRadius: "0.5rem", padding: "0.75rem" }}>
+            <p style={{ margin: 0, fontSize: "0.75rem", color: "var(--text-muted)" }}>{tile.label}</p>
             <p style={{ margin: "0.25rem 0 0", fontSize: "1.25rem", fontWeight: 600 }}>{tile.value.toFixed(2)}</p>
           </div>
         ))}
       </section>
 
-      <section style={{ marginTop: "1.5rem", border: "1px solid #d1d5db", borderRadius: "0.5rem", padding: "1rem" }}>
+      <section style={{ marginTop: "1.5rem", border: "1px solid var(--border-2)", borderRadius: "0.5rem", padding: "1rem" }}>
         <h2>Adjustments awaiting approval</h2>
         {adjLoading ? <p>Loading adjustments…</p> : null}
         {adjError ? <p role="alert">{adjError}</p> : null}
         {adjustments.length === 0 && !adjLoading ? <p>No adjustments awaiting approval.</p> : null}
         <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
           {adjustments.map((a) => (
-            <li key={a.id} style={{ borderBottom: "1px solid #e5e7eb", padding: "0.5rem 0" }}>
+            <li key={a.id} style={{ borderBottom: "1px solid var(--border)", padding: "0.5rem 0" }}>
               <strong>{a.item_name}</strong>
               {a.specification ? ` (${a.specification})` : ""} — {a.original_qty} → {a.corrected_qty}
               <span style={{ marginLeft: "0.5rem" }}>reason: {a.reason}</span>
@@ -262,14 +264,14 @@ export function App() {
         </ul>
       </section>
 
-      <section style={{ marginTop: "1.5rem", border: "1px solid #d1d5db", borderRadius: "0.5rem", padding: "1rem" }}>
+      <section style={{ marginTop: "1.5rem", border: "1px solid var(--border-2)", borderRadius: "0.5rem", padding: "1rem" }}>
         <h2>Bills &amp; invoices</h2>
         {billingLoading ? <p>Loading bills and invoices…</p> : null}
         {billingError ? <p role="alert">{billingError}</p> : null}
         {billingRows.length === 0 && !billingLoading ? <p>No bills or invoices recorded for this period.</p> : null}
         <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
           {billingRows.map((row) => (
-            <li key={row.key} style={{ borderBottom: "1px solid #e5e7eb", padding: "0.5rem 0", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+            <li key={row.key} style={{ borderBottom: "1px solid var(--border)", padding: "0.5rem 0", display: "flex", alignItems: "center", gap: "0.5rem" }}>
               <strong>{row.label}</strong>
               <span>{row.detail}</span>
               <button type="button" onClick={() => openEditor(row.target)} style={{ marginLeft: "auto" }}>
@@ -281,7 +283,7 @@ export function App() {
       </section>
 
       {edit ? (
-        <section style={{ marginTop: "1.5rem", border: "1px solid #d1d5db", borderRadius: "0.5rem", padding: "1rem" }}>
+        <section style={{ marginTop: "1.5rem", border: "1px solid var(--border-2)", borderRadius: "0.5rem", padding: "1rem" }}>
           <h2>Edit {edit.kind}</h2>
           <p>{edit.id}</p>
           <label style={{ display: "block" }}>

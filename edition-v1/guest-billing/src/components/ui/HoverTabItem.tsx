@@ -1,9 +1,9 @@
 const HoverTabItem=({tab}:{tab: string | null})=>{
     return(
-        <div className="absolute select-none active:bg-blue-200 w-full flex items-center justify-center text-black h-full backdrop-blur-lg bg-white animate-slideIn">
+        <div className="absolute select-none active:bg-[var(--brand-soft)] w-full flex items-center justify-center text-[var(--text-primary)] h-full backdrop-blur-lg bg-[var(--surface)] animate-slideIn">
             {tab}
         </div>
     )
 }
 
-export default HoverTabItem;
+export default HoverTabItem

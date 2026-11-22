@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { fetchLinenOperations, recordLinenMovement, type LinenOperations } from "./api";
 import { actorId, getSession, logout, type SessionUser } from "./auth";
 import { LoginScreen } from "./LoginScreen";
+import { ThemeSwitcher } from "./ll-theme";
 
 const CURRENT_PERIOD = new Date().toISOString().slice(0, 7);
 
@@ -118,7 +119,8 @@ export function App() {
           <p style={{ margin: 0 }}>Signed in as {session.user_name}</p>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-          <span style={{ fontSize: "0.8rem", color: "#666" }}>
+          <ThemeSwitcher compact />
+          <span style={{ fontSize: "0.8rem", color: "var(--text-muted)" }}>
             {lastUpdated ? `Updated ${lastUpdated}` : ""}
           </span>
           <button type="button" onClick={() => void refreshPage()} disabled={refreshing}>
@@ -146,14 +148,14 @@ export function App() {
 
       <section style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: "0.75rem", marginTop: "1rem" }}>
         {tiles.map((tile) => (
-          <div key={tile.label} style={{ border: "1px solid #d1d5db", borderRadius: "0.5rem", padding: "0.75rem" }}>
-            <p style={{ margin: 0, fontSize: "0.75rem", color: "#6b7280" }}>{tile.label}</p>
+          <div key={tile.label} style={{ border: "1px solid var(--border-2)", borderRadius: "0.5rem", padding: "0.75rem" }}>
+            <p style={{ margin: 0, fontSize: "0.75rem", color: "var(--text-muted)" }}>{tile.label}</p>
             <p style={{ margin: "0.25rem 0 0", fontSize: "1.25rem", fontWeight: 600 }}>{tile.value.toFixed(2)}</p>
           </div>
         ))}
       </section>
 
-      <section style={{ marginTop: "1.5rem", border: "1px solid #d1d5db", borderRadius: "0.5rem", padding: "1rem" }}>
+      <section style={{ marginTop: "1.5rem", border: "1px solid var(--border-2)", borderRadius: "0.5rem", padding: "1rem" }}>
         <h2>Record movement</h2>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: "0.75rem" }}>
           <label style={{ display: "block" }}>

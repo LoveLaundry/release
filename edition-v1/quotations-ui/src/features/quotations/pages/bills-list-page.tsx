@@ -191,10 +191,10 @@ export default function BillsListPage() {
                     <div className="flex min-w-0 items-start gap-3">
                         <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border ${
                             bill.payment_status === 'PAID'
-                                ? 'bg-[#F0FDF4] text-[#16A34A] border-[#BBF7D0]'
+                                ? 'bg-[var(--surface-2)] text-[var(--success-text)] border-[var(--success-border)]'
                                 : bill.payment_status === 'PARTIALLY_PAID'
-                                    ? 'bg-[#FFFBEB] text-[#D97706] border-[#FDE68A]'
-                                    : 'bg-[#FFF1F1] text-[#DC2626] border-[#FECACA]'
+                                    ? 'bg-[var(--surface-2)] text-[var(--danger-text)] border-[var(--danger-border)]'
+                                    : 'bg-[var(--surface-2)] text-[var(--danger-deep)] border-[var(--danger-border)]'
                         }`}>
                             <Receipt className="h-4 w-4" />
                         </div>
@@ -222,10 +222,10 @@ export default function BillsListPage() {
                         <div className="flex items-center gap-1.5">
                             <VerificationStatus status={bill.verification?.status} showLabel={false} />
                             {owed > 0 && (
-                                <span className="text-[11px] font-bold text-[#DC2626]">Owed LKR {owed.toFixed(2)}</span>
+                                <span className="text-[11px] font-bold text-[var(--danger-deep)]">Owed LKR {owed.toFixed(2)}</span>
                             )}
                             {bill.payment_status === 'PAID' && (
-                                <span className="text-[11px] font-bold text-[#16A34A]">Paid LKR {paid.toFixed(2)}</span>
+                                <span className="text-[11px] font-bold text-[var(--success-text)]">Paid LKR {paid.toFixed(2)}</span>
                             )}
                         </div>
                     </div>
@@ -235,7 +235,7 @@ export default function BillsListPage() {
                 <div className="mt-2 flex items-center justify-between border-t border-[var(--border)] pt-2">
                     <div className="flex items-center gap-1.5">
                         {bill.gate_pass_id ? (
-                            <Link to={`/gate-passes/${bill.gate_pass_id}`} className="font-mono text-[11px] font-semibold text-[#10B981] hover:text-[#047857]">
+                            <Link to={`/gate-passes/${bill.gate_pass_id}`} className="font-mono text-[11px] font-semibold text-[var(--success-text)] hover:text-[var(--success-text)]">
                                 View gate pass
                             </Link>
                         ) : (
@@ -258,7 +258,7 @@ export default function BillsListPage() {
             <div className="rounded-xl border border-[var(--border)] bg-white p-4 shadow-[var(--shadow-xs)] transition-shadow hover:shadow-md">
                 <div className="flex items-start justify-between gap-2">
                     <div className="flex min-w-0 items-start gap-3">
-                        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-[#FFEAD5] bg-[#FFF7ED] text-[#C2410C]">
+                        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-[var(--danger-soft)] bg-[var(--surface-2)] text-[var(--danger-deep)]">
                             <Boxes className="h-4 w-4" />
                         </div>
                         <div className="min-w-0">
@@ -269,10 +269,10 @@ export default function BillsListPage() {
                                     <p className="truncate text-[12px] text-[var(--text-muted)]">{gp.client_name || '—'}</p>
                                 )}
                             </div>
-                            <p className="mt-1 text-[11px] text-[#98A2B3]">{formatDate(gp.receiving_date)}</p>
+                            <p className="mt-1 text-[11px] text-[var(--text-faint)]">{formatDate(gp.receiving_date)}</p>
                         </div>
                     </div>
-                    <span className="rounded-full border border-[#FDE68A] bg-[#FFFBEB] px-2 py-0.5 text-[11px] font-bold text-[#D97706]">
+                    <span className="rounded-full border border-[var(--danger-border)] bg-[var(--surface-2)] px-2 py-0.5 text-[11px] font-bold text-[var(--danger-text)]">
                         {gp.total_unbilled_qty} pcs
                     </span>
                 </div>
@@ -280,8 +280,8 @@ export default function BillsListPage() {
                 <div className="mt-3 space-y-1 border-t border-[var(--border)] pt-2.5">
                     {(gp.unbilled_items ?? []).slice(0, 3).map(item => (
                         <div key={item.item_name} className="flex items-center justify-between gap-2 text-[12px]">
-                            <span className="truncate font-medium text-[#374151]">{item.item_name}</span>
-                            <span className="shrink-0 font-semibold text-[#D97706]">+{item.unbilled_qty}</span>
+                            <span className="truncate font-medium text-[var(--text-primary)]">{item.item_name}</span>
+                            <span className="shrink-0 font-semibold text-[var(--danger-text)]">+{item.unbilled_qty}</span>
                         </div>
                     ))}
                     {(gp.unbilled_items ?? []).length > 3 && (
@@ -291,7 +291,7 @@ export default function BillsListPage() {
                     )}
                     {(gp.total_rewashed_qty ?? 0) > 0 && (
                         <div className="flex items-start justify-between gap-2 text-[12px]">
-                            <span className="inline-flex items-center gap-1.5 truncate text-[#15803D]">
+                            <span className="inline-flex items-center gap-1.5 truncate text-[var(--success-text)]">
                                 <RotateCw size={12} className="shrink-0" />
                                 <span className="truncate">Free re-wash · not billed
                                     {(gp.rewashed_items ?? []).length > 0
@@ -299,13 +299,13 @@ export default function BillsListPage() {
                                         : ''}
                                 </span>
                             </span>
-                            <span className="shrink-0 font-semibold text-[#15803D]">+{gp.total_rewashed_qty}</span>
+                            <span className="shrink-0 font-semibold text-[var(--success-text)]">+{gp.total_rewashed_qty}</span>
                         </div>
                     )}
                 </div>
 
                 <div className="mt-2 flex items-center justify-between border-t border-[var(--border)] pt-2">
-                    <span className="inline-flex items-center gap-1 text-[11px] font-medium text-[#B45309]">
+                    <span className="inline-flex items-center gap-1 text-[11px] font-medium text-[var(--danger-text)]">
                         <AlertTriangle size={11} /> Ready to bill
                     </span>
                     <EntityCardActions
@@ -323,11 +323,11 @@ export default function BillsListPage() {
                 <div className="min-w-0 flex-1">
                     <Breadcrumb items={[{ label: 'Dashboard', href: '/' }, { label: 'Bills' }]} />
                     <h1 className="text-dashboard-title mt-1">Bills</h1>
-                    <p className="text-[13px] text-[#98A2B3] mt-0.5">
+                    <p className="text-[13px] text-[var(--text-faint)] mt-0.5">
                         Billing and collections — organized by hotel.
                     </p>
                     <div className="mt-1.5">
-                        <span className="text-[12px] font-medium text-[#6B7280]">
+                        <span className="text-[12px] font-medium text-[var(--text-secondary)]">
                             {isLoading ? 'Loading…' : `${bills.length} bill${bills.length !== 1 ? 's' : ''}`}
                             {hotel ? ` · ${hotel}` : ' · All hotels'}
                         </span>
@@ -364,13 +364,13 @@ export default function BillsListPage() {
                         value={searchInput}
                         onChange={e => setSearchInput(e.target.value)}
                         placeholder={`Search ${hotel ? hotel : 'all hotels'} by client, quotation title, or item…`}
-                        className="h-10 w-full rounded-lg border border-[var(--border)] bg-[var(--surface)] pl-9 pr-8 text-[13px] text-[var(--text-primary)] outline-none focus:border-[#DC2626] focus:ring-2 focus:ring-[#DC2626]/10 shadow-sm"
+                        className="h-10 w-full rounded-lg border border-[var(--border)] bg-[var(--surface)] pl-9 pr-8 text-[13px] text-[var(--text-primary)] outline-none focus:border-[var(--danger-deep)] focus:ring-2 focus:ring-[var(--danger-deep)]/10 shadow-sm"
                     />
                     {searchInput && (
                         <button
                             type="button"
                             onClick={() => setSearchInput('')}
-                            className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#98A2B3] hover:text-[#374151] cursor-pointer"
+                            className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[var(--text-faint)] hover:text-[var(--text-primary)] cursor-pointer"
                             aria-label="Clear search"
                         >
                             <X className="h-3.5 w-3.5" />
@@ -385,7 +385,7 @@ export default function BillsListPage() {
                             type="date"
                             value={dateFrom}
                             onChange={e => setDateFrom(e.target.value)}
-                            className="h-10 rounded-lg border border-[var(--border)] bg-[var(--surface)] pl-8 pr-2.5 text-[13px] text-[var(--text-primary)] outline-none focus:border-[#DC2626] focus:ring-2 focus:ring-[#DC2626]/10 shadow-sm"
+                            className="h-10 rounded-lg border border-[var(--border)] bg-[var(--surface)] pl-8 pr-2.5 text-[13px] text-[var(--text-primary)] outline-none focus:border-[var(--danger-deep)] focus:ring-2 focus:ring-[var(--danger-deep)]/10 shadow-sm"
                         />
                     </div>
                     <span className="text-[12px] text-[var(--text-faint)]">to</span>
@@ -393,7 +393,7 @@ export default function BillsListPage() {
                         type="date"
                         value={dateTo}
                         onChange={e => setDateTo(e.target.value)}
-                        className="h-10 rounded-lg border border-[var(--border)] bg-[var(--surface)] px-2.5 text-[13px] text-[var(--text-primary)] outline-none focus:border-[#DC2626] focus:ring-2 focus:ring-[#DC2626]/10 shadow-sm"
+                        className="h-10 rounded-lg border border-[var(--border)] bg-[var(--surface)] px-2.5 text-[13px] text-[var(--text-primary)] outline-none focus:border-[var(--danger-deep)] focus:ring-2 focus:ring-[var(--danger-deep)]/10 shadow-sm"
                     />
                     {hasFilters && (
                         <Button variant="ghost" size="sm" onClick={clearFilters}>

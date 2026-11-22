@@ -35,7 +35,7 @@ const ActionBar = ({
                     gap-1
                     rounded-[18px]
                     border
-                    border-red-600
+                    border-[var(--ll-red)]
                     bg-surface
                     px-2
                     py-2

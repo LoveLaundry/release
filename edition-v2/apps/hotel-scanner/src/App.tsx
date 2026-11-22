@@ -20,6 +20,7 @@ import {
 } from "./api";
 import { actorId, getSession, logout, type SessionUser } from "./auth";
 import { LoginScreen } from "./LoginScreen";
+import { ThemeSwitcher } from "./ll-theme";
 
 type Route = "operations" | "scan" | "bulk" | "exceptions" | "dashboard";
 
@@ -430,6 +431,7 @@ export function App() {
           </p>
         </div>
         <div className="session">
+          <ThemeSwitcher compact />
           <span>{lastUpdated ? `Updated ${lastUpdated}` : ""}</span>
           <button type="button" onClick={() => void refreshPage()} disabled={refreshing}>
             {refreshing ? "Refreshing…" : "Refresh"}

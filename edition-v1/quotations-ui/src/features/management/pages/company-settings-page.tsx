@@ -169,7 +169,7 @@ function ProjectionCard({ entry, past }: { entry?: any; past: boolean }) {
         </div>
         <div>
           <p className="text-xs text-gray-500">{past ? 'Billed units' : 'Projected units'}</p>
-          <p className="font-semibold text-[#B91C1C]">{formatKwh(entry.projected_units)}</p>
+          <p className="font-semibold text-[var(--danger-deep)]">{formatKwh(entry.projected_units)}</p>
         </div>
         <div>
           <p className="text-xs text-gray-500">Trend</p>
@@ -185,7 +185,7 @@ function ProjectionCard({ entry, past }: { entry?: any; past: boolean }) {
         </div>
         <div>
           <p className="text-xs text-gray-500">{past ? 'Billed cost' : 'Projected cost'}</p>
-          <p className="font-semibold text-[#B91C1C]">
+          <p className="font-semibold text-[var(--danger-deep)]">
             {entry.projected_cost ? formatLkr(entry.projected_cost.amount_lkr) : '—'}
           </p>
         </div>
@@ -466,7 +466,7 @@ export default function CompanySettingsPage() {
       : []
   const costChartData = [...monthlyLabeled, ...projChartEntry]
   const projSource = projMeter === 'combined' ? meterProjection?.combined : meterProjection?.meters?.[projMeter]
-  const projColor = projMeter === 'meter_1' ? '#2563eb' : projMeter === 'meter_2' ? '#dc2626' : '#16a34a'
+  const projColor = projMeter === 'meter_1' ? 'var(--brand-text)' : projMeter === 'meter_2' ? 'var(--danger-deep)' : 'var(--success-text)'
   const projChartData = (projSource?.series || []).map((day: any) => ({
     date: fmtDay(day.date),
     actual: day.actual,
@@ -781,7 +781,7 @@ export default function CompanySettingsPage() {
                         <button
                           type="button"
                           onClick={() => openEdit(reading)}
-                          className="inline-flex items-center gap-1 text-xs text-[#B91C1C] hover:text-red-700 cursor-pointer"
+                          className="inline-flex items-center gap-1 text-xs text-[var(--danger-deep)] hover:text-red-700 cursor-pointer"
                         >
                           <Pencil size={13} /> Edit
                         </button>
@@ -833,8 +833,8 @@ export default function CompanySettingsPage() {
                         ? form.electricity_meter_1_name
                         : form.electricity_meter_2_name}
                     />
-                    <Line type="monotone" dataKey="meter_1" name="meter_1" stroke="#2563eb" connectNulls dot />
-                    <Line type="monotone" dataKey="meter_2" name="meter_2" stroke="#dc2626" connectNulls dot />
+                    <Line type="monotone" dataKey="meter_1" name="meter_1" stroke="var(--brand-text)" connectNulls dot />
+                    <Line type="monotone" dataKey="meter_2" name="meter_2" stroke="var(--danger-deep)" connectNulls dot />
                   </LineChart>
                 </ResponsiveContainer>
               </div>
@@ -875,17 +875,17 @@ export default function CompanySettingsPage() {
                       }
                     />
                     <Legend />
-                    <Bar dataKey="meter_1_amount_lkr" name={form.electricity_meter_1_name} fill="#2563eb">
+                    <Bar dataKey="meter_1_amount_lkr" name={form.electricity_meter_1_name} fill="var(--brand-text)">
                       {costChartData.map((entry: any, index: number) => (
                         <Cell key={index} fillOpacity={entry.projected ? 0.4 : 1} />
                       ))}
                     </Bar>
-                    <Bar dataKey="meter_2_amount_lkr" name={form.electricity_meter_2_name} fill="#dc2626">
+                    <Bar dataKey="meter_2_amount_lkr" name={form.electricity_meter_2_name} fill="var(--danger-deep)">
                       {costChartData.map((entry: any, index: number) => (
                         <Cell key={index} fillOpacity={entry.projected ? 0.4 : 1} />
                       ))}
                     </Bar>
-                    <Bar dataKey="amount_lkr" name="Combined total (sum of both meters)" fill="#16a34a">
+                    <Bar dataKey="amount_lkr" name="Combined total (sum of both meters)" fill="var(--success-text)">
                       {costChartData.map((entry: any, index: number) => (
                         <Cell key={index} fillOpacity={entry.projected ? 0.4 : 1} />
                       ))}
@@ -954,7 +954,7 @@ export default function CompanySettingsPage() {
                               <button
                                 type="button"
                                 onClick={() => setExpandedMonth(current => (current === month.month ? null : month.month))}
-                                className="ml-2 text-xs text-[#B91C1C] hover:text-red-700 underline underline-offset-2 cursor-pointer"
+                                className="ml-2 text-xs text-[var(--danger-deep)] hover:text-red-700 underline underline-offset-2 cursor-pointer"
                               >
                                 {expandedMonth === month.month ? 'Hide breakdown' : 'Breakdown'}
                               </button>
@@ -1125,7 +1125,7 @@ export default function CompanySettingsPage() {
               </div>
               <div className="h-2 rounded-full bg-gray-100 dark:bg-gray-700 overflow-hidden">
                 <div
-                  className="h-full bg-[#B91C1C] rounded-full"
+                  className="h-full bg-[var(--danger-deep)] rounded-full"
                   style={{ width: `${meterProjection.total_days ? Math.min(100, (meterProjection.elapsed_days / meterProjection.total_days) * 100) : 0}%` }}
                 />
               </div>
@@ -1183,7 +1183,7 @@ export default function CompanySettingsPage() {
                         type="monotone"
                         dataKey="trend"
                         name="Trend (kWh/day)"
-                        stroke="#111827"
+                        stroke="var(--text-primary)"
                         strokeDasharray="6 4"
                         dot={false}
                         connectNulls
@@ -1192,7 +1192,7 @@ export default function CompanySettingsPage() {
                     <ReferenceLine
                       y={projAvg}
                       label={{ value: 'Average pace', position: 'insideTopRight', fontSize: 11 }}
-                      stroke="#6b7280"
+                      stroke="var(--text-secondary)"
                       strokeDasharray="2 3"
                     />
                   </ComposedChart>
@@ -1214,7 +1214,7 @@ export default function CompanySettingsPage() {
               </div>
               <div>
                 <p className="text-xs text-gray-500">{meterProjection.is_current ? 'Projected total' : 'Billed total'} (kWh)</p>
-                <p className="font-semibold text-[#B91C1C]">{formatKwh(meterProjection.combined?.projected_units ?? 0)}</p>
+                <p className="font-semibold text-[var(--danger-deep)]">{formatKwh(meterProjection.combined?.projected_units ?? 0)}</p>
               </div>
               <div>
                 <p className="text-xs text-gray-500">Cost so far</p>
@@ -1224,7 +1224,7 @@ export default function CompanySettingsPage() {
               </div>
               <div>
                 <p className="text-xs text-gray-500">{meterProjection.is_current ? 'Projected cost' : 'Billed cost'}</p>
-                <p className="font-semibold text-[#B91C1C]">
+                <p className="font-semibold text-[var(--danger-deep)]">
                   {meterProjection.combined?.projected_cost_lkr == null ? '—' : formatLkr(meterProjection.combined.projected_cost_lkr)}
                 </p>
               </div>
@@ -1296,11 +1296,11 @@ export default function CompanySettingsPage() {
                       }
                     />
                     <Legend />
-                    <Bar dataKey="meter_1" name={`${usageMeters?.meter_1?.name || form.electricity_meter_1_name} · daily`} fill="#bfdbfe" radius={[3, 3, 0, 0]} maxBarSize={28} />
-                    <Bar dataKey="meter_2" name={`${usageMeters?.meter_2?.name || form.electricity_meter_2_name} · daily`} fill="#fecaca" radius={[3, 3, 0, 0]} maxBarSize={28} />
-                    <Line type="monotone" dataKey="meter_1_ma7" name={`${usageMeters?.meter_1?.name || form.electricity_meter_1_name} · 7-day avg`} stroke="#1d4ed8" strokeWidth={2} dot={false} />
-                    <Line type="monotone" dataKey="meter_2_ma7" name={`${usageMeters?.meter_2?.name || form.electricity_meter_2_name} · 7-day avg`} stroke="#b91c1c" strokeWidth={2} dot={false} />
-                    <Line type="monotone" dataKey="combined_ma7" name="Combined · 7-day avg" stroke="#15803d" strokeWidth={2} dot={false} />
+                    <Bar dataKey="meter_1" name={`${usageMeters?.meter_1?.name || form.electricity_meter_1_name} · daily`} fill="var(--brand-border)" radius={[3, 3, 0, 0]} maxBarSize={28} />
+                    <Bar dataKey="meter_2" name={`${usageMeters?.meter_2?.name || form.electricity_meter_2_name} · daily`} fill="var(--danger-border)" radius={[3, 3, 0, 0]} maxBarSize={28} />
+                    <Line type="monotone" dataKey="meter_1_ma7" name={`${usageMeters?.meter_1?.name || form.electricity_meter_1_name} · 7-day avg`} stroke="var(--brand-deep)" strokeWidth={2} dot={false} />
+                    <Line type="monotone" dataKey="meter_2_ma7" name={`${usageMeters?.meter_2?.name || form.electricity_meter_2_name} · 7-day avg`} stroke="var(--danger-deep)" strokeWidth={2} dot={false} />
+                    <Line type="monotone" dataKey="combined_ma7" name="Combined · 7-day avg" stroke="var(--success-text)" strokeWidth={2} dot={false} />
                   </ComposedChart>
                 </ResponsiveContainer>
               </div>
@@ -1458,7 +1458,7 @@ export default function CompanySettingsPage() {
                       data: { reading_value: Number(editValue), reason: editReason.trim() },
                     })
                   }
-                  className="rounded-md bg-[#B91C1C] px-4 py-2 text-sm text-white font-medium disabled:opacity-40 cursor-pointer disabled:cursor-not-allowed"
+                  className="rounded-md bg-[var(--danger-deep)] px-4 py-2 text-sm text-white font-medium disabled:opacity-40 cursor-pointer disabled:cursor-not-allowed"
                 >
                   {updateReadingMut.isPending ? 'Saving…' : 'Save correction'}
                 </button>

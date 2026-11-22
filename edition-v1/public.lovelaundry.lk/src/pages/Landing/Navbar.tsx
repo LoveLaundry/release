@@ -7,6 +7,7 @@ import {
 } from "react-icons/ri";
 import type { ActionType } from "../../types/action";
 import { useLanguage } from "../../i18n";
+import { ThemeSwitcher } from "../../ll-theme";
 
 interface NavbarProps {
     actions: ActionType[];
@@ -184,6 +185,10 @@ const Navbar = ({ actions }: NavbarProps) => {
 
                             <RiArrowRightLine className="h-3.5 w-3.5 lg:h-4 lg:w-4" />
                         </button>
+
+                        <div className="ml-1 flex items-center lg:ml-2">
+                            <ThemeSwitcher compact />
+                        </div>
 
                         <div className="ml-2 flex items-center rounded-full border border-line bg-surface p-0.5 lg:ml-3">
                             <button
@@ -386,6 +391,10 @@ const Navbar = ({ actions }: NavbarProps) => {
                                     </div>
 
                                     <div className="my-1 h-px bg-surface-muted" />
+
+                                    <div className="flex items-center justify-center p-2">
+                                        <ThemeSwitcher compact />
+                                    </div>
 
                                     <div className="p-1">
                                         <div className="flex items-center justify-center rounded-lg bg-surface-muted p-1">

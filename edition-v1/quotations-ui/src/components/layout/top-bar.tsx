@@ -14,6 +14,7 @@ import {
   ShieldCheck,
 } from 'lucide-react'
 import { cn } from '../../lib/utils'
+import { ThemeSwitcher } from '../../ll-theme'
 import { useAuth } from '../../context/AuthContext'
 import { PLATFORM_LANDING } from '../../lib/session-scope'
 import { useNotifications } from '../../features/quotations/hooks/useNotifications'
@@ -417,6 +418,7 @@ export function TopBar({
           <QueuedActionsBadge />
 
           {/* Accessibility and discoverability controls stay in one cluster. */}
+          <ThemeSwitcher compact />
           <HighContrastToggle />
           <LargeTextToggle pressed={largeText} onToggle={toggleLargeText} />
           <FeatureLauncherButton onClick={() => setPanelOpen(true)} />
