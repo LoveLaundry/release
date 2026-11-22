@@ -18,6 +18,8 @@ interface ConsolidatedInvoiceTemplateProps {
     accountName: string
     accountNumber: string
   }
+  /** Saved invoices keep their original generation date on reprint. */
+  generatedAt?: string
 }
 
 interface InvoiceColumn {
@@ -115,7 +117,7 @@ function quantityFor(bill: Bill, column: InvoiceColumn): number {
 }
 
 export const ConsolidatedInvoiceTemplate = React.forwardRef<HTMLDivElement, ConsolidatedInvoiceTemplateProps>(
-  ({ bills, dateFrom, dateTo, invoiceNo, clientAddress, managerSignature, includePrefix = true, bankDetails }, ref) => {
+  ({ bills, dateFrom, dateTo, invoiceNo, clientAddress, managerSignature, includePrefix = true, bankDetails, generatedAt }, ref) => {
     const invoiceBills = bills.filter((bill) => bill.payment_status !== 'CANCELLED')
     const itemColumns = buildItemColumns(invoiceBills)
     const clientNames = [...new Set(invoiceBills.map((bill) => bill.client_name))]
@@ -127,7 +129,7 @@ export const ConsolidatedInvoiceTemplate = React.forwardRef<HTMLDivElement, Cons
       0,
     )
     const money = (amount: number) => `LKR ${amount.toFixed(2)}`
-    const generatedOn = formatInvoiceDate(new Date().toISOString())
+    const generatedOn = formatInvoiceDate(generatedAt ?? new Date().toISOString())
 
     return (
       <div ref={ref} className="inv-root" style={{ fontFamily: '"Spectral", Georgia, serif' }}>

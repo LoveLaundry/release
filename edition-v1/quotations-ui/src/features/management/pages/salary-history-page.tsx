@@ -722,7 +722,7 @@ export default function SalaryHistoryPage() {
                     </button>
                   </div>
                 )}
-                <button onClick={() => handlePrint()} className="px-3 py-1.5 bg-blue-600 text-white rounded-lg text-sm flex items-center gap-1">
+                <button onClick={() => handlePrint()} className="px-3 py-1.5 bg-zinc-600 text-white rounded-lg text-sm flex items-center gap-1">
                   <Printer size={14} /> Print
                 </button>
                 <button onClick={() => setViewSlip(null)} className="p-1.5 hover:bg-gray-100 rounded">
@@ -756,7 +756,7 @@ export default function SalaryHistoryPage() {
                         {viewSlip.attendance_required !== false && (
                           <>
                             <div className="flex justify-between"><span className="text-gray-500">Worked Days</span><span className="font-medium text-green-600">{viewSlip.worked_days ?? '-'}</span></div>
-                            <div className="flex justify-between"><span className="text-gray-500">Leave Days</span><span className="font-medium text-blue-600">{viewSlip.leave_days ?? '-'}</span></div>
+                            <div className="flex justify-between"><span className="text-gray-500">Leave Days</span><span className="font-medium text-zinc-600">{viewSlip.leave_days ?? '-'}</span></div>
                             <div className="flex justify-between"><span className="text-gray-500">Absent Days</span><span className="font-medium text-red-600">{viewSlip.absent_days ?? '-'}</span></div>
                             <div className="flex justify-between"><span className="text-gray-500">Calendar / Working Days</span><span className="font-medium">{viewSlip.calendar_days ?? '-'} / {viewSlip.working_days ?? '-'}</span></div>
                           </>

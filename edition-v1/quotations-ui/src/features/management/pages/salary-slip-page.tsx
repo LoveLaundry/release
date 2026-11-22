@@ -376,7 +376,7 @@ export default function SalarySlipPage() {
                 </div>
                 <button
                   onClick={() => handleSummaryPrint()}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm flex items-center gap-2"
+                  className="px-4 py-2 bg-zinc-600 text-white rounded-lg hover:bg-zinc-700 text-sm flex items-center gap-2"
                 >
                   <Printer size={16} /> Print
                 </button>
@@ -395,7 +395,7 @@ export default function SalarySlipPage() {
                   {selectedSlip.attendance_required !== false && (
                     <>
                       <div className="flex justify-between"><span className="text-gray-500">Worked Days</span><span className="font-medium text-green-600">{selectedSlip.worked_days ?? '-'}</span></div>
-                      <div className="flex justify-between"><span className="text-gray-500">Leave Days</span><span className="font-medium text-blue-600">{selectedSlip.leave_days ?? '-'}</span></div>
+                      <div className="flex justify-between"><span className="text-gray-500">Leave Days</span><span className="font-medium text-zinc-600">{selectedSlip.leave_days ?? '-'}</span></div>
                       <div className="flex justify-between"><span className="text-gray-500">Absent Days</span><span className="font-medium text-red-600">{selectedSlip.absent_days ?? '-'}</span></div>
                       <div className="flex justify-between"><span className="text-gray-500">Calendar / Working Days</span><span className="font-medium">{selectedSlip.calendar_days ?? '-'} / {selectedSlip.working_days ?? '-'}</span></div>
                     </>
@@ -446,7 +446,7 @@ export default function SalarySlipPage() {
               <div className="flex justify-between"><span className="text-gray-500">Calendar Days</span><span className="font-medium">{calculation.calendar_days}</span></div>
               <div className="flex justify-between"><span className="text-gray-500">Working Days</span><span className="font-medium">{calculation.total_working_days}</span></div>
               <div className="flex justify-between"><span className="text-gray-500">Worked Days</span><span className="font-medium text-green-600">{calculation.worked_days}</span></div>
-              <div className="flex justify-between"><span className="text-gray-500">Leave Days</span><span className="font-medium text-blue-600">{calculation.leave_days}</span></div>
+              <div className="flex justify-between"><span className="text-gray-500">Leave Days</span><span className="font-medium text-zinc-600">{calculation.leave_days}</span></div>
               <div className="flex justify-between"><span className="text-gray-500">Absent Days</span><span className="font-medium text-red-600">{calculation.absent_days}</span></div>
               <div className="flex justify-between"><span className="text-gray-500">Holidays</span><span className="font-medium text-purple-600">{calculation.holiday_count || 0}</span></div>
               <div className="flex justify-between"><span className="text-gray-500">Weekends</span><span className="font-medium text-purple-600">{calculation.weekend_count || 0}</span></div>
@@ -608,7 +608,7 @@ export default function SalarySlipPage() {
               </div>
               <button
                 onClick={() => handlePrint()}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm flex items-center gap-2"
+                className="px-4 py-2 bg-zinc-600 text-white rounded-lg hover:bg-zinc-700 text-sm flex items-center gap-2"
               >
                 <Printer size={16} /> Print
               </button>
