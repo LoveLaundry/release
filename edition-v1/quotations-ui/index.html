@@ -1,7 +1,20 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <script>(function(){try{var t=localStorage.getItem('lovelaundry-theme');if(t!=='light'&&t!=='dark'){var p=localStorage.getItem('theme-preset');t=(p==='dark'||p==='nightblue'||p==='contrast-dark')?'dark':'light'}var r=document.documentElement;r.setAttribute('data-theme',t);r.style.colorScheme=t;r.classList.toggle('dark',t==='dark');var preset=p||'light';if(t==='dark'||preset==='dark'||preset==='nightblue'||preset==='contrast-dark'){r.classList.add('dark-theme')}var size={xs:'12px',sm:'13px',md:'14px',lg:'15px',xl:'17px',xxl:'19px'}[localStorage.getItem('theme-font-size')||'md'];var zoom={xs:0.85,sm:0.92,md:1,lg:1.08,xl:1.18,xxl:1.3}[localStorage.getItem('theme-font-size')||'md'];r.style.setProperty('--body-font-size',size);r.style.setProperty('--body-font-zoom',String(zoom))}catch(e){document.documentElement.setAttribute('data-theme','light')}})();</script>
+    <script>(function(){try{
+var ids=['light','dark','light-crimson','dark-crimson','light-ember','dark-ember','light-amber','dark-amber','light-gold','dark-gold','light-lime','dark-lime','light-emerald','dark-emerald','light-forest','dark-forest','light-teal','dark-teal','light-rose','dark-rose'];
+var t=localStorage.getItem('lovelaundry-theme');
+if(ids.indexOf(t)<0){
+  var legacy=localStorage.getItem('theme-preset');
+  if(legacy==='dark'||legacy==='nightblue'||legacy==='contrast-dark'){t='dark';}
+  else if(legacy==='light'||legacy==='contrast'||legacy==='ocean'||legacy==='forest'||legacy==='sepia'||legacy==='slate'){t='light';}
+  else{t=(window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light';}
+}
+var mode=t.indexOf('dark')===0?'dark':'light';
+var r=document.documentElement;
+r.setAttribute('data-theme',t);r.style.colorScheme=mode;r.classList.toggle('dark',mode==='dark');
+}catch(e){document.documentElement.setAttribute('data-theme','light')}})();</script>
+    
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="/icon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
