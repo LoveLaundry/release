@@ -1,0 +1,17 @@
+{
+  "name": "lovelaundry-ann-chat",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Trainable, dependency-free intent ANN for the Love Laundry chatbot.",
+  "scripts": {
+    "train": "node scripts/train.js",
+    "serve": "node server.js",
+    "start": "node server.js",
+    "check": "node scripts/evaluate.js",
+    "check:validation": "node scripts/evaluate-validation.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

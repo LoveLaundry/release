@@ -40,6 +40,8 @@ repository. Nothing in `edition-v1/`, the submodule pointers, `deploy/`, or
   drop-off and partner-collection information, one responsive navbar, a
   no-API-key embedded map (Google/OpenStreetMap) and lightweight scroll reveals
   (`apps/public-site/`).
+- **Chatbot** — trainable, zero-dependency EN/SIN intent ANN with browser,
+  standalone Node server and hosted-service modes (`apps/public-site/chat-bot/`).
 - **Deployment** — Docker Compose, reverse-proxy config, monitoring, and
   Vercel serverless handlers (`infrastructure/`, `backend/api/index.py`,
   per-app `vercel.json`).
@@ -93,7 +95,17 @@ npm run dev
 ```
 
 `apps/public-site` is a standalone Vite app and does not require the backend or
-environment variables to build.
+environment variables to build. Its bundled EN/SIN chatbot runs in the browser
+by default; to use the standalone ANN API instead:
+
+```bash
+cd apps/public-site/chat-bot
+npm start                 # http://localhost:8787
+# set VITE_BOT_API_URL=http://localhost:8787 in apps/public-site/.env.local
+```
+
+See `apps/public-site/chat-bot/README.md` for training, evaluation and
+deployment details.
 
 ### Tests
 
