@@ -1,4 +1,5 @@
 import { useLanguage } from "../../i18n";
+import type { QuoteService } from "./RequestQuote";
 import { useReveal } from "../../hooks/useReveal";
 import heroVideo from "../../assets/videos/web.mp4";
 import { useReducedMotion } from "framer-motion";
@@ -11,7 +12,11 @@ import {
     RiShoppingBasket2Line,
 } from "react-icons/ri";
 
-const Hero = () => {
+interface HeroProps {
+    onQuote: (service?: QuoteService) => void;
+}
+
+const Hero = ({ onQuote }: HeroProps) => {
     const { t } = useLanguage();
     const prefersReducedMotion = useReducedMotion();
     const textRef = useReveal<HTMLDivElement>({ y: 28, stagger: 0.09 });
@@ -39,7 +44,7 @@ const Hero = () => {
         },
         {
             icon: RiTimeFill,
-            value: "24/7",
+            value: "3+",
             label: t("heroStatConvenience"),
         },
     ];
@@ -222,7 +227,7 @@ const Hero = () => {
                     >
                         <button
                             type="button"
-                            onClick={() => scrollTo("contact")}
+                            onClick={() => scrollTo("locations")}
                             className="
                                 flex
                                 h-14
@@ -278,6 +283,26 @@ const Hero = () => {
                         >
                             {t("heroSecondary")}
                             <RiArrowRightLine className="h-4 w-4" />
+                        </button>
+                    </div>
+
+                    <div
+                        data-reveal
+                        className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-xs font-bold text-on-dark/80"
+                    >
+                        <button
+                            type="button"
+                            onClick={() => scrollTo("track")}
+                            className="underline-offset-4 transition hover:text-brand hover:underline"
+                        >
+                            {t("heroTrack")}
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => onQuote()}
+                            className="underline-offset-4 transition hover:text-brand hover:underline"
+                        >
+                            {t("heroQuote")}
                         </button>
                     </div>
 
@@ -346,7 +371,6 @@ const Hero = () => {
                     hover:text-brand
                     sm:bottom-8
                 "
-                aria-label="Scroll down"
             >
                 <span className="text-[10px] font-bold uppercase tracking-[0.2em]">
                     {t("heroScroll")}

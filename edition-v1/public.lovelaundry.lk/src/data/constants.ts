@@ -1,7 +1,7 @@
 export const COMPANY = {
     name: "Love Laundry",
-    tagline: "Fresh. Clean. Delivered with love.",
-    description: "Professional Laundry Service",
+    tagline: "Trusted hotel linen care.",
+    description: "Hotel Linen & Laundry Service",
 
     phone: "0774200919",
     phoneFull: "+94774200919",
@@ -25,15 +25,15 @@ export const COMPANY = {
     },
 
     hours: {
-        display: "24/7",
-        open: "Open 24 Hours",
-        subtitle: "Every Day",
+        display: "Mon - Sat",
+        open: "8:00 AM - 6:00 PM",
+        subtitle: "Counter hours",
     },
 
     stats: {
         rating: "4.9",
         serviceCount: "10+",
-        availability: "24/7",
+        availability: "Mon - Sat",
         customerCount: "200+",
         experience: "3+",
     },
@@ -46,15 +46,17 @@ export const COMPANY = {
 
     serviceAreas: [
         "Chilaw",
+        "Madampe",
+        "Mahawewa",
+        "Wennappuwa",
         "Negombo",
-        "Colombo",
-        "Galle",
     ] as const,
 
     googleMapsUrl: "https://www.google.com/maps/search/Love+Laundry+Madagama+Chilaw",
 
     whatsappLink: "https://wa.me/94774200919",
-    whatsappMessage: "Hi Love Laundry, I'd like to book a pickup.",
+    whatsappMessage:
+        "Hi Love Laundry, I'd like to know about your hotel linen service or my nearest drop-off point.",
     whatsappCareersMessage: "Hi Love Laundry, I'm interested in joining your team!",
 } as const;
 
