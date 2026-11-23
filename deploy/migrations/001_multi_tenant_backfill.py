@@ -132,9 +132,20 @@ def utc_now() -> datetime:
 
 
 def resolve_connection() -> tuple[str, str]:
-    uri = "mongodb+srv://lovelaundry01_db_user:xd5Vv3sVOOCjlYhn@lovelaundry.12kgzcw.mongodb.net/?appName=LoveLaundry"
-    db_name = "laundry_management"
-    
+    # Credentials are runtime configuration, never source code. The previous
+    # hardcoded Atlas URI in this file had to be treated as compromised.
+    uri = (
+        os.getenv("MONGODB_MAIN_URI")
+        or os.getenv("DATABASE_URL")
+        or os.getenv("MONGODB_URI")
+        or ""
+    ).strip()
+    db_name = (
+        os.getenv("MONGODB_MAIN_DB")
+        or os.getenv("MONGODB_DB_NAME")
+        or "laundry_management"
+    ).strip()
+
     if not uri:
         raise SystemExit("MONGODB_MAIN_URI or DATABASE_URL is required")
     if not db_name:
